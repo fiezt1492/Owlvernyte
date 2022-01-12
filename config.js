@@ -1,6 +1,6 @@
 require("dotenv").config()
 module.exports = {
-	prefix: "o,",
+	prefix: "o.",
 	token: String(process.env.TOKEN),
 	owner: "445102575314927617",
 	client_id: String(process.env.CLIENT_ID),
