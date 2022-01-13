@@ -105,4 +105,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# i dont use yarn
 yarn.lock
