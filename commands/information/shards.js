@@ -62,11 +62,11 @@ module.exports = {
 			.setColor("RANDOM")
 			.setDescription("```" + des + "```")
 			.setFooter(
-				`Requested by ${message.author.username} | This message is from shard #${message.guild.shardID} | Guild ID: ${message.guild.id}`
+				`This message is from shard #${message.guild.shardID} | Guild ID: ${message.guild.id}`
 			)
 			.setTimestamp();
 
-		return message.channel.send({ embeds: [embed] });
+		return message.reply({ embeds: [embed] });
 	},
 };
 
