@@ -56,6 +56,7 @@ module.exports = {
 
 		const categoryEmbed = new MessageEmbed()
 			.setTitle(`${category.toUpperCase()}`)
+			.setColor("RANDOM")
 			.setDescription(
 				`You can use \`${prefix}help <command name>\` to get info on a specific command!`
 			)

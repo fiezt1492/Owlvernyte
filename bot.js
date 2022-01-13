@@ -43,6 +43,7 @@ for (const file of eventFiles) {
 // Define Collection of Commands, Slash Commands and cooldowns
 
 client.commands = new Collection();
+// client.aliases = new Discord.Collection();
 client.slashCommands = new Collection();
 client.buttonCommands = new Collection();
 client.selectCommands = new Collection();

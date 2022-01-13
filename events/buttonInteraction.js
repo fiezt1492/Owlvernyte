@@ -15,7 +15,7 @@ module.exports = {
 		// You can modify the error message at ./messages/defaultButtonError.js file!
 
 		if (!command) {
-			await require("../messages/defaultButtonError").execute(interaction);
+			// await require("../messages/defaultButtonError").execute(interaction);
 			return;
 		}
 

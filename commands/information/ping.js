@@ -5,7 +5,7 @@ module.exports = {
 
 	/** You need to uncomment below properties if you need them. */
 	description: 'Ping!',
-	category: 'misc',
+	category: "information",
 	usage: '',
 	permissions: 'SEND_MESSAGES',
 	guildOnly: true,

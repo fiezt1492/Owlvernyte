@@ -1,24 +1,55 @@
-const Discord = require("discord.js")
+const Discord = require("discord.js");
 
 module.exports = {
 	name: "avatar",
 
 	/** You need to uncomment below properties if you need them. */
-	description: 'Get user avatar',
-	category: 'information',
-	usage: '<mention>',
-	permissions: 'SEND_MESSAGES',
+	description: "Get user avatar",
+	category: "information",
+	usage: "<mention>",
+	permissions: "SEND_MESSAGES",
 	guildOnly: true,
 
-	execute(message, args) {
-		const { client } = message
+	async execute(message, args) {
+		const { client } = message;
+		const user = message.mentions.users.first() || await client.users.fetch(message.author.id);
 
 		const Embed = new Discord.MessageEmbed()
-		.setTitle("🏓 Pong!")
-		.setColor("RANDOM")
-		.addField("API Latency",Math.round(client.ws.ping) + "ms",true)
-		.addField("Client Latency",Math.round(Date.now() - message.createdTimestamp) + "ms",true)
+			.setColor("RANDOM")
+			.setAuthor(
+				user.username + "#" + user.discriminator + "'s avatar",
+				user.displayAvatarURL
+			)
+			.setImage(
+				`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
+			);
 
-		return message.reply({ embeds: [Embed] });
+		const JPG = new Discord.MessageButton()
+			.setStyle("LINK")
+			.setLabel("JPG")
+			.setURL(
+				`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.jpg`
+			);
+
+		const PNG = new Discord.MessageButton()
+			.setStyle("LINK")
+			.setLabel("PNG")
+			.setURL(
+				`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+			);
+
+		const WEBP = new Discord.MessageButton()
+			.setStyle("LINK")
+			.setLabel("WEBP")
+			.setURL(
+				`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.webp`
+			);
+
+		const ROW = new Discord.MessageActionRow().addComponents([WEBP, PNG, JPG]);
+
+		return message.reply({
+			embeds: [Embed],
+			components: [ROW],
+		});
 	},
 };

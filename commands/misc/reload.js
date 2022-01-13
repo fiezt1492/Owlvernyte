@@ -1,16 +1,45 @@
 // "fs" declared is used in reloading command cache of the specified command.
 const fs = require("fs");
+const glob = require("glob");
 
 module.exports = {
 	name: "reload",
 	description: "Reloads a command",
-	category: 'misc',
-	args: true,
+	category: "misc",
+	// args: true,
 	ownerOnly: true,
 
 	execute(message, args) {
+		const { client } = message
+		let commandName;
+		if (!args[0]) {
+			client.commands.sweep(() => true);
 
-		const commandName = args[0].toLowerCase();
+			glob(`${__dirname}/../**/*.js`, async (err, filePaths) => {
+				if (err) return console.error(err);
+				filePaths.forEach((file) => {
+					delete require.cache[require.resolve(file)];
+
+					const pull = require(file);
+
+					if (pull.name) {
+						console.log(`Reloading command ${pull.name}`);
+						client.commands.set(pull.name, pull);
+					}
+
+					// if (pull.aliases && Array.isArray(pull.aliases)) {
+					// 	pull.aliases.forEach((alias) => {
+					// 		client.aliases.set(alias, pull.name);
+					// 	});
+					// }
+				});
+				console.log("[RELOAD] Reloaded all commands");
+			});
+
+			return message.reply("RELOADED ALL COMMANDS");
+		} else {
+			commandName = args[0].toLowerCase();
+		}
 
 		const command =
 			message.client.commands.get(commandName) ||
