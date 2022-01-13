@@ -116,6 +116,16 @@ module.exports = {
 						list.category,
 						"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
 					);
+<<<<<<< HEAD:commands/information/help.js
+=======
+
+				interaction.update({ embeds: [categoryEmbed] });
+			});
+
+			msgCol.on("end", () => {
+				msg.edit({ components: components(true) });
+			});
+>>>>>>> c544fb6cf4218787e058515e263b2a20e4536f6b:commands/misc/help.js
 
 				interaction.update({ embeds: [categoryEmbed] });
 			});
