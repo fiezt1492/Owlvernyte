@@ -108,3 +108,6 @@ dist
 
 # i dont use yarn
 yarn.lock
+
+#bat files
+.bat
