@@ -5,7 +5,7 @@ module.exports = {
 	description: "pick a things from provided",
 	category: "fun",
 	aliases: ["choose"],
-	usage: "[things to pick/choices]",
+	usage: `[things to pick/choices then seperate them with comma ","]`,
 	permissions: "SEND_MESSAGES",
 	guildOnly: true,
 	args: true,
