@@ -45,6 +45,11 @@ module.exports = {
 			);
 			post = await http.json();
 			// console.log(post)
+			if (post)
+				if (post.code)
+					return message.reply(
+						`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
+					);
 			embed
 				.setAuthor(`u/${post.author}`)
 				.setTitle(String(post.title))
@@ -59,16 +64,16 @@ module.exports = {
 					);
 		} catch (error) {
 			console.log(error);
-			// if (error.code === "ERR_NON_2XX_3XX_RESPONSE")
-			// 	return message.reply(
-			// 		`**[ERROR]** I can't find any meme in \`r/${subreddit}\``
-			// 	);
+			if (error.code === "ERR_NON_2XX_3XX_RESPONSE")
+				return message.reply(
+					`**[ERROR]** I can't find any meme in \`r/${subreddit}\``
+				);
 
-			// embed.setColor("RED").setTitle("ERROR").setDescription(error);
-			// return message.reply(embed);
+			embed.setColor("RED").setTitle("ERROR").setDescription(error);
+			return message.reply(embed);
 		}
-
-		const m = await message.channel.send({
+        
+		const m = await message.reply({
 			embeds: [embed],
 			components: [row],
 		});
@@ -87,28 +92,40 @@ module.exports = {
 			if (btn.customId === "stop") return mCol.stop();
 			if (btn.customId === "more") {
 				mCol.resetTimer();
-				let Embed = new Discord.MessageEmbed().setColor("RANDOM");
+				// embed = new Discord.MessageEmbed().setColor("RANDOM");
 				try {
 					http = await fetch(
 						`https://meme-api.herokuapp.com/gimme/${subreddit ? subreddit : ""}`
 					);
 					post = await http.json();
-					Embed.setAuthor(`u/${post.author}`)
+					if (post)
+						if (post.code)
+							if (btn.replied === false)
+								return btn.reply(
+									`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
+								);
+							else
+								btn.editReply(
+									`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
+								);
+					embed.description = null;
+					embed
+						.setAuthor(`u/${post.author}`)
 						.setTitle(post.title)
 						.setURL(post.postLink)
 						.setFooter(`r/${post.subreddit} | ⬆ ${post.ups}`);
-					if (!(post.nsfw || post.spoiler)) Embed.setImage(post.url);
+					if (!(post.nsfw || post.spoiler)) embed.setImage(post.url);
 					else
-						Embed.setImage(
-							"https://cdn130.picsart.com/322803413346201.jpg"
-						).setDescription(
-							`⚠ This image is set as **NSFW/Spoiler**.\n||Click **[here](${post.url})** if you want to reveal.||`
-						);
+						embed
+							.setImage("https://cdn130.picsart.com/322803413346201.jpg")
+							.setDescription(
+								`⚠ This image is set as **NSFW/Spoiler**.\n||Click **[here](${post.url})** if you want to reveal.||`
+							);
+					await btn.update({ embeds: [embed] });
 				} catch (error) {
 					console.log(error);
-					return message.reply(error);
+					// return message.reply(error);
 				}
-				await btn.update({ embeds: [Embed] });
 			}
 		});
 
@@ -133,13 +150,14 @@ module.exports = {
 				});
 
 			if (collected)
-				return collected.map(
-					async (btn) =>
+				return collected.map(async (btn) => {
+					// console.log(btn);
+					if (btn.replied === false)
 						await btn.update({
 							embeds: [embed],
 							components: [row],
-						})
-				);
+						});
+				});
 		});
 	},
 };
