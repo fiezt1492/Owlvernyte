@@ -62,7 +62,7 @@ module.exports = {
 			const components = (state) => [
 				new MessageActionRow().addComponents(
 					new MessageSelectMenu()
-						.setCustomId("helpMenu")
+						.setCustomId("helpPanel")
 						.setPlaceholder("Please select a category")
 						.setDisabled(state)
 						.addOptions(
@@ -86,39 +86,40 @@ module.exports = {
 				components: components(false),
 			});
 
-			// const filter = (interaction) => interaction.user.id === message.author.id;
+			const filter = (interaction) => interaction.user.id === message.author.id;
 
-			// const msgCol = message.channel.createMessageComponentCollector({
-			// 	filter,
-			// 	componentType: "SELECT_MENU",
-			// 	time: 60000,
-			// });
+			const msgCol = message.channel.createMessageComponentCollector({
+				filter,
+				componentType: "SELECT_MENU",
+				time: 60000,
+			});
 
-			// msgCol.on("collect", (interaction) => {
-			// 	// console.log(interaction.values)
-			// 	const [category] = interaction.values;
-			// 	const list = commandsList.find(
-			// 		(x) => x.category.toLowerCase() === category
-			// 	);
+			msgCol.on("collect", (interaction) => {
+				// console.log(interaction.values)
+				const [category] = interaction.values;
+				const list = commandsList.find(
+					(x) => x.category.toLowerCase() === category
+				);
 
-			// 	// console.log(list)
+				// console.log(list)
 
-			// 	const categoryEmbed = new MessageEmbed()
-			// 		.setTitle(`${category.toUpperCase()}`)
-			// 		.setDescription(
-			// 			`You can use \`${prefix}help <command name>\` to get info on a specific command!`
-			// 		)
-			// 		.addField(
-			// 			list.category,
-			// 			"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
-			// 		);
+				const categoryEmbed = new MessageEmbed()
+					.setTitle(`${category.toUpperCase()}`)
+					.setColor("RANDOM")
+					.setDescription(
+						`You can use \`${prefix}help <command name>\` to get info on a specific command!`
+					)
+					.addField(
+						list.category,
+						"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
+					);
 
-			// 	interaction.update({ embeds: [categoryEmbed] });
-			// });
+				interaction.update({ embeds: [categoryEmbed] });
+			});
 
-			// msgCol.on("end", () => {
-			// 	msg.edit({ components: components(true) });
-			// });
+			msgCol.on("end", () => {
+				msg.edit({ components: components(true) });
+			});
 
 		} else {
 			// If argument is provided, check if it's a command.
