@@ -22,6 +22,15 @@ module.exports = {
 		// A try to execute the interaction.
 
 		try {
+			if (command.filter.toLowerCase() === "author")
+				if (
+					interaction.message.mentions.users.first().id !== interaction.user.id
+				)
+					return await interaction.reply({
+						content: "This message is not for you!",
+						ephemeral: true,
+					})
+
 			await command.execute(interaction);
 			return;
 		} catch (err) {
