@@ -68,7 +68,7 @@ module.exports = {
 		const mCol = m.createMessageComponentCollector({ filter,componentType: "BUTTON", time: 30000 });
 
 		mCol.on("collect", async (btn) => {
-			btn.deferUpdate();
+			btn.deferReply();
             // console.log(btn)
 			if (btn.customId === "stop") return mCol.stop();
 			if (btn.customId === "more") {
