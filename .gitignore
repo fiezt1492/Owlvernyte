@@ -113,3 +113,4 @@ yarn.lock
 .bat
 start.bat
 commands/misc/template
+.prettierrc
