@@ -23,7 +23,8 @@
 		"glob": "^7.2.0",
 		"mongodb": "^4.3.0",
 		"node-fetch": "^2.6.1",
-		"pm2": "^5.1.2"
+		"pm2": "^5.1.2",
+		"string-table": "^0.1.5"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.12"

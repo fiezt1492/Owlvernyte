@@ -3,24 +3,39 @@ const { Client, Collection, Intents } = require("discord.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const { prefix, token, client_id, test_guild_id } = require("./config.js");
+const intents = [
+	"GUILDS",
+	"GUILD_MEMBERS",
+	"GUILD_BANS",
+	"GUILD_INTEGRATIONS",
+	"GUILD_WEBHOOKS",
+	"GUILD_INVITES",
+	"GUILD_VOICE_STATES",
+	"GUILD_PRESENCES",
+	"GUILD_MESSAGES",
+	"GUILD_MESSAGE_REACTIONS",
+	"GUILD_MESSAGE_TYPING",
+	"DIRECT_MESSAGES",
+	"DIRECT_MESSAGE_REACTIONS",
+	"DIRECT_MESSAGE_TYPING",
+];
 
 const client = new Client({
-	intents: [
-		Intents.FLAGS.GUILDS, 
-		Intents.FLAGS.GUILD_MESSAGES,
-		Intents.FLAGS.GUILD_MEMBERS
-	],
+	intents: [intents],
+	ws: { intents: intents },
 	disableMentions: "everyone",
+	restTimeOffset: 0,
+	shard: "auto",
 	presence: {
-		status: 'online',
+		status: "online",
 		afk: false,
 		activities: [
 			{
 				name: `${prefix}help | Testing with bugs`,
 				type: 0,
-			}
-		]
-	}
+			},
+		],
+	},
 });
 
 const eventFiles = fs
@@ -42,8 +57,7 @@ for (const file of eventFiles) {
 /**********************************************************************/
 // Define Collection of Commands, Slash Commands and cooldowns
 
-
-client.db = require("./databases/mongo.js")
+client.db = require("./databases/mongo.js");
 client.commands = new Collection();
 // client.aliases = new Discord.Collection();
 client.slashCommands = new Collection();
