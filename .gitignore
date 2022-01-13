@@ -112,3 +112,4 @@ yarn.lock
 #bat files
 .bat
 start.bat
+commands/misc/template

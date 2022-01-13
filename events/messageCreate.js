@@ -85,13 +85,13 @@ module.exports = {
 		// Args missing
 
 		if (command.args && !args.length) {
-			let reply = `You didn't provide any arguments, ${message.author}!`;
+			let reply = `You didn't provide any arguments!`;
 
 			if (command.usage) {
 				reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
 			}
 
-			return message.channel.send({ content: reply });
+			return message.reply({ content: reply });
 		}
 
 		// Cooldowns
