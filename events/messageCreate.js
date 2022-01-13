@@ -62,7 +62,7 @@ module.exports = {
 		// Owner Only Property, add in your command properties if true.
 
 		if (command.ownerOnly && message.author.id !== owner) {
-			return message.reply({ content: "This is a owner only command!" });
+			return;
 		}
 
 		// Guild Only Property, add in your command properties if true.

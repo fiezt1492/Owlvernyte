@@ -42,6 +42,8 @@ for (const file of eventFiles) {
 /**********************************************************************/
 // Define Collection of Commands, Slash Commands and cooldowns
 
+
+client.db = require("./databases/mongo.js")
 client.commands = new Collection();
 // client.aliases = new Discord.Collection();
 client.slashCommands = new Collection();

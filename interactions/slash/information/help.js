@@ -22,7 +22,7 @@ module.exports = {
 		const commands = interaction.client.slashCommands;
 
 		const helpEmbed = new MessageEmbed()
-			.setColor(0x4286f4)
+			.setColor("RANDOM")
 			.setTitle("List of all my slash commands")
 			.setDescription(
 				"`" + commands.map((command) => command.data.name).join("`, `") + "`"
