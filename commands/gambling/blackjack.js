@@ -12,7 +12,6 @@ module.exports = {
 
 	async execute(message, args) {
 		const { client } = message;
-
 		await blackjack(client, message);
 	},
 };

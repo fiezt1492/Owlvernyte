@@ -1,5 +1,4 @@
 const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
-const { isBigInt64Array } = require("util/types");
 const Deck = require("./Deck");
 const Hand = require("./Hand");
 
@@ -26,6 +25,7 @@ module.exports = async (client, message) => {
 				},
 			],
 		});
+
 	try {
 		const d = new Deck();
 		d.shuffle();
@@ -144,7 +144,7 @@ module.exports = async (client, message) => {
 				mID: msg.id,
 				mURL: msg.url,
 			});
-        else return;
+		else return;
 
 		const filter = (f) => f.user.id === message.author.id;
 
