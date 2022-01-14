@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
 
 module.exports = {
-	name: "invite",
+	name: "link",
 	description: "Send bot invitation",
 	category: "information",
-	aliases: ["vote"],
+	aliases: ["vote","invite","links"],
 	usage: "",
 	cooldown: 1,
 	args: false,
