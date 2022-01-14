@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-// const got = require("got");
 const fetch = require("node-fetch");
 
 module.exports = {
@@ -35,14 +34,6 @@ module.exports = {
 			),
 		];
 
-		// fetch(`https://meme-api.herokuapp.com/gimme/${subreddit ? subreddit : ""}`).then(res => res.json()).then(json => console.log(json))
-
-		// let res = await fetch(`https://meme-api.herokuapp.com/gimme/${subreddit ? subreddit : ""}`)
-		// console.log(res)
-		// let json = await res.json()
-		// console.log(json)
-		// return;
-
 		try {
 			http = await fetch(
 				`https://meme-api.herokuapp.com/gimme/${subreddit ? subreddit : ""}`
@@ -74,7 +65,7 @@ module.exports = {
 				);
 
 			embed.setColor("RED").setTitle("ERROR").setDescription(error);
-			return message.reply(embed);
+			return message.reply({ embeds: [embed] });
 		}
 
 		const m = await message.reply({
@@ -91,12 +82,9 @@ module.exports = {
 		});
 
 		mCol.on("collect", async (btn) => {
-			// console.log(btn)
-			// await btn.update()
 			if (btn.customId === "stop") return mCol.stop();
 			if (btn.customId === "more") {
 				mCol.resetTimer();
-				// embed = new Discord.MessageEmbed().setColor("RANDOM");
 				try {
 					http = await fetch(
 						`https://meme-api.herokuapp.com/gimme/${subreddit ? subreddit : ""}`
@@ -128,7 +116,6 @@ module.exports = {
 					await btn.update({ embeds: [embed] });
 				} catch (error) {
 					console.log(error);
-					// return message.reply(error);
 				}
 			}
 		});
@@ -141,7 +128,6 @@ module.exports = {
 
 			if (collected)
 				return collected.map(async (btn) => {
-					// console.log(btn);
 					if (btn.replied === false)
 						await btn.update({
 							components: row(true),

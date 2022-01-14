@@ -7,6 +7,7 @@ module.exports = {
 	/** You need to uncomment below properties if you need them. */
 	description: "Watching shards informations",
 	category: "information",
+	aliases: ["shard"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
 	guildOnly: true,
@@ -62,7 +63,7 @@ module.exports = {
 			.setColor("RANDOM")
 			.setDescription("```" + des + "```")
 			.setFooter(
-				`This message is from shard #${message.guild.shardID} | Guild ID: ${message.guild.id}`
+				`${message.guild.name}'s Shard: #${message.guild.shardId} | Guild ID: ${message.guild.id}`
 			)
 			.setTimestamp();
 

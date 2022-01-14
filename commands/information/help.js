@@ -1,7 +1,4 @@
-// Deconstructing prefix from config file to use in help command
 const { prefix } = require("./../../config");
-
-// Deconstructing MessageEmbed to create embeds within this command
 const {
 	MessageEmbed,
 	MessageActionRow,
@@ -20,10 +17,7 @@ module.exports = {
 	async execute(message, args) {
 		const { commands } = message.client;
 
-		// If there are no args, it means it needs whole help command.
-
 		if (!args.length) {
-			// console.log(commands)
 			const formatString = (str) =>
 				`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
 
@@ -66,10 +60,6 @@ module.exports = {
 				)
 				.setFooter(`Select one of these categories below`);
 
-			// commandsList.forEach((list) => {
-			// 	helpEmbed.addField(list.category,"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`")
-			// });
-
 			const components = (state) => [
 				new MessageActionRow().addComponents(
 					new MessageSelectMenu()
@@ -83,7 +73,6 @@ module.exports = {
 						})
 						.addOptions(
 							commandsList.map((cmd) => {
-								// if (cmd.category !== "misc")
 								return {
 									label: cmd.category,
 									value: cmd.category.toLowerCase(),
@@ -110,9 +99,7 @@ module.exports = {
 				),
 			];
 
-			// Attempts to send embed in DMs.
-
-			const msg = await message.reply({
+			const msg = await message.channel.send({
 				embeds: [helpEmbed],
 				components: components(false),
 			});
@@ -126,15 +113,12 @@ module.exports = {
 			});
 
 			msgCol.on("collect", (interaction) => {
-				// console.log(interaction.values)
 				if (interaction.values.includes("home"))
 					return interaction.update({ embeds: [helpEmbed] });
 				const [category] = interaction.values;
 				const list = commandsList.find(
 					(x) => x.category.toLowerCase() === category
 				);
-
-				// console.log(list)
 
 				const categoryEmbed = new MessageEmbed()
 					.setTitle(`${category.toUpperCase()}`)
@@ -154,18 +138,12 @@ module.exports = {
 				msg.edit({ components: components(true) });
 			});
 		} else {
-			// If argument is provided, check if it's a command.
-
-			// let name;
-			// if (args) name = args[0].toLowerCase();
 
 			const command =
 				commands.get(args.join(" ").toLowerCase()) ||
 				commands.find(
 					(c) => c.aliases && c.aliases.includes(args.join(" ").toLowerCase())
 				);
-
-			// If it's an invalid command.
 
 			if (!command) {
 				return message.reply({ content: "That's not a valid command!" });
@@ -176,7 +154,7 @@ module.exports = {
 				.setDescription(
 					`Find information on the command provided.\nMandatory arguments \`[]\`, optional arguments \`<>\`.`
 				)
-				.setTitle("Help Panel");
+				.setTitle(command.name);
 
 			if (command.description)
 				commandEmbed.addField("Description", `${command.description}`);
@@ -191,8 +169,11 @@ module.exports = {
 					`\`${prefix}${command.name} ${command.usage}\``,
 					true
 				);
-
-			// Finally send the embed.
+			else commandEmbed.addField(
+				"Usage",
+				`\`${prefix}${command.name}\``,
+				true
+			);
 
 			return message.reply({ embeds: [commandEmbed] });
 		}
