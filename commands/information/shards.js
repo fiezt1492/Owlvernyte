@@ -7,7 +7,7 @@ module.exports = {
 	/** You need to uncomment below properties if you need them. */
 	description: "Watching shards informations",
 	category: "information",
-	aliases: ["shard"],
+	aliases: ["shard","stat","stats"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
 	guildOnly: true,
