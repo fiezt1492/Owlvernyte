@@ -121,13 +121,14 @@ module.exports = {
 				);
 
 				const categoryEmbed = new MessageEmbed()
-					.setTitle(`${category.toUpperCase()}`)
+					.setTitle(`Help Panel`)
 					.setColor("RANDOM")
+					.setURL(process.env.URL)
 					.setDescription(
 						`You can use \`${prefix}help <command name>\` to get info on a specific command!`
 					)
 					.addField(
-						list.category,
+						list.category.toUpperCase(),
 						"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
 					);
 				msgCol.resetTimer()
