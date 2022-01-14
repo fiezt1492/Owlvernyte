@@ -6,6 +6,7 @@ const {
 	MessageEmbed,
 	MessageActionRow,
 	MessageSelectMenu,
+	MessageButton,
 } = require("discord.js");
 
 module.exports = {
@@ -55,7 +56,15 @@ module.exports = {
 				.setDescription(
 					`You can use \`${prefix}help <command name>\` to get info on a specific command!`
 				)
-				.addField("SELECTION", "Select one of these categories below");
+				.addField(
+					"CONNECT WITH US",
+					"**[Youtube](https://www.youtube.com/channel/UCEG5sgFKieaUuHsu5VG-kBg)** | **[Discord](https://discord.io/owlvernyte+)** | **[Facebook](https://www.facebook.com/owlvernyte)**"
+				)
+				.addField(
+					"Buy me a coffee",
+					`**[Playerduo](https://playerduo.com/owlvernyte)** | **[buymeacoffee](https://buymeacoffee.com/fiezt)**`
+				)
+				.setFooter(`Select one of these categories below`);
 
 			// commandsList.forEach((list) => {
 			// 	helpEmbed.addField(list.category,"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`")
@@ -67,6 +76,11 @@ module.exports = {
 						.setCustomId("helpPanel")
 						.setPlaceholder("Please select a category")
 						.setDisabled(state)
+						.addOptions({
+							label: "Home",
+							value: "home",
+							description: "Showing homepage",
+						})
 						.addOptions(
 							commandsList.map((cmd) => {
 								// if (cmd.category !== "misc")
@@ -79,6 +93,20 @@ module.exports = {
 								};
 							})
 						)
+				),
+				new MessageActionRow().addComponents(
+					new MessageButton()
+						.setStyle("LINK")
+						.setURL("https://top.gg/bot/853623967180259369/invite")
+						.setLabel("Invite me"),
+					new MessageButton()
+						.setStyle("LINK")
+						.setURL("https://top.gg/bot/853623967180259369/vote")
+						.setLabel("Vote me"),
+					new MessageButton()
+						.setStyle("LINK")
+						.setURL("https://discord.io/owlvernyte")
+						.setLabel("Support Server")
 				),
 			];
 
@@ -99,6 +127,8 @@ module.exports = {
 
 			msgCol.on("collect", (interaction) => {
 				// console.log(interaction.values)
+				if (interaction.values.includes("home"))
+					return interaction.update({ embeds: [helpEmbed] });
 				const [category] = interaction.values;
 				const list = commandsList.find(
 					(x) => x.category.toLowerCase() === category
@@ -116,7 +146,7 @@ module.exports = {
 						list.category,
 						"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
 					);
-
+				msgCol.resetTimer()
 				interaction.update({ embeds: [categoryEmbed] });
 			});
 

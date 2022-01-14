@@ -20,16 +20,20 @@ module.exports = {
 		let http;
 		let post;
 
-		let row = new Discord.MessageActionRow().addComponents(
-			new Discord.MessageButton()
-				.setCustomId("more")
-				.setLabel("More!")
-				.setStyle("SUCCESS"),
-			new Discord.MessageButton()
-				.setCustomId("stop")
-				.setLabel("Stop")
-				.setStyle("SECONDARY")
-		);
+		let row = (state) => [
+			new Discord.MessageActionRow().addComponents(
+				new Discord.MessageButton()
+					.setCustomId("more")
+					.setLabel("More!")
+					.setDisabled(state)
+					.setStyle("SUCCESS"),
+				new Discord.MessageButton()
+					.setCustomId("stop")
+					.setLabel("Stop")
+					.setDisabled(state)
+					.setStyle("SECONDARY")
+			),
+		];
 
 		// fetch(`https://meme-api.herokuapp.com/gimme/${subreddit ? subreddit : ""}`).then(res => res.json()).then(json => console.log(json))
 
@@ -72,10 +76,10 @@ module.exports = {
 			embed.setColor("RED").setTitle("ERROR").setDescription(error);
 			return message.reply(embed);
 		}
-        
+
 		const m = await message.reply({
 			embeds: [embed],
-			components: [row],
+			components: row(false),
 		});
 
 		const filter = (b) => b.user.id === message.author.id;
@@ -130,23 +134,9 @@ module.exports = {
 		});
 
 		mCol.on("end", async (collected, reason) => {
-			row = new Discord.MessageActionRow().addComponents(
-				new Discord.MessageButton()
-					.setCustomId("more")
-					.setLabel("More!")
-					.setStyle("SUCCESS")
-					.setDisabled(true),
-				new Discord.MessageButton()
-					.setCustomId("stop")
-					.setLabel("Stop")
-					.setStyle("SECONDARY")
-					.setDisabled(true)
-			);
-
 			if (reason === "time")
 				return m.edit({
-					embeds: [embed],
-					components: [row],
+					components: row(true),
 				});
 
 			if (collected)
@@ -154,8 +144,7 @@ module.exports = {
 					// console.log(btn);
 					if (btn.replied === false)
 						await btn.update({
-							embeds: [embed],
-							components: [row],
+							components: row(true),
 						});
 				});
 		});
