@@ -4,7 +4,7 @@ module.exports = {
 	name: "ping",
 
 	/** You need to uncomment below properties if you need them. */
-	description: "Ping!",
+	description: "Get bot's uptime and ping",
 	category: "information",
 	aliases: ["uptime"],
 	usage: "",
