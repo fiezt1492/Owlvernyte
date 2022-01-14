@@ -144,6 +144,7 @@ module.exports = async (client, message) => {
 				mID: msg.id,
 				mURL: msg.url,
 			});
+        else return;
 
 		const filter = (f) => f.user.id === message.author.id;
 
