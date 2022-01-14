@@ -8,7 +8,7 @@ module.exports = {
 
 	/** You need to uncomment below properties if you need them. */
 	description: "Create ascii art",
-	category: "information",
+	category: "fun",
 	usage: "[text]",
 	args: true,
 	permissions: "SEND_MESSAGES",
