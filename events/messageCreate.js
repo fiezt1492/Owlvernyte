@@ -125,7 +125,20 @@ module.exports = {
 			}
 
 			return message.reply({ content: reply });
-		}
+		} 
+		// else if (
+		// 	command.args &&
+		// 	args.length &&
+		// 	command.options &&
+		// 	command.options.length > 0
+		// ) {
+		// 	let options = command.options
+		// 		.map((o) => `${prefix}${command.name} ${o.toLowerCase()}`)
+		// 		.join("\n");
+		// 	let reply = `Wrong input option.\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\`\n\`\`\`Usage:\n${options}\`\`\``;
+		// 	if (!command.options.includes(args[0]))
+		// 		return message.reply({ content: reply });
+		// }
 
 		// Cooldowns
 
@@ -145,9 +158,9 @@ module.exports = {
 			if (now < expirationTime) {
 				const timeLeft = (expirationTime - now) / 1000;
 				return message.reply({
-					content: `Please wait ${timeLeft.toFixed(
+					content: `Please wait **${timeLeft.toFixed(
 						1
-					)} more second(s) before reusing the \`${command.name}\` command.`,
+					)}** more second(s) before reusing the \`${command.name}\` command.`,
 				});
 			}
 		}
