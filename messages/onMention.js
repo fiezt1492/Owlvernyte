@@ -1,10 +1,11 @@
-const { prefix } = require("../config.js");
+// const { prefix } = require("../config.js");
+const guildPrefix = require("../modules/configuration/guildPrefix")
 
 module.exports = {
-
 	async execute(message) {
-		return message.channel.send(
-			`Hi ${message.author}! My prefix is \`${prefix}\`, get help by \`${prefix}help\``
+		let prefix = await guildPrefix.get(message)
+		return message.reply(
+			`This guild prefix is \`${prefix}\`. Type \`${prefix}help\` to spawn help panel.`
 		);
 	},
 };
