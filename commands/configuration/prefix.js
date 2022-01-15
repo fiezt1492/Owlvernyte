@@ -36,7 +36,6 @@ module.exports = {
 					return message.reply(`**[ERROR]** ${error.message}`);
 				}
 			case "get":
-
 				return message.reply(
 					`Your current guild prefix is \`${await guildPrefix.get(message)}\``
 				);
