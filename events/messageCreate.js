@@ -28,33 +28,27 @@ module.exports = {
 			return;
 		}
 
-		const gDB = client.db.collection("guildSettings");
-		const guildSetting = await gDB.findOne(
-			{ gID: message.guild.id },
-			{
-				prefix: 1,
-			}
-		);
+		// const gDB = client.db.collection("guildSettings");
+		// const guildSetting = await gDB.findOne(
+		// 	{ gID: message.guild.id },
+		// 	{
+		// 		prefix: 1,
+		// 	}
+		// );
 
-		if (guildSetting)
-			if (guildSetting.prefix) {
-				client.guildSettings.set(message.guild.id, {
-					prefix: guildSetting.prefix,
-				});
-			} else {
-				client.guildSettings.set(message.guild.id, {
-					prefix: prefix,
-				});
-			}
-		else {
-			client.guildSettings.set(message.guild.id, {
-				prefix: prefix,
-			});
-		}
+		// if (guildSetting && guildSetting.prefix) {
+		// 	client.guildSettings.set(message.guild.id, {
+		// 		prefix: guildSetting.prefix,
+		// 	});
+		// } else {
+		// 	client.guildSettings.set(message.guild.id, {
+		// 		prefix: prefix,
+		// 	});
+		// }
 
-		const checkPrefix = client.guildSettings
-			.get(message.guild.id)
-			.prefix.toLowerCase();
+		const checkPrefix = (
+			await require("../modules/configuration/guildPrefix").get(message)
+		).toLowerCase();
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(checkPrefix)})\\s*`
