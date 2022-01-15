@@ -38,6 +38,8 @@ const client = new Client({
 	},
 });
 
+
+
 const eventFiles = fs
 	.readdirSync("./events")
 	.filter((file) => file.endsWith(".js"));
@@ -58,6 +60,7 @@ for (const file of eventFiles) {
 // Define Collection of Commands, Slash Commands and cooldowns
 
 client.db = require("./databases/mongo.js");
+client.guildSettings = new Collection();
 client.commands = new Collection();
 // client.aliases = new Discord.Collection();
 client.slashCommands = new Collection();

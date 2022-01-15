@@ -160,7 +160,7 @@ module.exports = {
 			if (command.description)
 				commandEmbed.addField("Description", `${command.description}`);
 
-			if (command.aliases)
+			if (command.aliases && command.aliases.length > 0)
 				commandEmbed
 					.addField("Aliases", `\`${command.aliases.join(", ")}\``, true)
 					.addField("Cooldown", `${command.cooldown || 3} second(s)`, true);
