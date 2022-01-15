@@ -36,17 +36,25 @@ module.exports = {
 			}
 		);
 
-		if (guildSetting.prefix) {
-			client.guildSettings.set(message.guild.id, {
-				prefix: guildSetting.prefix,
-			});
-		} else {
+		if (guildSetting)
+			if (guildSetting.prefix) {
+				client.guildSettings.set(message.guild.id, {
+					prefix: guildSetting.prefix,
+				});
+			} else {
+				client.guildSettings.set(message.guild.id, {
+					prefix: prefix,
+				});
+			}
+		else {
 			client.guildSettings.set(message.guild.id, {
 				prefix: prefix,
 			});
 		}
 
-		const checkPrefix = client.guildSettings.get(message.guild.id).prefix.toLowerCase();
+		const checkPrefix = client.guildSettings
+			.get(message.guild.id)
+			.prefix.toLowerCase();
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(checkPrefix)})\\s*`
@@ -101,7 +109,8 @@ module.exports = {
 		}
 
 		if (command.guildOwner === true) {
-			if (author.id !== guild.ownerId) return message.reply("This command is only for guild owner.")
+			if (author.id !== guild.ownerId)
+				return message.reply("This command is only for guild owner.");
 		}
 
 		// Args missing
@@ -114,15 +123,16 @@ module.exports = {
 			}
 
 			if (command.options && command.options.length > 0) {
-				let options = command.options.map(o => `${prefix}${command.name} ${o.toLowerCase()}`).join("\n")
+				let options = command.options
+					.map((o) => `${prefix}${command.name} ${o.toLowerCase()}`)
+					.join("\n");
 
-				reply += `\n\`\`\`Usage:\n${options}\`\`\``
+				reply += `\n\`\`\`Usage:\n${options}\`\`\``;
 			}
 
 			return message.reply({ content: reply });
 		}
 
-		
 		// Cooldowns
 
 		const { cooldowns } = client;
