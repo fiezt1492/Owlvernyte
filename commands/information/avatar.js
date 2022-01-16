@@ -12,17 +12,16 @@ module.exports = {
 
 	async execute(message, args) {
 		const { client } = message;
-		const user = message.mentions.users.first() || await client.users.fetch(message.author.id);
+		const user =
+			message.mentions.users.first() ||
+			(await client.users.fetch(message.author.id));
 
 		const Embed = new Discord.MessageEmbed()
 			.setColor("RANDOM")
-			.setAuthor(
-				user.username + "#" + user.discriminator + "'s avatar",
-				user.displayAvatarURL
-			)
-			.setImage(
-				`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-			);
+			.setAuthor({
+				name: user.username + "#" + user.discriminator + "'s avatar",
+			})
+			.setImage(user.displayAvatarURL({ dynamic: true }));
 
 		const JPG = new Discord.MessageButton()
 			.setStyle("LINK")
