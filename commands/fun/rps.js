@@ -16,13 +16,13 @@ module.exports = {
 	async execute(message, args) {
 		const { client } = message;
 
-		const member = await message.mentions.users.first();
+		const opponent = await message.mentions.users.first();
 
 		let selections = ["rock", "paper", "scissors", "r", "p", "s"];
 
 		let choices = ["rock", "paper", "scissors"];
 
-		if (!member) {
+		if (!opponent) {
 			let u = String(args.shift()).toLowerCase();
 
 			if (selections.includes(u)) {
@@ -55,6 +55,14 @@ module.exports = {
 					)}help ${this.name}\` for more infomation.`
 				);
 			}
+		} else {
+			if (opponent.id === message.author.id)
+				return message.reply(`You can't play against yourself!`);
+
+			let state = false;
+			if (opponent.bot) state = true;
+
+			buttonRPS(Discord, message, opponent, state);
 		}
 	},
 };
@@ -86,4 +94,130 @@ const RPS = (player1, player2) => {
 		return 2;
 
 	return -2;
+};
+
+const buttonRPS = async (Discord, message, opponent, bot = false) => {
+	const Embed = new Discord.MessageEmbed()
+		.setAuthor({
+			name: message.author.tag,
+			iconURL: message.author.displayAvatarURL({ dynamic: true }),
+		})
+		.setTitle(`${message.author.username} vs ${opponent.username}`)
+		.setDescription(`**ROCK PAPER SCISSORS WAR!**`)
+		.setColor("RANDOM")
+		.setFooter({
+			text: opponent.tag,
+			iconURL: opponent.displayAvatarURL({ dynamic: true }),
+		});
+
+	const components = (state) => [
+		new Discord.MessageActionRow().addComponents(
+			new Discord.MessageButton()
+				.setCustomId("rock")
+				.setLabel("ROCK")
+				.setEmoji("✊")
+				.setDisabled(state)
+				.setStyle("SECONDARY"),
+			new Discord.MessageButton()
+				.setCustomId("paper")
+				.setLabel("PAPER")
+				.setEmoji("✋")
+				.setDisabled(state)
+				.setStyle("SECONDARY"),
+			new Discord.MessageButton()
+				.setCustomId("scissors")
+				.setLabel("SCISSORS")
+				.setEmoji("✌")
+				.setDisabled(state)
+				.setStyle("SECONDARY")
+		),
+
+		new Discord.MessageActionRow().addComponents(
+			new Discord.MessageButton()
+				.setCustomId("rps-cancel")
+				.setLabel("Cancel")
+				.setDisabled(state)
+				.setStyle("DANGER")
+		),
+	];
+
+	const msg = await message.reply({
+		embeds: [Embed],
+		components: components(false),
+	});
+
+	const filter = (i) =>
+		i.user.id === message.author.id || i.user.id === opponent.id;
+
+	const msgCol = msg.createMessageComponentCollector({
+		filter,
+		componentType: "BUTTON",
+		time: 60000,
+	});
+
+	let game = new Map();
+
+	msgCol.on("collect", async (interaction) => {
+		// if (game.has(interaction.user.id))
+		if (interaction.customId === "rps-cancel") return msgCol.stop("CANCEL");
+
+		game.set(interaction.user.id, interaction.customId);
+
+		if (bot === true) {
+			let choices = ["rock", "paper", "scissors"];
+			let choice = choices[Math.floor(Math.random() * choices.length)];
+			game.set(opponent.id, choice);
+		}
+
+		if (game.size === 2) return msgCol.stop();
+		// console.log(game);
+		// console.log(interaction)
+		await interaction.update({ components: components(false) });
+	});
+
+	msgCol.on("end", async (collected, reason) => {
+		if (reason === "CANCEL" || reason === "time")
+			return collected.map(async (btn) => {
+				if (btn.replied === false)
+					await btn.update({
+						embeds: [
+							Embed.setTitle(
+								reason === "CANCEL"
+									? `Cancelled by ${btn.user.username}`
+									: `TIMEOUT`
+							),
+						],
+						components: components(true),
+					});
+			});
+
+		let result = RPS(game.get(message.author.id), game.get(opponent.id));
+
+		let title = ``;
+		let description = `**${message.author.username}** chose \`${game.get(
+			message.author.id
+		)}\`\n**${opponent.username}** chose \`${game.get(opponent.id)}\``;
+
+		switch (result) {
+			case 0:
+				title = `ITS TIED`;
+				break;
+			case 1:
+				title = `${message.author.username} WON!`;
+				break;
+			case 2:
+				title = `${opponent.username} WON!`;
+				break;
+			default:
+				title = `SOMETHING WENT WRONG`;
+		}
+
+		return collected.map(async (btn) => {
+			if (btn.replied === false)
+				await btn.update({
+					embeds: [Embed.setTitle(title).setDescription(description)],
+					components: components(true),
+				});
+		});
+	});
 };
