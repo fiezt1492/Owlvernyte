@@ -16,6 +16,7 @@ module.exports = {
 
 	async execute(message, args) {
 		const { commands } = message.client;
+		// const slashCommands = message.client.slashCommands;
 
 		if (!args.length) {
 			const formatString = (str) =>
@@ -43,6 +44,13 @@ module.exports = {
 				};
 			});
 
+			// const slashHelpEmbed = new MessageEmbed()
+			// 	.setColor("RANDOM")
+			// 	.setTitle("List of all my slash commands")
+			// 	.setDescription(
+			// 		"`" + slashCommands.map((command) => command.data.name).join("`, `") + "`"
+			// 	);
+
 			let helpEmbed = new MessageEmbed()
 				.setColor("RANDOM")
 				.setURL(process.env.URL)
@@ -58,7 +66,7 @@ module.exports = {
 					"Buy me a coffee",
 					`**[Playerduo](https://playerduo.com/owlvernyte)** | **[buymeacoffee](https://buymeacoffee.com/fiezt)**`
 				)
-				.setFooter(`Select one of these categories below`);
+				.setFooter({ text: `Select one of these categories below` });
 
 			const components = (state) => [
 				new MessageActionRow().addComponents(
@@ -70,6 +78,11 @@ module.exports = {
 							label: "Home",
 							value: "home",
 							description: "Showing homepage",
+						})
+						.addOptions({
+							label: "Slash Commands Panel",
+							value: "slashCommandPanel",
+							description: `Show Slash Commands Panel`,
 						})
 						.addOptions(
 							commandsList.map((cmd) => {
@@ -99,47 +112,24 @@ module.exports = {
 				),
 			];
 
-			const msg = await message.channel.send({
+			const msg = await message.reply({
 				embeds: [helpEmbed],
 				components: components(false),
 			});
 
-			const filter = (interaction) => interaction.user.id === message.author.id;
-
-			const msgCol = message.channel.createMessageComponentCollector({
-				filter,
+			const msgCol = msg.createMessageComponentCollector({
 				componentType: "SELECT_MENU",
 				time: 60000,
 			});
 
-			msgCol.on("collect", (interaction) => {
-				if (interaction.values.includes("home"))
-					return interaction.update({ embeds: [helpEmbed] });
-				const [category] = interaction.values;
-				const list = commandsList.find(
-					(x) => x.category.toLowerCase() === category
-				);
-
-				const categoryEmbed = new MessageEmbed()
-					.setTitle(`Help Panel`)
-					.setColor("RANDOM")
-					.setURL(process.env.URL)
-					.setDescription(
-						`You can use \`${prefix}help <command name>\` to get info on a specific command!`
-					)
-					.addField(
-						list.category.toUpperCase(),
-						"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
-					);
-				msgCol.resetTimer()
-				interaction.update({ embeds: [categoryEmbed] });
+			msgCol.on("collect", () => {
+				msgCol.resetTimer();
 			});
 
 			msgCol.on("end", () => {
 				msg.edit({ components: components(true) });
 			});
 		} else {
-
 			const command =
 				commands.get(args.join(" ").toLowerCase()) ||
 				commands.find(
@@ -170,11 +160,7 @@ module.exports = {
 					`\`${prefix}${command.name} ${command.usage}\``,
 					true
 				);
-			else commandEmbed.addField(
-				"Usage",
-				`\`${prefix}${command.name}\``,
-				true
-			);
+			else commandEmbed.addField("Usage", `\`${prefix}${command.name}\``, true);
 
 			return message.reply({ embeds: [commandEmbed] });
 		}
