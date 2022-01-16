@@ -176,17 +176,17 @@ const buttonRPS = async (Discord, message, opponent, bot = false) => {
 	});
 
 	msgCol.on("end", async (collected, reason) => {
-		if (reason === "CANCEL" || reason === "time")
+		if (reason === "time")
+			return msg.edit({
+				embeds: [Embed.setTitle(`TIMEOUT`)],
+				components: components(true),
+			});
+
+		if (reason === "CANCEL")
 			return collected.map(async (btn) => {
 				if (btn.replied === false)
 					await btn.update({
-						embeds: [
-							Embed.setTitle(
-								reason === "CANCEL"
-									? `Cancelled by ${btn.user.username}`
-									: `TIMEOUT`
-							),
-						],
+						embeds: [Embed.setTitle(`Cancelled by ${btn.user.username}`)],
 						components: components(true),
 					});
 			});
