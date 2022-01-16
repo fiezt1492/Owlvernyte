@@ -142,7 +142,7 @@ const buttonRPS = async (Discord, message, opponent, bot = false) => {
 	];
 
 	const msg = await message.reply({
-		content: `<@!${message.author.id}> VS <@!${opponent.id}>`,
+		content: `<@!${message.author.id}> **VS** <@!${opponent.id}>`,
 		embeds: [Embed],
 		components: components(false),
 	});
