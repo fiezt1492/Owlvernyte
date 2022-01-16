@@ -63,9 +63,8 @@ module.exports = {
 			)
 			.setFooter({ text: `Select one of these categories below` });
 
-		if (interaction.values.includes("slashCommandPanel")) 
+		if (interaction.values.includes("slashCommandPanel"))
 			return interaction.update({ embeds: [slashHelpEmbed] });
-		
 
 		if (interaction.values.includes("home"))
 			return interaction.update({ embeds: [helpEmbed] });
