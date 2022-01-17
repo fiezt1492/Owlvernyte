@@ -38,8 +38,6 @@ const client = new Client({
 	},
 });
 
-
-
 const eventFiles = fs
 	.readdirSync("./events")
 	.filter((file) => file.endsWith(".js"));
@@ -182,8 +180,8 @@ const commandJsonData = [
 					deploy commands globally, replace the line below with:
 				Routes.applicationCommands(client_id)
 			 */
-
-			Routes.applicationGuildCommands(client_id, test_guild_id),
+			Routes.applicationCommands(client_id),
+			// Routes.applicationGuildCommands(client_id, test_guild_id),
 			{ body: commandJsonData }
 		);
 

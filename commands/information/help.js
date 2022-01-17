@@ -22,9 +22,7 @@ module.exports = {
 			const formatString = (str) =>
 				`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
 
-			let categories = [...new Set(commands.map((cmd) => cmd.category))];
-
-			categories = categories.filter((cate) => cate !== "misc");
+			let categories = [...new Set(commands.filter(cmd => cmd.category !== 'misc').map((cmd) => cmd.category))];
 
 			const commandsList = categories.map((cate) => {
 				const getCommands = commands
