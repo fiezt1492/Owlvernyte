@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
 const weather = require("weather-js");
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
 	guildOnly: true,
 
 	async execute(message, args) {
-		const { client } = message;
+		// const { client } = message;
 		let location = args.length ? args.join(" ") : "700000";
 
 		let embed = new Discord.MessageEmbed()
