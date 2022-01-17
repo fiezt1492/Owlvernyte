@@ -2,7 +2,7 @@ const fs = require("fs");
 const { Client, Collection, Intents } = require("discord.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const { prefix, token, client_id, test_guild_id } = require("./config.js");
+const { prefix, token, client_id, test_guild_id, dev } = require("./config.js");
 const intents = [
 	"GUILDS",
 	"GUILD_MEMBERS",
@@ -44,6 +44,7 @@ const eventFiles = fs
 
 for (const file of eventFiles) {
 	const event = require(`./events/${file}`);
+	if (event.skip) continue;
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args, client));
 	} else {
@@ -169,9 +170,9 @@ const commandJsonData = [
 (async () => {
 	try {
 		console.log("Started refreshing application (/) commands.");
-
-		await rest.put(
-			/**
+		if (dev === "on")
+			await rest.put(
+				/**
 			 * Here we are sending to discord our slash commands to be registered.
 					There are 2 types of commands, guild commands and global commands.
 					Guild commands are for specific guilds and global ones are for all.
@@ -180,10 +181,15 @@ const commandJsonData = [
 					deploy commands globally, replace the line below with:
 				Routes.applicationCommands(client_id)
 			 */
-			Routes.applicationCommands(client_id),
-			// Routes.applicationGuildCommands(client_id, test_guild_id),
-			{ body: commandJsonData }
-		);
+				// Routes.applicationCommands(client_id),
+				Routes.applicationGuildCommands(client_id, test_guild_id),
+				{ body: commandJsonData }
+			);
+		else
+			await rest.put(
+				Routes.applicationCommands(client_id),
+				{ body: commandJsonData }
+			);
 
 		console.log("Successfully reloaded application (/) commands.");
 	} catch (error) {

@@ -16,7 +16,7 @@ module.exports = {
 
 		if (!msg.content || msg.content.length === 0) {
 			return await interaction.reply({
-				content: `I will not translate a message without content or embed description`,
+				content: `I will not translate a message without content.`,
 				ephemeral: true,
 			});
 		}
