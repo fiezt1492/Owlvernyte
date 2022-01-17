@@ -18,9 +18,6 @@ module.exports = {
 				ephemeral: true,
 			});
 
-		let bot = false;
-		if (opponent.bot) bot = true;
-
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: interaction.user.tag,
@@ -85,20 +82,18 @@ module.exports = {
 		let game = new Map();
 
 		msgCol.on("collect", async (i) => {
-			// if (game.has(interaction.user.id))
 			if (i.customId === "rps-cancel") return msgCol.stop("CANCEL");
 
 			game.set(i.user.id, i.customId);
 
-			if (bot === true) {
+			if (opponent.bot === true) {
 				let choices = ["rock", "paper", "scissors"];
 				let choice = choices[Math.floor(Math.random() * choices.length)];
 				game.set(opponent.id, choice);
 			}
 
 			if (game.size === 2) return msgCol.stop();
-			// console.log(game);
-			// console.log(i)
+			
 			await i.update({ components: components(false) });
 		});
 

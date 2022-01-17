@@ -59,10 +59,7 @@ module.exports = {
 			if (opponent.id === message.author.id)
 				return message.reply(`You can't play against yourself!`);
 
-			let state = false;
-			if (opponent.bot) state = true;
-
-			buttonRPS(Discord, message, opponent, state);
+			buttonRPS(Discord, message, opponent, opponent.bot);
 		}
 	},
 };
