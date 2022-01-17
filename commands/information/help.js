@@ -115,6 +115,9 @@ module.exports = {
 			const msg = await message.reply({
 				embeds: [helpEmbed],
 				components: components(false),
+				allowedMentions: {
+					repliedUser: false,
+				},
 			});
 
 			const msgCol = msg.createMessageComponentCollector({
@@ -162,7 +165,12 @@ module.exports = {
 				);
 			else commandEmbed.addField("Usage", `\`${prefix}${command.name}\``, true);
 
-			return message.reply({ embeds: [commandEmbed] });
+			return message.reply({
+				embeds: [commandEmbed],
+				allowedMentions: {
+					repliedUser: false,
+				},
+			});
 		}
 	},
 };

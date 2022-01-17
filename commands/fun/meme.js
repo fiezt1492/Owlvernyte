@@ -11,7 +11,7 @@ module.exports = {
 	guildOnly: true,
 
 	async execute(message, args) {
-		const { client } = message;
+		// const { client } = message;
 		let subreddit = args.join("_");
 
 		if (!isNaN(Number(subreddit))) subreddit = null;
@@ -65,12 +65,17 @@ module.exports = {
 				);
 
 			embed.setColor("RED").setTitle("ERROR").setDescription(error);
-			return message.reply({ embeds: [embed] });
+			return message.reply({
+				embeds: [embed],
+			});
 		}
 
 		const m = await message.reply({
 			embeds: [embed],
 			components: row(false),
+			allowedMentions: {
+				repliedUser: false,
+			},
 		});
 
 		const filter = (b) => b.user.id === message.author.id;
@@ -93,13 +98,15 @@ module.exports = {
 					if (post)
 						if (post.code)
 							if (btn.replied === false)
-								return btn.reply(
-									`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
-								);
+								return btn.reply({
+									content: `**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``,
+									ephemeral: true,
+								});
 							else
-								btn.editReply(
-									`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
-								);
+								btn.editReply({
+									content: `**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``,
+									ephemeral: true,
+								});
 					embed.description = null;
 					embed
 						.setAuthor({ name: `u/${post.author}` })

@@ -23,19 +23,38 @@ module.exports = {
 
 		try {
 			if (command.filter.toLowerCase() === "author") {
-				if (interaction.message.interaction) {
-					if (interaction.message.interaction.user.id !== interaction.user.id)
-						return await interaction.reply({
-							content: "This message is not for you!",
-							ephemeral: true,
-						});
-				} else if (
-					interaction.message.mentions.users.first().id !== interaction.user.id
-				)
-					return await interaction.reply({
-						content: "This message is not for you!",
-						ephemeral: true,
-					});
+				if (interaction.message) {
+					if (interaction.message.mentions) {
+						if (
+							interaction.message.mentions.repliedUser &&
+							interaction.message.mentions.repliedUser.id !==
+								interaction.user.id
+						) {
+							return await interaction.reply({
+								content: "This message is not for you!",
+								ephemeral: true,
+							});
+						}
+
+						if (
+							interaction.message.mentions.users.length > 0 &&
+							interaction.message.mentions.users.first().id !==
+								interaction.user.id
+						)
+							return await interaction.reply({
+								content: "This message is not for you!",
+								ephemeral: true,
+							});
+					}
+
+					if (interaction.message.interaction) {
+						if (interaction.message.interaction.user.id !== interaction.user.id)
+							return await interaction.reply({
+								content: "This message is not for you!",
+								ephemeral: true,
+							});
+					}
+				}
 			}
 
 			await command.execute(interaction);

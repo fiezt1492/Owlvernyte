@@ -45,6 +45,11 @@ module.exports = {
 			.setFooter({
 				text: `${message.guild.name}'s Shard: #${message.guild.shardId}`,
 			});
-		return message.reply({ embeds: [Embed] });
+		return message.reply({
+			embeds: [Embed],
+			allowedMentions: {
+				repliedUser: false,
+			},
+		});
 	},
 };
