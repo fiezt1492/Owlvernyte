@@ -46,10 +46,10 @@ module.exports = {
 						`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
 					);
 			embed
-				.setAuthor(`u/${post.author}`)
+				.setAuthor({ name: `u/${post.author}` })
 				.setTitle(String(post.title))
 				.setURL(String(post.postLink))
-				.setFooter(`r/${post.subreddit} | ⬆ ${post.ups}`);
+				.setFooter({ text: `r/${post.subreddit} | ⬆ ${post.ups}` });
 			if (!(post.nsfw || post.spoiler)) embed.setImage(post.url);
 			else
 				embed
@@ -102,10 +102,10 @@ module.exports = {
 								);
 					embed.description = null;
 					embed
-						.setAuthor(`u/${post.author}`)
+						.setAuthor({ name: `u/${post.author}` })
 						.setTitle(post.title)
 						.setURL(post.postLink)
-						.setFooter(`r/${post.subreddit} | ⬆ ${post.ups}`);
+						.setFooter({ text: `r/${post.subreddit} | ⬆ ${post.ups}` });
 					if (!(post.nsfw || post.spoiler)) embed.setImage(post.url);
 					else
 						embed
