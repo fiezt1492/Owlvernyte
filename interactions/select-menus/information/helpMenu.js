@@ -44,7 +44,7 @@ module.exports = {
 				"`" +
 					slashCommands.map((command) => command.data.name).join("`, `") +
 					"`"
-			);
+			).addField('Missing Slash Commands?',`Reinvite the bot via the **Invite me** button below`);
 
 		const helpEmbed = new MessageEmbed()
 			.setColor("RANDOM")

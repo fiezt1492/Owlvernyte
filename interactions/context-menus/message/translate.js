@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const translate = require("translate-google");
-// const locale = require("../../../modules/misc/translate/locale");
+const locale = require("../../../modules/misc/translate/locale");
 
 module.exports = {
 	data: {
@@ -32,7 +32,9 @@ module.exports = {
 		// 		};
 		// 	});
 
-		// console.log(langs);
+        let langs = Object.keys(locale)
+
+		console.log(langs);
 
 		// const components = [
 		// 	new Discord.MessageActionRow().addComponents(
@@ -50,6 +52,13 @@ module.exports = {
 		// ];
 
         let TO = guild.preferredLocale ? guild.preferredLocale : "en"
+
+        if (TO == 'en-US') TO = 'en'
+
+        if (!langs.includes(TO)) return await interaction.reply({
+            content: `This language is not supported`,
+            ephemeral: true,
+        });
 
 		let description = await translate(msg.content, {
 			from: "auto",

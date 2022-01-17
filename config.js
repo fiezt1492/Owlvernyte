@@ -5,5 +5,5 @@ module.exports = {
 	owner: String(process.env.OWNER),
 	client_id: String(process.env.CLIENT_ID),
 	test_guild_id: String(process.env.TEST_GUILD_ID),
-	dev: String(process.env.DEVMODE) || 'off',
+	dev: String(process.env.DEVMODE),
 }
