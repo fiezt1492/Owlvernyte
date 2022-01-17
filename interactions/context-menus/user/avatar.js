@@ -42,6 +42,9 @@ module.exports = {
 		await interaction.reply({
 			embeds: [Embed],
 			components: [ROW],
+			allowedMentions: {
+				repliedUser: false,
+			},
 			// ephemeral: true
 		});
 		return;

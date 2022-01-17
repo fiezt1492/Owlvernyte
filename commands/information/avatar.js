@@ -49,6 +49,9 @@ module.exports = {
 		return message.reply({
 			embeds: [Embed],
 			components: [ROW],
+			allowedMentions: {
+				repliedUser: false,
+			},
 		});
 	},
 };

@@ -132,9 +132,12 @@ module.exports = async (client, message) => {
 
 		let row1 = new MessageActionRow().addComponents([bt1, bt2]);
 
-		let msg = await message.channel.send({
+		let msg = await message.reply({
 			embeds: [deckEmbed],
 			components: [row1],
+			allowedMentions: {
+				repliedUser: false,
+			},
 		});
 
 		if (bt2.disabled == false)

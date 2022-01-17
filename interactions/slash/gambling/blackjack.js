@@ -161,6 +161,9 @@ module.exports = {
 			await interaction.reply({
 				embeds: [deckEmbed],
 				components: [row1],
+				allowedMentions: {
+					repliedUser: false,
+				},
 			});
 
 			let msg = await interaction.fetchReply();

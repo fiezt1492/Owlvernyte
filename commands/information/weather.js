@@ -35,11 +35,16 @@ module.exports = {
 						`${c.current.skytext} ${c.current.temperature}°${c.location.degreetype}`
 					)
 				);
-                if (embed.fields.length == 0) return message.reply("Not found")
-				message.channel.send({ embeds: [embed] });
+				if (embed.fields.length == 0) return message.reply("Not found");
+				message.reply({
+					embeds: [embed],
+					allowedMentions: {
+						repliedUser: false,
+					},
+				});
 			} catch (err) {
-                return message.reply("Unable to get data")
-            }
+				return message.reply("Unable to get data");
+			}
 		});
 
 		// return message.channel.send({ embeds: [embed] });

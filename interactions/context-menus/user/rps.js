@@ -63,12 +63,12 @@ module.exports = {
 		];
 
 		await interaction.reply({
-            content: `<@!${interaction.user.id}> **VS** <@!${opponent.id}>`,
+			content: `<@!${interaction.user.id}> **VS** <@!${opponent.id}>`,
 			embeds: [Embed],
 			components: components(false),
 		});
 
-        const msg = await interaction.fetchReply();
+		const msg = await interaction.fetchReply();
 
 		const filter = (i) =>
 			i.user.id === interaction.user.id || i.user.id === opponent.id;
@@ -93,7 +93,7 @@ module.exports = {
 			}
 
 			if (game.size === 2) return msgCol.stop();
-			
+
 			await i.update({ components: components(false) });
 		});
 

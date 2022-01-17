@@ -4,7 +4,7 @@ module.exports = {
 	name: "link",
 	description: "Send bot invitation",
 	category: "information",
-	aliases: ["vote","invite","links"],
+	aliases: ["vote", "invite", "links"],
 	usage: "",
 	cooldown: 1,
 	args: false,
@@ -34,6 +34,12 @@ module.exports = {
 					.setStyle("LINK")
 					.setURL(`https://top.gg/servers/830110554604961824/vote`)
 			);
-		return message.reply({ content: `Here you go.`, components: [components] });
+		return message.reply({
+			content: `Here you go.`,
+			components: [components],
+			allowedMentions: {
+				repliedUser: false,
+			},
+		});
 	},
 };

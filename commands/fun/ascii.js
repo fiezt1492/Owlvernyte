@@ -28,6 +28,11 @@ module.exports = {
 			.setColor("RANDOM")
 			.setDescription("```" + Result + "```");
 
-		return message.reply({ embeds: [embed] });
+		return message.reply({
+			embeds: [embed],
+			allowedMentions: {
+				repliedUser: false,
+			},
+		});
 	},
 };

@@ -30,6 +30,11 @@ module.exports = {
 			.setColor("RANDOM");
 		// .setTimestamp()
 
-		return message.reply({ embeds: [Embed] });
+		return message.reply({
+			embeds: [Embed],
+			allowedMentions: {
+				repliedUser: false,
+			},
+		});
 	},
 };

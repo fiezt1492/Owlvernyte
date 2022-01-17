@@ -27,6 +27,11 @@ module.exports = {
 		// 	.setFooter(`Requested by ${message.author.tag}`)
 		// 	.setTimestamp();
 
-		return message.reply({ content: `I chose \`${rs}\`.` });
+		return message.reply({
+			content: `I chose \`${rs}\`.`,
+			allowedMentions: {
+				repliedUser: false,
+			},
+		});
 	},
 };
