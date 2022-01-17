@@ -7,7 +7,7 @@ module.exports = {
 	/** You need to uncomment below properties if you need them. */
 	description: "Watching shards informations",
 	category: "information",
-	aliases: ["shard","stat","stats"],
+	aliases: ["shard", "stat", "stats"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
 	guildOnly: true,
@@ -26,7 +26,10 @@ module.exports = {
 				client.ws.ping,
 				client.users.cache.size,
 				client.guilds.cache.size,
-                (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(1) + "/" + (process.memoryUsage().heapTotal / 1024 / 1024).toFixed(1) + "MB"
+				(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(1) +
+					"/" +
+					(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(1) +
+					"MB",
 			];
 		});
 
@@ -37,7 +40,7 @@ module.exports = {
 				ping: s[2],
 				users: s[3],
 				guilds: s[4],
-                memory: s[5]
+				memory: s[5],
 			});
 		});
 
@@ -62,9 +65,9 @@ module.exports = {
 			.setTitle("SHARDS")
 			.setColor("RANDOM")
 			.setDescription("```" + des + "```")
-			.setFooter(
-				`${message.guild.name}'s Shard: #${message.guild.shardId} | Guild ID: ${message.guild.id}`
-			)
+			.setFooter({
+				text: `${message.guild.name}'s Shard: #${message.guild.shardId} | Guild ID: ${message.guild.id}`,
+			})
 			.setTimestamp();
 
 		return message.reply({ embeds: [embed] });

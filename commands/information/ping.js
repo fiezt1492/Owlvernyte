@@ -42,7 +42,9 @@ module.exports = {
 					"```",
 				true
 			)
-			.setFooter(`${message.guild.name}'s Shard: #${message.guild.shardId}`);
+			.setFooter({
+				text: `${message.guild.name}'s Shard: #${message.guild.shardId}`,
+			});
 		return message.reply({ embeds: [Embed] });
 	},
 };
