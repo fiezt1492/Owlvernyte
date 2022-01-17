@@ -231,8 +231,8 @@ module.exports = async (client, message) => {
 			}
 
 			while (
-				!dealer.isStayable() ||
-				(dealer.point < p1.point && p1.isHitable())
+				(!dealer.isStayable() || (dealer.point < p1.point && p1.isHitable())) &&
+				dealer.isHitable()
 			) {
 				dealer.draw(d);
 			}

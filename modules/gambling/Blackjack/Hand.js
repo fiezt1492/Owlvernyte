@@ -38,7 +38,7 @@ module.exports = class {
     }
   
     isBusted() {
-      return this.point > 21
+      return this.point > 21 || (this.numberOfCards == 5 && this.point > 21)
     }
     is5D() {
       return this.numberOfCards == 5 && this.point <= 21
@@ -47,7 +47,7 @@ module.exports = class {
       return this.point === 21
     }
     isStayable() {
-      return this.point >= 15
+      return this.point >= 15 && this.numberOfCards <= 5
     }
     isHitable() {
       return this.point <= 21 && this.numberOfCards < 5
