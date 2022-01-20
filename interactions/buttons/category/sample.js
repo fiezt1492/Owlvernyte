@@ -1,5 +1,6 @@
 module.exports = {
 	id: "sample",
+	filter: "author",
 
 	async execute(interaction) {
 		await interaction.reply({

@@ -93,6 +93,12 @@ module.exports = {
 			});
 		}
 
+		if (command.maintain) {
+			return message.reply({
+				content: "This command is currently under maintenance. Please wait until we completely fixed it.",
+			});
+		}
+
 		// Author perms property
 
 		if (command.permissions) {

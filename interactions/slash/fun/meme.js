@@ -1,20 +1,28 @@
+// Deconstructed the constants we need in this file.
+
 const Discord = require("discord.js");
+const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const fetch = require("node-fetch");
 
 module.exports = {
-	name: "meme",
-	description: "Generate random meme",
-	category: "fun",
-	aliases: ["mêm"],
-	usage: "<subreddit>",
-	permissions: "SEND_MESSAGES",
-	guildOnly: true,
+	// The data needed to register slash commands to Discord.
+	data: new SlashCommandBuilder()
+		.setName("meme")
+		.setDescription("Summon random memes")
+		.addStringOption((option) =>
+			option
+				.setName("subreddit")
+				.setDescription("Provide a subreddit to get memes in it.")
+				.setRequired(false)
+		),
 
-	async execute(message, args) {
-		// const { client } = message;
-		let subreddit = args.join("_");
+	async execute(interaction) {
+		const { client } = interaction;
 
+		let subreddit = interaction.options.getString("subreddit");
 		if (!isNaN(Number(subreddit))) subreddit = null;
+
 		const embed = new Discord.MessageEmbed().setColor("RANDOM");
 		let http;
 		let post;
@@ -60,30 +68,31 @@ module.exports = {
 		} catch (error) {
 			console.log(error);
 			if (error.code === "ERR_NON_2XX_3XX_RESPONSE")
-				return message.reply(
+				return interaction.reply(
 					`**[ERROR]** I can't find any meme in \`r/${subreddit}\``
 				);
 
 			embed.setColor("RED").setTitle("ERROR").setDescription(error);
-			return message.reply({
+			return interaction.reply({
 				embeds: [embed],
 			});
 		}
-
-		const m = await message.reply({
+		await interaction.reply({
 			embeds: [embed],
 			components: row(false),
-			allowedMentions: {
-				repliedUser: false,
-			},
+			// allowedMentions: {
+			// 	repliedUser: false,
+			// },
 		});
 
-		const filter = (b) => b.user.id === message.author.id;
+        const m = await interaction.fetchReply()
+
+		const filter = (b) => b.user.id === interaction.user.id;
 
 		const mCol = m.createMessageComponentCollector({
 			filter,
 			componentType: "BUTTON",
-			time: 10000,
+			time: 30000,
 		});
 
 		mCol.on("collect", async (btn) => {

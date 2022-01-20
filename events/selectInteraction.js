@@ -22,31 +22,9 @@ module.exports = {
 		// A try to execute the interaction.
 
 		try {
+			// console.log(interaction);
 			if (command.filter.toLowerCase() === "author") {
 				if (interaction.message) {
-					if (interaction.message.mentions) {
-						if (
-							interaction.message.mentions.repliedUser &&
-							interaction.message.mentions.repliedUser.id !==
-								interaction.user.id
-						) {
-							return await interaction.reply({
-								content: "This message is not for you!",
-								ephemeral: true,
-							});
-						}
-
-						if (
-							interaction.message.mentions.users.length > 0 &&
-							interaction.message.mentions.users.first().id !==
-								interaction.user.id
-						)
-							return await interaction.reply({
-								content: "This message is not for you!",
-								ephemeral: true,
-							});
-					}
-
 					if (interaction.message.interaction) {
 						if (interaction.message.interaction.user.id !== interaction.user.id)
 							return await interaction.reply({
@@ -54,6 +32,47 @@ module.exports = {
 								ephemeral: true,
 							});
 					}
+
+					if (interaction.message.reference) {
+						const guild = await client.guilds.fetch(
+							interaction.message.reference.guildId
+						);
+						const channel = await guild.channels.fetch(
+							interaction.message.reference.channelId
+						);
+						const message = await channel.messages.fetch(
+							interaction.message.reference.messageId
+						);
+
+						if (message.author.id !== interaction.user.id)
+							return await interaction.reply({
+								content: "This message is not for you!",
+								ephemeral: true,
+							});
+					}
+
+					// if (interaction.message.mentions) {
+					// 	if (
+					// 		interaction.message.mentions.repliedUser &&
+					// 		interaction.message.mentions.repliedUser.id !==
+					// 			interaction.user.id
+					// 	) {
+					// 		return await interaction.reply({
+					// 			content: "This message is not for you!",
+					// 			ephemeral: true,
+					// 		});
+					// 	}
+
+					// 	if (
+					// 		interaction.message.mentions.users.length > 0 &&
+					// 		interaction.message.mentions.users.first().id !==
+					// 			interaction.user.id
+					// 	)
+					// 		return await interaction.reply({
+					// 			content: "This message is not for you!",
+					// 			ephemeral: true,
+					// 		});
+					// }
 				}
 			}
 
