@@ -49,7 +49,7 @@ module.exports = {
 		const msg = await message.reply({
 			embeds: [Embed],
 			components: components(false),
-			allowedMention: {
+			allowedMentions: {
 				repliedUser: false,
 			},
 		});
