@@ -1,24 +1,28 @@
-// const Discord = require("discord.js");
-const config = require("../../config");
-// const guildPrefix = require("../../modules/configuration/guildPrefix");
+// Deconstructed the constants we need in this file.
+
 const Discord = require("discord.js");
-const disableComponent = require("../../modules/util/disableComponent");
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const disableComponent = require("../../../modules/util/disableComponent");
 
 module.exports = {
-	name: "settings",
-	description: "Change guild settings",
-	category: "configuration",
-	aliases: [],
-	// usage: "[options]",
-	cooldown: 5,
-	// options: ["reset", "set", "get"],
-	// args: true,
-	ownerOnly: false,
+	// The data needed to register slash commands to Discord.
+	data: new SlashCommandBuilder()
+		.setName("settings")
+		.setDescription("Config your guild"),
+	// .setDefaultPermission(true),
+	// .addStringOption((option) =>
+	// 	option
+	// 		.setName("subreddit")
+	// 		.setDescription("Provide a subreddit to get memes in it.")
+	// 		.setRequired(false)
+	// ),
 	guildOwner: true,
 	permissions: ["ADMINISTRATOR"],
-	guildOnly: true,
 
-	async execute(message, args) {
+	async execute(interaction) {
+		const { client } = interaction;
+
+		// console.log(interaction);
 		const Embed = new Discord.MessageEmbed()
 			.setTitle("Guild Settings Panel")
 			.setDescription(
@@ -26,8 +30,8 @@ module.exports = {
 			)
 			.setColor("RANDOM")
 			.setAuthor({
-				name: message.guild.name,
-				iconURL: message.guild.iconURL(),
+				name: interaction.member.guild.name,
+				iconURL: interaction.member.guild.iconURL(),
 			});
 		// .addField("Prefix", await guildPrefix.get(message));
 
@@ -46,23 +50,22 @@ module.exports = {
 			),
 		];
 
-		const msg = await message.reply({
+		await interaction.reply({
+			// content: "alo"
 			embeds: [Embed],
 			components: components(false),
-			allowedMention: {
-				repliedUser: false,
-			},
 		});
 
-		const filter = (i) => i.user.id === message.author.id;
+        const msg = await interaction.fetchReply()
+        const filter = (i) => i.user.id === interaction.user.id;
 
-		const msgCol = msg.createMessageComponentCollector({
+        const msgCol = msg.createMessageComponentCollector({
 			filter,
 			componentType: "BUTTON",
 			time: 60000,
 		});
 
-		msgCol.on("collect", (i) => {
+        msgCol.on("collect", (i) => {
 			if (i.customId === "cancel") return msgCol.stop();
 			// console.log(i)
 			// i.update()

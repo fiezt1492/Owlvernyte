@@ -11,7 +11,10 @@ module.exports = {
 		const Embed = new Discord.MessageEmbed()
 			.setTitle("Guild Settings Panel")
 			.setColor("RANDOM")
-			.setAuthor({ name: interaction.message.guild.name, iconURL: interaction.message.guild.iconURL() })
+			.setAuthor({
+				name: interaction.message.guild.name,
+				iconURL: interaction.message.guild.iconURL(),
+			})
 			.addField("Prefix", await guildPrefix.get(interaction.message));
 
 		const components = (state) => [
@@ -29,9 +32,10 @@ module.exports = {
 			),
 		];
 
-        await interaction.update({
-            embeds: [Embed],
-            components: components(false)
-        })
+		await interaction.update({
+			embeds: [Embed],
+			components: components(false),
+		});
+		return;
 	},
 };

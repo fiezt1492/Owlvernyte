@@ -170,7 +170,7 @@ const commandJsonData = [
 (async () => {
 	try {
 		console.log("Started refreshing application (/) commands.");
-		if (dev === "on")
+		if (dev === "on") {
 			await rest.put(
 				/**
 			 * Here we are sending to discord our slash commands to be registered.
@@ -185,11 +185,11 @@ const commandJsonData = [
 				Routes.applicationGuildCommands(client_id, test_guild_id),
 				{ body: commandJsonData }
 			);
-		else
-			await rest.put(
-				Routes.applicationCommands(client_id),
-				{ body: commandJsonData }
-			);
+		} else {
+			await rest.put(Routes.applicationCommands(client_id), {
+				body: commandJsonData,
+			});
+		}
 
 		console.log("Successfully reloaded application (/) commands.");
 	} catch (error) {
