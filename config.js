@@ -6,4 +6,5 @@ module.exports = {
 	client_id: String(process.env.CLIENT_ID),
 	test_guild_id: String(process.env.TEST_GUILD_ID),
 	dev: String(process.env.DEVMODE),
+	port: Number(process.env.PORT) || 80,
 }

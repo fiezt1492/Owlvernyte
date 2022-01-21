@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 const Topgg = require("@top-gg/sdk");
 const webhook = new Topgg.Webhook(process.env.TOPGG_AUTH);
 const server = express();
+const { port } = require("./config");
 
 module.exports = (client) => {
 	server.all("/", (req, res) => {
@@ -30,7 +31,7 @@ module.exports = (client) => {
 };
 
 var keepAlive = () => {
-	server.listen(80, () => {
+	server.listen(port, () => {
 		console.log("Server is ready.");
 	});
 };
