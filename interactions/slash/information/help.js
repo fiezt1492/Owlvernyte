@@ -1,6 +1,11 @@
 // Deconstructed the constants we need in this file.
 
-const { MessageEmbed, MessageButton, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const {
+	MessageEmbed,
+	MessageButton,
+	MessageActionRow,
+	MessageSelectMenu,
+} = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { prefix } = require("../../../config");
 
@@ -141,13 +146,16 @@ module.exports = {
 			});
 		} else {
 			const command =
-				commands.get(args.join(" ").toLowerCase()) ||
+				commands.get(string.toLowerCase()) ||
 				commands.find(
-					(c) => c.aliases && c.aliases.includes(args.join(" ").toLowerCase())
+					(c) => c.aliases && c.aliases.includes(string.toLowerCase())
 				);
 
 			if (!command) {
-				return message.reply({ content: "That's not a valid command!" });
+				return interaction.reply({
+					content: "That's not a valid command!",
+					ephemeral: true,
+				});
 			}
 
 			let commandEmbed = new MessageEmbed()
