@@ -33,11 +33,12 @@ module.exports = {
 		// const checkPrefix = (
 		// 	await require("../modules/configuration/guildPrefix").get(message)
 		// ).toLowerCase();
-		const { prefix } = await client.guildSettings.get(guild.id)
-		const checkPrefix = prefix
+		const guildSettings = await client.guildSettings.get(guild.id)
+		// const checkPrefix = prefix
+		const prefix = guildSettings.prefix
 
 		const prefixRegex = new RegExp(
-			`^(<@!?${client.user.id}>|${escapeRegex(checkPrefix)})\\s*`
+			`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
 		);
 
 		// Checks if message content in lower case starts with bot's mention.
