@@ -7,7 +7,7 @@ module.exports = {
 	aliases: ["sicbo", "taixiu", "highlow"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
-	// maintain: true,
+	maintain: true,
 	guildOnly: true,
 
 	async execute(message, args) {
@@ -23,8 +23,8 @@ module.exports = {
 		};
 
 		// let description = "";
-		// let dices = [];
-		let dices = [1, 1, 1];
+		let dices = [];
+		// let dices = [1, 1, 1];
 
 		// for (let i = 0; i < 3; i++) {
 		// 	dices.push(Math.floor(Math.random() * 5) + 1);
