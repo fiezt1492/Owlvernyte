@@ -8,7 +8,7 @@ const { port } = require("./config");
 module.exports = (client) => {
 	server.all("/", (req, res) => {
 		res.send(
-			`Bot is running.<br>Default Prefix: ${process.env.PREFIX}<br>Bot ID: ${process.env.BOT_ID}`
+			`Bot is running.`
 		);
 	});
 
