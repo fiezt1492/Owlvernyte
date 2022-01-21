@@ -3,7 +3,7 @@ const { Client, Collection, Intents } = require("discord.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const { prefix, token, client_id, test_guild_id, dev } = require("./config.js");
-const keepAlive = require('./server')
+// const keepAlive = require('./server')
 const intents = [
 	"GUILDS",
 	"GUILD_MEMBERS",
@@ -216,5 +216,5 @@ for (const folder of triggerFolders) {
 }
 
 // Login into your client application with bot's token.
-keepAlive(client)
+// keepAlive(client)
 client.login(token);
