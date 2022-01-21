@@ -8,7 +8,6 @@ module.exports = {
 	aliases: ["bj"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
-	guildOnly: true,
 
 	async execute(message, args) {
 		const { client } = message;

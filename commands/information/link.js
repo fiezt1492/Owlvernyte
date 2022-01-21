@@ -10,7 +10,6 @@ module.exports = {
 	args: false,
 	ownerOnly: false,
 	permissions: ["SEND_MESSAGES"],
-	guildOnly: true,
 
 	async execute(message, args) {
 		// const { client } = message;

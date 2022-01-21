@@ -20,6 +20,8 @@ module.exports = {
 		// Checks if the bot is mentioned in the message all alone and triggers onMention trigger.
 		// You can change the behavior as per your liking at ./messages/onMention.js
 
+		if (message.author.bot || message.channel.type === "dm") return;
+
 		if (
 			message.content == `<@${client.user.id}>` ||
 			message.content == `<@!${client.user.id}>`
@@ -67,14 +69,6 @@ module.exports = {
 
 		if (command.ownerOnly && message.author.id !== owner) {
 			return;
-		}
-
-		// Guild Only Property, add in your command properties if true.
-
-		if (command.guildOnly && message.channel.type === "dm") {
-			return message.reply({
-				content: "I can't execute that command inside DMs!",
-			});
 		}
 
 		if (command.maintain) {

@@ -16,7 +16,6 @@ module.exports = {
 	ownerOnly: false,
 	guildOwner: true,
 	permissions: ["ADMINISTRATOR"],
-	guildOnly: true,
 
 	async execute(message, args) {
 		const Embed = new Discord.MessageEmbed()

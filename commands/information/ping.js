@@ -7,7 +7,6 @@ module.exports = {
 	aliases: ["uptime"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
-	guildOnly: true,
 
 	async execute(message, args) {
 		const { client } = message;

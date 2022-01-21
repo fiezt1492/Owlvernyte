@@ -10,7 +10,6 @@ module.exports = {
 	aliases: ["shard", "stat", "stats"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
-	guildOnly: true,
 
 	async execute(message, args) {
 		const { client } = message;

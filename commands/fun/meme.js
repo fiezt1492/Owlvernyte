@@ -8,7 +8,6 @@ module.exports = {
 	aliases: ["mêm"],
 	usage: "<subreddit>",
 	permissions: "SEND_MESSAGES",
-	guildOnly: true,
 
 	async execute(message, args) {
 		// const { client } = message;

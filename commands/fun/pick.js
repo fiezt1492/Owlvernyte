@@ -7,7 +7,6 @@ module.exports = {
 	aliases: ["choose"],
 	usage: `[things to pick/choices then seperate them with comma ","]`,
 	permissions: "SEND_MESSAGES",
-	guildOnly: true,
 	args: true,
 
 	async execute(message, args) {

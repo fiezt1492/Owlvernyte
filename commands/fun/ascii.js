@@ -12,7 +12,6 @@ module.exports = {
 	usage: "[text]",
 	args: true,
 	permissions: "SEND_MESSAGES",
-	guildOnly: true,
 
 	async execute(message, args) {
 		// const { client } = message;
