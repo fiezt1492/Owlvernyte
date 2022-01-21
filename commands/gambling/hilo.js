@@ -23,12 +23,12 @@ module.exports = {
 		};
 
 		// let description = "";
-		let dices = [];
-		// let dices = [1, 1, 1];
+		// let dices = [];
+		let dices = [1, 1, 1];
 
-		for (let i = 0; i < 3; i++) {
-			dices.push(Math.floor(Math.random() * 5) + 1);
-		}
+		// for (let i = 0; i < 3; i++) {
+		// 	dices.push(Math.floor(Math.random() * 5) + 1);
+		// }
 
 		let description = dices.map((dice) => `${emojis[dice]}`).join(` | `);
 
@@ -147,10 +147,10 @@ module.exports = {
 					result = sum >= 4 && sum <= 10 ? 1 : -1;
 					break;
 				case "biggest":
-					result = sum === 3 ? 180 : -1;
+					result = sum === 18 ? 180 : -1;
 					break;
 				case "smallest":
-					result = sum === 18 ? 180 : -1;
+					result = sum === 3 ? 180 : -1;
 					break;
 				case "even":
 					result = !odd ? 1 : -1;
