@@ -20,7 +20,7 @@ module.exports = {
 	permissions: ["ADMINISTRATOR"],
 
 	async execute(interaction) {
-		const { client } = interaction;
+		// const { client } = interaction;
 
 		// console.log(interaction);
 		const Embed = new Discord.MessageEmbed()

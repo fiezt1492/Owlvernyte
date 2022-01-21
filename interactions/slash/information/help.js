@@ -7,7 +7,7 @@ const {
 	MessageSelectMenu,
 } = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { prefix } = require("../../../config");
+// const { prefix } = require("../../../config");
 
 module.exports = {
 	// The data needed to register slash commands to Discord.
@@ -27,6 +27,7 @@ module.exports = {
 		const { client } = interaction;
 		const { commands } = client;
 		// const slashCommands = client.slashCommands;
+		const prefix = client.guildSettings.get(interaction.guildId).prefix.toLowerCase()
 		const string = interaction.options.getString("command");
 
 		if (!string) {

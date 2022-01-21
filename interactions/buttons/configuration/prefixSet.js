@@ -89,7 +89,7 @@ module.exports = {
 
 				Embed.fields[0] = {
 					name: "Current Prefix",
-					value: await guildPrefix.get(message),
+					value: guildPrefix.get(message),
 				};
 
 				message.edit({
@@ -98,7 +98,7 @@ module.exports = {
 				});
 
 				return interaction.followUp({
-					content: `Successfully changed your guild prefix to \`${await guildPrefix.get(
+					content: `Successfully changed your guild prefix to \`${guildPrefix.get(
 						message
 					)}\``,
 					ephemeral: true,
@@ -109,7 +109,7 @@ module.exports = {
 
 			Embed.fields[0] = {
 				name: "Current Prefix",
-				value: await guildPrefix.get(message),
+				value: guildPrefix.get(message),
 			};
 
 			message.edit({

@@ -1,7 +1,7 @@
 // Declares constants (destructured) to be used in this file.
 
 const { Collection } = require("discord.js");
-const { prefix, owner } = require("../config");
+const { owner } = require("../config");
 
 // Prefix regex, we will use to match in mention prefix.
 
@@ -28,27 +28,11 @@ module.exports = {
 			return;
 		}
 
-		// const gDB = client.db.collection("guildSettings");
-		// const guildSetting = await gDB.findOne(
-		// 	{ gID: message.guild.id },
-		// 	{
-		// 		prefix: 1,
-		// 	}
-		// );
-
-		// if (guildSetting && guildSetting.prefix) {
-		// 	client.guildSettings.set(message.guild.id, {
-		// 		prefix: guildSetting.prefix,
-		// 	});
-		// } else {
-		// 	client.guildSettings.set(message.guild.id, {
-		// 		prefix: prefix,
-		// 	});
-		// }
-
-		const checkPrefix = (
-			await require("../modules/configuration/guildPrefix").get(message)
-		).toLowerCase();
+		// const checkPrefix = (
+		// 	await require("../modules/configuration/guildPrefix").get(message)
+		// ).toLowerCase();
+		const prefix = client.guildSettings.get(guild.id).prefix.toLowerCase();
+		const checkPrefix = client.guildSettings.get(guild.id).prefix.toLowerCase();
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(checkPrefix)})\\s*`
@@ -95,7 +79,8 @@ module.exports = {
 
 		if (command.maintain) {
 			return message.reply({
-				content: "This command is currently under maintenance. Please wait until we completely fixed it.",
+				content:
+					"This command is currently under maintenance. Please wait until we completely fixed it.",
 			});
 		}
 
@@ -131,7 +116,7 @@ module.exports = {
 			}
 
 			return message.reply({ content: reply });
-		} 
+		}
 		// else if (
 		// 	command.args &&
 		// 	args.length &&

@@ -13,7 +13,7 @@ module.exports = {
 
 		const Embed = message.embeds[0];
 
-		if ((await guildPrefix.get(message)) === config.prefix)
+		if ((guildPrefix.get(message)) === config.prefix)
 			return interaction.reply({
 				content: `Your prefix is already default! You dont need to reset it.`,
 				ephemeral: true,
@@ -23,7 +23,7 @@ module.exports = {
 
 		Embed.fields[0] = {
 			name: "Current Prefix",
-			value: await guildPrefix.get(message),
+			value: guildPrefix.get(message),
 		};
 
 		message.edit({

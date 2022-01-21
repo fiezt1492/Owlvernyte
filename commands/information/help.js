@@ -1,4 +1,4 @@
-const { prefix } = require("./../../config");
+// const { prefix } = require("./../../config");
 const {
 	MessageEmbed,
 	MessageActionRow,
@@ -17,6 +17,7 @@ module.exports = {
 	async execute(message, args) {
 		const { commands } = message.client;
 		// const slashCommands = message.client.slashCommands;
+		const prefix = message.client.guildSettings.get(message.guild.id).prefix.toLowerCase()
 
 		if (!args.length) {
 			const formatString = (str) =>

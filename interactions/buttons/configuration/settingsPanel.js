@@ -15,7 +15,7 @@ module.exports = {
 				name: interaction.message.guild.name,
 				iconURL: interaction.message.guild.iconURL(),
 			})
-			.addField("Prefix", await guildPrefix.get(interaction.message));
+			.addField("Prefix", guildPrefix.get(interaction.message));
 
 		const components = (state) => [
 			new Discord.MessageActionRow().addComponents(

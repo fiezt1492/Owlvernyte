@@ -50,7 +50,7 @@ module.exports = {
 				}
 			} else {
 				return message.reply(
-					`**[ERROR]** Invalid input. Type \`${await guildPrefix.get(
+					`**[ERROR]** Invalid input. Type \`${guildPrefix.get(
 						message
 					)}help ${this.name}\` for more infomation.`
 				);

@@ -17,7 +17,7 @@ module.exports = {
 			})
 			.setTitle("Guild Prefix")
 			.setColor("RANDOM")
-			.addField("Current Prefix", await guildPrefix.get(interaction.message))
+			.addField("Current Prefix", guildPrefix.get(interaction.message))
 			.setDescription(
 				`\`Set\` button -> set new guild prefix\n\`Reset\` button -> reset your current guild prefix to default prefix: \`${config.prefix}\``
 			);
