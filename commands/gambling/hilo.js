@@ -4,7 +4,7 @@ module.exports = {
 	name: "hilo",
 	description: "Tài xỉu - High Low - Sic bo is arrived",
 	category: "gambling",
-	aliases: ["sicbo", "taixiu", "highlow"],
+	aliases: ["sicbo", "taixiu", "highlow", "bigsmall"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
 	// maintain: true,
@@ -43,27 +43,47 @@ module.exports = {
 		const components = (state) => [
 			new Discord.MessageActionRow().addComponents(
 				new Discord.MessageButton()
-					.setCustomId("hilo-hi")
+					.setCustomId("double")
+					.setLabel("Double")
+					.setDisabled(state)
+					.setStyle("SUCCESS"),
+				new Discord.MessageButton()
+					.setCustomId("big")
 					.setLabel("Big")
 					.setDisabled(state)
 					.setStyle("PRIMARY"),
 				new Discord.MessageButton()
-					.setCustomId("hilo-lo")
+					.setCustomId("small")
 					.setLabel("Small")
 					.setDisabled(state)
-					.setStyle("PRIMARY")
+					.setStyle("PRIMARY"),
+				new Discord.MessageButton()
+					.setCustomId("biggest")
+					.setLabel("Biggest")
+					.setDisabled(state)
+					.setStyle("DANGER")
 			),
 			new Discord.MessageActionRow().addComponents(
 				new Discord.MessageButton()
-					.setCustomId("hilo-even")
+					.setCustomId("triple")
+					.setLabel("Triple")
+					.setDisabled(state)
+					.setStyle("SUCCESS"),
+				new Discord.MessageButton()
+					.setCustomId("even")
 					.setLabel("Even")
 					.setDisabled(state)
 					.setStyle("SECONDARY"),
 				new Discord.MessageButton()
-					.setCustomId("hilo-odd")
+					.setCustomId("odd")
 					.setLabel("Odd")
 					.setDisabled(state)
-					.setStyle("SECONDARY")
+					.setStyle("SECONDARY"),
+				new Discord.MessageButton()
+					.setCustomId("smallest")
+					.setLabel("Smallest")
+					.setDisabled(state)
+					.setStyle("DANGER")
 			),
 		];
 
@@ -107,37 +127,50 @@ module.exports = {
 
 			let bet = collected.first().customId;
 
-			let sum = dices.reduce((a, b) => a + b, 0);
-			Embed.setFooter({ text: `1:1` });
-
-			if (bet === "hilo-even" || bet === "hilo-odd") {
-				let odd = () => sum % 2 === 1;
-				if ((bet === "hilo-even" && !odd()) || (bet === "hilo-odd" && odd())) {
-					Embed.title = `WIN`;
-				} else Embed.title = `LOSE`;
+			function hasDuplicates(array) {
+				return new Set(array).size !== array.length;
 			}
 
-			if (bet === "hilo-hi" || bet === "hilo-lo") {
-				if (
-					(sum >= 4 && sum <= 10 && bet === "hilo-lo") ||
-					(sum >= 11 && sum <= 17 && bet === "hilo-hi")
-				) {
-					Embed.title = "WIN";
-				} else Embed.title = "LOSE";
+			let sum = dices.reduce((a, b) => a + b, 0);
+			Embed.setFooter({ text: `-1` });
+			Embed.title = "LOSE";
+			let odd = sum % 2 === 1 ? true : false;
+			let triple = dices.every((val, i, arr) => val === arr[0]);
+			let double = triple ? false : hasDuplicates(dices);
+			let result = -1;
 
-				if (dices.every((val, i, arr) => val === arr[0])) {
-					Embed.setFooter({ text: `3:1` });
+			switch (bet) {
+				case "big":
+					result = sum >= 11 && sum <= 17 ? 1 : -1;
+					break;
+				case "small":
+					result = sum >= 4 && sum <= 10 ? 1 : -1;
+					break;
+				case "biggest":
+					result = sum === 3 ? 180 : -1;
+					break;
+				case "smallest":
+					result = sum === 18 ? 180 : -1;
+					break;
+				case "even":
+					result = !odd ? 1 : -1;
+					break;
+				case "odd":
+					result = odd ? 1 : -1;
+					break;
+				case "double":
+					result = double ? 5 : -1;
+					break;
+				case "triple":
+					result = triple ? 30 : -1;
+					break;
+			}
 
-					if (
-						(sum === 3 && bet === "hilo-lo") ||
-						(sum === 18 && bet === "hilo-hi")
-					) {
-						Embed.title = "Special WIN";
-						Embed.setFooter({ text: `5:1` });
-					}
-
-					
-				}
+			if (result > 0) {
+				Embed.title = "WIN";
+				Embed.setFooter({
+					text: String(result),
+				});
 			}
 
 			if (collected)
