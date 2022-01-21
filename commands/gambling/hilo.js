@@ -7,7 +7,7 @@ module.exports = {
 	aliases: ["sicbo", "taixiu", "highlow"],
 	usage: "",
 	permissions: "SEND_MESSAGES",
-	maintain: true,
+	// maintain: true,
 	guildOnly: true,
 
 	async execute(message, args) {
@@ -26,9 +26,9 @@ module.exports = {
 		let dices = [];
 		// let dices = [1, 1, 1];
 
-		// for (let i = 0; i < 3; i++) {
-		// 	dices.push(Math.floor(Math.random() * 5) + 1);
-		// }
+		for (let i = 0; i < 3; i++) {
+			dices.push(Math.floor(Math.random() * 5) + 1);
+		}
 
 		let description = dices.map((dice) => `${emojis[dice]}`).join(` | `);
 
@@ -44,12 +44,12 @@ module.exports = {
 			new Discord.MessageActionRow().addComponents(
 				new Discord.MessageButton()
 					.setCustomId("hilo-hi")
-					.setLabel("High")
+					.setLabel("Big")
 					.setDisabled(state)
 					.setStyle("PRIMARY"),
 				new Discord.MessageButton()
 					.setCustomId("hilo-lo")
-					.setLabel("Low")
+					.setLabel("Small")
 					.setDisabled(state)
 					.setStyle("PRIMARY")
 			),
@@ -108,6 +108,7 @@ module.exports = {
 			let bet = collected.first().customId;
 
 			let sum = dices.reduce((a, b) => a + b, 0);
+			Embed.setFooter({ text: `1:1` });
 
 			if (bet === "hilo-even" || bet === "hilo-odd") {
 				let odd = () => sum % 2 === 1;
@@ -125,14 +126,17 @@ module.exports = {
 				} else Embed.title = "LOSE";
 
 				if (dices.every((val, i, arr) => val === arr[0])) {
+					Embed.setFooter({ text: `3:1` });
+
 					if (
 						(sum === 3 && bet === "hilo-lo") ||
 						(sum === 18 && bet === "hilo-hi")
 					) {
 						Embed.title = "Special WIN";
+						Embed.setFooter({ text: `5:1` });
 					}
 
-					Embed.setFooter({ text: `SAME DICES!!!` });
+					
 				}
 			}
 
