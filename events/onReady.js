@@ -18,48 +18,63 @@ module.exports = {
 			console.log("[RESTART] RESTARTED THE BOT");
 		}
 
-		try {
-			client.guilds.cache
-				.map((guild) => guild.id)
-				.forEach(async (id) => {
-					const guild = await gDB.findOne(
-						{
-							gID: id,
-						},
-						{
-							prefix: 1,
-						}
-					);
+		// try {
+		client.guilds.cache
+			.map((guild) => guild.id)
+			.forEach(async (id) => {
+				const guild = await gDB.findOne(
+					{
+						gID: id,
+					},
+					{
+						prefix: 1,
+					}
+				);
 
-					client.guildSettings.set(id, {
-						prefix: guild ? guild.prefix : prefix,
-					});
+				client.guildSettings.set(id, {
+					prefix: guild ? guild.prefix : prefix,
 				});
+			})
+			.then(() => {
+				client.user.setPresence({
+					status: "online",
+					afk: false,
+					activities: [
+						{
+							name: `${prefix}help | Testing with bugs`,
+							type: 0,
+						},
+					],
+				});
+			})
+			.catch((error) => {
+				console.log(error);
 
-			client.user.setPresence({
-				status: "online",
-				afk: false,
-				activities: [
-					{
-						name: `${prefix}help | Testing with bugs`,
-						type: 0,
-					},
-				],
+				client.user.setPresence({
+					status: "idle",
+					afk: false,
+					activities: [
+						{
+							name: `${prefix}help | Testing with bugs`,
+							type: 0,
+						},
+					],
+				});
 			});
-		} catch (error) {
-			console.log(error);
+		// } catch (error) {
+		// 	console.log(error);
 
-			client.user.setPresence({
-				status: "idle",
-				afk: false,
-				activities: [
-					{
-						name: `${prefix}help | Testing with bugs`,
-						type: 0,
-					},
-				],
-			});
-		}
+		// 	client.user.setPresence({
+		// 		status: "idle",
+		// 		afk: false,
+		// 		activities: [
+		// 			{
+		// 				name: `${prefix}help | Testing with bugs`,
+		// 				type: 0,
+		// 			},
+		// 		],
+		// 	});
+		// }
 
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 	},

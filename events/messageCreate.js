@@ -37,6 +37,7 @@ module.exports = {
 		// ).toLowerCase();
 		const guildSettings = await client.guildSettings.get(guild.id)
 		// const checkPrefix = prefix
+		console.log(guildSettings)
 		const prefix = guildSettings.prefix
 
 		const prefixRegex = new RegExp(
