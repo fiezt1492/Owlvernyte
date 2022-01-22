@@ -52,6 +52,7 @@ for (const file of eventFiles) {
 client.db = require("./databases/mongo.js");
 client.guildSettings = new Collection();
 client.commands = new Collection();
+client.ready = false
 // client.aliases = new Discord.Collection();
 client.slashCommands = new Collection();
 client.buttonCommands = new Collection();

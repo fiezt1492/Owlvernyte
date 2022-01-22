@@ -19,23 +19,6 @@ module.exports = {
 		}
 
 		try {
-			client.guilds.cache
-				.map((guild) => guild.id)
-				.forEach(async (id) => {
-					const guild = await gDB.findOne(
-						{
-							gID: id,
-						},
-						{
-							prefix: 1,
-						}
-					);
-
-					return client.guildSettings.set(id, {
-						prefix: guild ? guild.prefix : prefix,
-					});
-				});
-
 			client.user.setPresence({
 				status: "online",
 				afk: false,
@@ -45,6 +28,27 @@ module.exports = {
 						type: 0,
 					},
 				],
+			});
+
+			const guilds = await client.guilds.cache.map((guild) => guild.id);
+
+			guilds.forEach(async (id) => {
+				const guild = await gDB.findOne(
+					{
+						gID: id,
+					},
+					{
+						prefix: 1,
+					}
+				);
+
+				client.guildSettings.set(id, {
+					prefix: guild ? guild.prefix : prefix,
+				});
+
+				if (guilds.indexOf(id) === guilds.length - 1) {
+					client.ready = true
+				}
 			});
 		} catch (error) {
 			console.log(error);
