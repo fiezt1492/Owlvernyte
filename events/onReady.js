@@ -35,8 +35,30 @@ module.exports = {
 						prefix: guild ? guild.prefix : prefix,
 					});
 				});
+
+			client.user.setPresence({
+				status: "online",
+				afk: false,
+				activities: [
+					{
+						name: `${prefix}help | Testing with bugs`,
+						type: 0,
+					},
+				],
+			});
 		} catch (error) {
 			console.log(error);
+
+			client.user.setPresence({
+				status: "idle",
+				afk: false,
+				activities: [
+					{
+						name: `${prefix}help | Testing with bugs`,
+						type: 0,
+					},
+				],
+			});
 		}
 
 		console.log(`Ready! Logged in as ${client.user.tag}`);

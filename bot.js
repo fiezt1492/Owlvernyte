@@ -27,16 +27,6 @@ const client = new Client({
 	disableMentions: "everyone",
 	restTimeOffset: 0,
 	shard: "auto",
-	presence: {
-		status: "online",
-		afk: false,
-		activities: [
-			{
-				name: `${prefix}help | Testing with bugs`,
-				type: 0,
-			},
-		],
-	},
 });
 
 const eventFiles = fs

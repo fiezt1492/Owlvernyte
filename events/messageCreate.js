@@ -20,6 +20,8 @@ module.exports = {
 		// Checks if the bot is mentioned in the message all alone and triggers onMention trigger.
 		// You can change the behavior as per your liking at ./messages/onMention.js
 
+		if (client.user.presence.status !== 'online') return;
+
 		if (message.author.bot || message.channel.type === "dm") return;
 
 		if (
