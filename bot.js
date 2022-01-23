@@ -2,8 +2,15 @@ const fs = require("fs");
 const { Client, Collection, Intents } = require("discord.js");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const { prefix, token, client_id, test_guild_id, dev } = require("./config.js");
-const keepAlive = require('./server')
+const {
+	prefix,
+	token,
+	client_id,
+	test_guild_id,
+	dev,
+	web,
+} = require("./config.js");
+const keepAlive = require("./server");
 const intents = [
 	"GUILDS",
 	"GUILD_MEMBERS",
@@ -52,7 +59,7 @@ for (const file of eventFiles) {
 client.db = require("./databases/mongo.js");
 client.guildSettings = new Collection();
 client.commands = new Collection();
-client.ready = false
+client.ready = false;
 // client.aliases = new Discord.Collection();
 client.slashCommands = new Collection();
 client.buttonCommands = new Collection();
@@ -207,5 +214,5 @@ for (const folder of triggerFolders) {
 }
 
 // Login into your client application with bot's token.
-// keepAlive(client)
+if (web === "on") keepAlive(client);
 client.login(token);
