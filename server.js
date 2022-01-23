@@ -62,14 +62,16 @@ module.exports = (client) => {
 		"/dblwebhook",
 		webhook.listener(async (vote) => {
 			const user = await client.users.fetch(vote.user);
+			
+			if (user) {
+				let embed = new Discord.MessageEmbed()
+					.setColor("RANDOM")
+					.setTitle("Thanks for voting me, " + user.tag + "!");
 
-			let embed = new Discord.MessageEmbed()
-				.setColor("RANDOM")
-				.setTitle("Thanks for voting me, " + user.tag + "!");
-
-			user.send({
-				embeds: [embed],
-			});
+				user.send({
+					embeds: [embed],
+				});
+			}
 		})
 	);
 
