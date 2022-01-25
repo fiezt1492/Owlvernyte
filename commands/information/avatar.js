@@ -9,7 +9,7 @@ module.exports = {
 	usage: "<mention>",
 	permissions: "SEND_MESSAGES",
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		const { client } = message;
 		const user =
 			message.mentions.users.first() ||

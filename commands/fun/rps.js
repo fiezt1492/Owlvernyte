@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const guildPrefix = require("../../modules/configuration/guildPrefix");
+// const guildPrefix = require("../../modules/configuration/guildPrefix");
 module.exports = {
 	name: "rps",
 	description: "Play rock, paper, scissors",
@@ -12,7 +12,7 @@ module.exports = {
 	ownerOnly: false,
 	permissions: ["SEND_MESSAGES"],
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		const { client } = message;
 
 		const opponent = await message.mentions.users.first();
@@ -49,9 +49,7 @@ module.exports = {
 				}
 			} else {
 				return message.reply(
-					`**[ERROR]** Invalid input. Type \`${guildPrefix.get(
-						message
-					)}help ${this.name}\` for more infomation.`
+					`**[ERROR]** Invalid input. Type \`${guildSettings.prefix}help ${this.name}\` for more infomation.`
 				);
 			}
 		} else {

@@ -11,7 +11,7 @@ module.exports = {
 	ownerOnly: false,
 	permissions: ["SEND_MESSAGES"],
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		// const { client } = message;
 		let components = new Discord.MessageActionRow().addComponents(
 			new Discord.MessageButton()

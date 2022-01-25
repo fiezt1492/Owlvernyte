@@ -9,7 +9,7 @@ module.exports = {
 	permissions: "SEND_MESSAGES",
 	args: true,
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		// const { client } = message;
 		let choices = args.join(" ").split(/\s*,+\s*/);
 

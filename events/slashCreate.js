@@ -1,5 +1,6 @@
 const { Collection } = require("discord.js");
 const { prefix, owner } = require("../config");
+const Players = require("../modules/economy/players");
 
 module.exports = {
 	name: "interactionCreate",
@@ -47,7 +48,8 @@ module.exports = {
 		const cooldownAmount = (command.cooldown || 1) * 1000;
 
 		if (timestamps.has(interaction.user.id)) {
-			const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
+			const expirationTime =
+				timestamps.get(interaction.user.id) + cooldownAmount;
 
 			if (now < expirationTime) {
 				const timeLeft = (expirationTime - now) / 1000;
@@ -55,13 +57,34 @@ module.exports = {
 					content: `Please wait **${timeLeft.toFixed(
 						1
 					)}** more second(s) before reusing the \`${command.name}\` command.`,
-					ephemeral: true
+					ephemeral: true,
 				});
 			}
 		}
 
 		try {
-			await command.execute(interaction);
+			const Player = new Players(interaction.user.id);
+			const playersCategories = ["economy", "gambling"];
+
+			if (command.category && playersCategories.includes(command.category)) {
+				await Player.set();
+			}
+
+			if (command.mongoCD && command.mongoCD > 0) {
+				const mongoCD = await Player.cooldownsGet(command.name);
+				if (mongoCD) {
+					if (Date.now() - mongoCD.timestamps < mongoCD.duration) {
+						return interaction.reply({
+							content: `You can use \`${command.name}\` command <t:${Math.floor(
+								(mongoCD.timestamps + mongoCD.duration) / 1000
+							)}:R>`,
+							ephemeral: true,
+						});
+					} else await Player.cooldownsPull(command.name);
+				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
+			}
+
+			await command.execute(interaction, Player);
 		} catch (err) {
 			console.error(err);
 			await interaction.reply({

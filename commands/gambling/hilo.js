@@ -1,16 +1,28 @@
 const Discord = require("discord.js");
+const { millify } = require("millify");
 
 module.exports = {
 	name: "hilo",
 	description: "Tài xỉu - High Low - Sic bo is arrived",
 	category: "gambling",
 	aliases: ["sicbo", "taixiu", "highlow", "bigsmall"],
-	usage: "",
+	usage: "[owlet]",
 	permissions: "SEND_MESSAGES",
 	// maintain: true,
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings, Player) {
 		const { client } = message;
+
+		let bet = Math.round(Number(args[0]))
+		if (isNaN(bet) || bet <= 0)
+			return message.reply({
+				content: `Please provide a positive number!`,
+			});
+		const player = await Player.get();
+		if (bet > player.owlet)
+			return message.reply({
+				content: `You dont have enough owlet!`,
+			});
 
 		const emojis = {
 			1: "1️⃣",
@@ -32,6 +44,7 @@ module.exports = {
 		let description = dices.map((dice) => `${emojis[dice]}`).join(` | `);
 
 		const Embed = new Discord.MessageEmbed()
+			.setColor("RANDOM")
 			.setAuthor({
 				name: message.author.tag,
 				iconURL: message.author.displayAvatarURL({ dynamic: true }),
@@ -107,7 +120,7 @@ module.exports = {
 			msgCol.stop();
 		});
 
-		msgCol.on("end", (collected, reason) => {
+		msgCol.on("end", async (collected, reason) => {
 			Embed.description = description;
 
 			if (reason === "time") {
@@ -124,21 +137,19 @@ module.exports = {
 			// 	components: components(true)
 			// })
 
-			let bet = collected.first().customId;
+			let choice = collected.first().customId;
 
 			function hasDuplicates(array) {
 				return new Set(array).size !== array.length;
 			}
 
 			let sum = dices.reduce((a, b) => a + b, 0);
-			Embed.setFooter({ text: `-1` });
-			Embed.title = "LOSE";
 			let odd = sum % 2 === 1 ? true : false;
 			let triple = dices.every((val, i, arr) => val === arr[0]);
 			let double = triple ? false : hasDuplicates(dices);
 			let result = -1;
 
-			switch (bet) {
+			switch (choice) {
 				case "big":
 					result = sum >= 11 && sum <= 17 ? 1 : -1;
 					break;
@@ -158,18 +169,28 @@ module.exports = {
 					result = odd ? 1 : -1;
 					break;
 				case "double":
-					result = double ? 5 : -1;
+					result = double ? 3 : -1;
 					break;
 				case "triple":
 					result = triple ? 30 : -1;
 					break;
 			}
 
+			bet = bet * result;
+
+			const string = millify(Math.abs(bet), {
+				precision: 2,
+			});
+
+			Embed.title = `You LOSE ${string} owlets!`;
+			await Player.owlet(bet);
+
 			if (result > 0) {
-				Embed.title = "WIN";
-				Embed.setFooter({
-					text: String(result),
-				});
+				Embed.title = `You WON ${string} owlets!`;
+				if (result > 1)
+					Embed.setFooter({
+						text: `x${result} your bet owlet!`,
+					});
 			}
 
 			if (collected)

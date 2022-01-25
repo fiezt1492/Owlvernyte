@@ -1,4 +1,4 @@
-const { prefix } = require("../config");
+// const { prefix } = require("../config");
 // const guildPrefix = require("../modules/configuration/guildPrefix")
 
 module.exports = {

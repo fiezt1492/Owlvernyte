@@ -2,6 +2,8 @@
 
 const { Collection } = require("discord.js");
 const { owner } = require("../config");
+const mongo = require("../databases/mongo");
+const Players = require("../modules/economy/players");
 
 // Prefix regex, we will use to match in mention prefix.
 
@@ -21,7 +23,7 @@ module.exports = {
 		// You can change the behavior as per your liking at ./messages/onMention.js
 		if (!client.ready) return;
 
-		if (client.user.presence.status !== 'online') return;
+		if (client.user.presence.status !== "online") return;
 
 		if (message.author.bot || message.channel.type === "dm") return;
 
@@ -36,10 +38,11 @@ module.exports = {
 		// const checkPrefix = (
 		// 	await require("../modules/configuration/guildPrefix").get(message)
 		// ).toLowerCase();
-		const guildSettings = await client.guildSettings.get(guild.id)
+
+		const guildSettings = await client.guildSettings.get(guild.id);
 		// const checkPrefix = prefix
 		// console.log(guildSettings)
-		const prefix = guildSettings.prefix
+		const prefix = guildSettings.prefix;
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
@@ -146,11 +149,11 @@ module.exports = {
 			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 
 			if (now < expirationTime) {
-				const timeLeft = (expirationTime - now) / 1000;
+				// const timeLeft = (expirationTime - now) / 1000;
 				return message.reply({
-					content: `Please wait **${timeLeft.toFixed(
-						1
-					)}** more second(s) before reusing the \`${command.name}\` command.`,
+					content: `You can use \`${command.name}\` command <t:${Math.floor(
+						expirationTime / 1000
+					)}:R>`,
 				});
 			}
 		}
@@ -162,7 +165,28 @@ module.exports = {
 
 		// execute the final command. Put everything above this.
 		try {
-			command.execute(message, args);
+			const Player = new Players(message.author.id);
+			const playersCategories = ["economy", "gambling"];
+
+			if (playersCategories.includes(command.category)) {
+				await Player.set();
+			}
+
+			//mongo cooldown
+			if (command.mongoCD && command.mongoCD > 0) {
+				const mongoCD = await Player.cooldownsGet(command.name);
+				if (mongoCD) {
+					if (Date.now() - mongoCD.timestamps < mongoCD.duration) {
+						return message.reply({
+							content: `You can use \`${command.name}\` command <t:${Math.floor(
+								(mongoCD.timestamps + mongoCD.duration) / 1000
+							)}:R>`,
+						});
+					} else await Player.cooldownsPull(command.name);
+				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
+			}
+
+			command.execute(message, args, guildSettings, Player);
 		} catch (error) {
 			console.error(error);
 			message.reply({

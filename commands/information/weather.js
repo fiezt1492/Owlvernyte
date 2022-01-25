@@ -10,7 +10,7 @@ module.exports = {
 	usage: "<location>",
 	permissions: "SEND_MESSAGES",
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		// const { client } = message;
 		let location = args.length ? args.join(" ") : "700000";
 

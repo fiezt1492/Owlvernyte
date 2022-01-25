@@ -6,6 +6,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 // const blackjack = require("../../../modules/gambling/Blackjack/index")
 const Deck = require("../../../modules/gambling/Blackjack/Deck");
 const Hand = require("../../../modules/gambling/Blackjack/Hand");
+const { millify } = require("millify");
 
 let games = new Map();
 
@@ -13,15 +14,14 @@ module.exports = {
 	// The data needed to register slash commands to Discord.
 	data: new SlashCommandBuilder()
 		.setName("blackjack")
-		.setDescription("Play Vietnamese Blackjack"),
-	// .addStringOption((option) =>
-	// 	option
-	// 		.setName("command")
-	// 		.setDescription("The specific command to see the info of.")
-	// 		.setRequired(false)
-	// ),
+		.setDescription("Play Vietnamese Blackjack")
+		.addIntegerOption((option) =>
+			option.setName("bet").setDescription("Give me an owlet").setRequired(true)
+		),
+	category: "gambling",
+	permissions: "SEND_MESSAGES",
 
-	async execute(interaction) {
+	async execute(interaction, Player) {
 		const { client } = interaction;
 
 		const already = games.get(interaction.user.id);
@@ -43,6 +43,7 @@ module.exports = {
 						],
 					},
 				],
+				ephemeral: true,
 			});
 
 		// await interaction.reply({
@@ -50,12 +51,21 @@ module.exports = {
 		// });
 
 		// const message = await interaction.fetchReply();
+		const bet = interaction.options.getInteger("bet");
+		if (bet <= 0)
+			return interaction.reply({
+				content: `Please provide a positive number!`,
+				ephemeral: true,
+			});
 
 		try {
 			const d = new Deck();
 			d.shuffle();
 			const dealer = new Hand();
 			const p1 = new Hand();
+			const string = millify(bet, {
+				precision: 2,
+			});
 
 			p1.draw(d, 2);
 			dealer.draw(d, 2);
@@ -142,6 +152,8 @@ module.exports = {
 					(p1.is5D() && dealer.is5D() && p1.point < dealer.point)
 				) {
 					deckEmbed.setTitle("WIN");
+					await Player.owlet(bet);
+					deckEmbed.description = `You won \`${string}\` owlets!`;
 				} else if (
 					dealer.point === p1.point ||
 					(dealer.isBusted() && p1.isBusted())
@@ -149,6 +161,8 @@ module.exports = {
 					deckEmbed.setTitle("DRAW");
 				} else {
 					deckEmbed.setTitle("LOSE");
+					await Player.owlet(-bet);
+					deckEmbed.description = `You lose \`${string}\` owlets!`;
 				}
 			}
 
@@ -298,14 +312,18 @@ module.exports = {
 					(p1.is5D() && !dealer.is5D()) ||
 					(p1.is5D() && dealer.is5D() && p1.point > dealer.point)
 				) {
-					deckEmbed.setTitle("WIN 🎉");
+					deckEmbed.setTitle("WIN");
+					await Player.owlet(bet);
+					deckEmbed.description = `You won \`${string}\` owlets!`;
 				} else if (
 					dealer.point === p1.point ||
 					(dealer.isBusted() && p1.isBusted())
 				) {
 					deckEmbed.setTitle("DRAW");
 				} else {
-					deckEmbed.setTitle("LOSE :<");
+					deckEmbed.setTitle("LOSE");
+					await Player.owlet(-bet);
+					deckEmbed.description = `You lose \`${string}\` owlets!`;
 				}
 
 				bt1 = staybut(true);

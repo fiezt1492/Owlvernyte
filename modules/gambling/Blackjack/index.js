@@ -1,10 +1,11 @@
 const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const Deck = require("./Deck");
 const Hand = require("./Hand");
+const { millify } = require("millify");
 
 let games = new Map();
 
-module.exports = async (client, message) => {
+module.exports = async (client, message, Player, bet) => {
 	const already = games.get(message.author.id);
 
 	if (games.has(message.author.id) && already.cID == message.channel.id)
@@ -31,6 +32,9 @@ module.exports = async (client, message) => {
 		d.shuffle();
 		const dealer = new Hand();
 		const p1 = new Hand();
+		const string = millify(bet, {
+			precision: 2,  
+		  });
 
 		p1.draw(d, 2);
 		dealer.draw(d, 2);
@@ -116,6 +120,8 @@ module.exports = async (client, message) => {
 				(p1.is5D() && dealer.is5D() && p1.point < dealer.point)
 			) {
 				deckEmbed.setTitle("WIN");
+				await Player.owlet(bet)
+				deckEmbed.description = `You won \`${string}\` owlets!`
 			} else if (
 				dealer.point === p1.point ||
 				(dealer.isBusted() && p1.isBusted())
@@ -123,6 +129,8 @@ module.exports = async (client, message) => {
 				deckEmbed.setTitle("DRAW");
 			} else {
 				deckEmbed.setTitle("LOSE");
+				await Player.owlet(-bet)
+				deckEmbed.description = `You lose \`${string}\` owlets!`
 			}
 		}
 
@@ -270,6 +278,8 @@ module.exports = async (client, message) => {
 				(p1.is5D() && dealer.is5D() && p1.point > dealer.point)
 			) {
 				deckEmbed.setTitle("WIN 🎉");
+				await Player.owlet(bet)
+				deckEmbed.description = `You won \`${string}\` owlets!`
 			} else if (
 				dealer.point === p1.point ||
 				(dealer.isBusted() && p1.isBusted())
@@ -277,6 +287,8 @@ module.exports = async (client, message) => {
 				deckEmbed.setTitle("DRAW");
 			} else {
 				deckEmbed.setTitle("LOSE :<");
+				await Player.owlet(-bet)
+				deckEmbed.description = `You lose \`${string}\` owlets!`
 			}
 
 			bt1 = staybut(true);

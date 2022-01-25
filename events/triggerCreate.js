@@ -4,6 +4,7 @@ module.exports = {
 	name: "messageCreate",
 
 	async execute(message) {
+		return;
 
 		const { client, guild, channel, content, author } = message;
 

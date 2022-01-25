@@ -14,10 +14,10 @@ module.exports = {
 	usage: "<command name>",
 	cooldown: 5,
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		const { commands } = message.client;
 		// const slashCommands = message.client.slashCommands;
-		const prefix = message.client.guildSettings.get(message.guild.id).prefix.toLowerCase()
+		const prefix = guildSettings.prefix
 
 		if (!args.length) {
 			const formatString = (str) =>

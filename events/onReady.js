@@ -24,7 +24,7 @@ module.exports = {
 				afk: false,
 				activities: [
 					{
-						name: `${prefix}help | Testing with bugs`,
+						name: `/help | Testing with bugs`,
 						type: 0,
 					},
 				],

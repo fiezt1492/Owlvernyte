@@ -9,7 +9,7 @@ module.exports = {
 	usage: "<subreddit>",
 	permissions: "SEND_MESSAGES",
 
-	async execute(message, args) {
+	async execute(message, args, guildSettings) {
 		// const { client } = message;
 		let subreddit = args.join("_");
 
