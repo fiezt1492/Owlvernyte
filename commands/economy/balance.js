@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 // const shortNumber = require("short-number");
 const { millify } = require("millify");
+const Players = require("../../modules/economy/players");
 
 module.exports = {
 	name: "balance",
@@ -15,8 +16,9 @@ module.exports = {
 
 	async execute(message, args, guildSettings, Player) {
 		const { client } = message;
-
-		const player = await Player.get();
+		const member = message.mentions.users.first() || message.author
+		const Target = new Players(member.id);
+		const player = await Target.set();
 		const { owlet, nyteGem, bank } = player;
 
 		const string = {
@@ -33,8 +35,8 @@ module.exports = {
 
 		const Embed = new Discord.MessageEmbed()
 			.setColor("RANDOM")
-			.setTitle(message.author.tag)
-			.setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
+			.setTitle(member.tag)
+			.setThumbnail(member.displayAvatarURL({ dynamic: true }))
 			.addFields([
 				{
 					name: "Owlet",
