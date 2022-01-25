@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const { millify } = require("millify");
 
+let games = new Map();
+
 module.exports = {
 	name: "hilo",
 	description: "Tài xỉu - High Low - Sic bo is arrived",
@@ -12,6 +14,27 @@ module.exports = {
 
 	async execute(message, args, guildSettings, Player) {
 		const { client } = message;
+
+		const already = games.get(message.author.id);
+
+		if (games.has(message.author.id) && already.cID == message.channel.id)
+			return message.reply({
+				content: `**[Error]** There is a ${this.name} game playing for you.`,
+				components: [
+					{
+						type: 1,
+						components: [
+							{
+								type: 2,
+								style: 5,
+								label: "Forward",
+								// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
+								url: already.mURL,
+							},
+						],
+					},
+				],
+			});
 
 		let bet = Math.round(Number(args[0]))
 		if (isNaN(bet) || bet <= 0)
@@ -108,6 +131,13 @@ module.exports = {
 			},
 		});
 
+		games.set(message.author.id, {
+			gID: msg.guild.id,
+			cID: msg.channel.id,
+			mID: msg.id,
+			mURL: msg.url,
+		});
+
 		const filter = (i) => i.user.id === message.author.id;
 
 		const msgCol = msg.createMessageComponentCollector({
@@ -122,7 +152,7 @@ module.exports = {
 
 		msgCol.on("end", async (collected, reason) => {
 			Embed.description = description;
-
+			games.delete(message.author.id);
 			if (reason === "time") {
 				Embed.title = "TIME OUT";
 
