@@ -211,7 +211,7 @@ module.exports = async (client, message, Player, bet) => {
 			});
 		});
 
-		msgCol.on("end", (collected, reason) => {
+		msgCol.on("end", async (collected, reason) => {
 			games.delete(message.author.id);
 			if (reason === "time") {
 				let dealerhand = dealer.cards
