@@ -77,7 +77,7 @@ module.exports = {
 			else random = Math.round(Math.random() * 999) + 1;
 			// console.log(random);
 			const string = millify(random);
-			await Player.cooldownsPush(this.name, 24 * 60 * 60);
+			await Player.cooldownsPush(this.name, 24 * 60 * 60 * 1000);
 			await Player.owlet(random);
 			Embed.title = "SUCCESS!";
 			Embed.color = "GREEN";
