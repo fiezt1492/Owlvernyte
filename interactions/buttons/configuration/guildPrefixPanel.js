@@ -1,7 +1,7 @@
 const guildPrefix = require("../../../modules/configuration/guildPrefix");
 const config = require("../../../config");
 const Discord = require("discord.js");
-const disableComponent = require("../../../modules/util/disableComponent");
+// const disableComponent = require("../../../modules/util/disableComponent");
 
 module.exports = {
 	id: "prefixpanel",

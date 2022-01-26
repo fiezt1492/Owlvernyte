@@ -2,7 +2,7 @@
 
 const { Collection } = require("discord.js");
 const { owner } = require("../config");
-const mongo = require("../databases/mongo");
+// const mongo = require("../databases/mongo");
 const Players = require("../modules/economy/players");
 
 // Prefix regex, we will use to match in mention prefix.

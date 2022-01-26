@@ -40,17 +40,17 @@ module.exports = {
 			.addFields([
 				{
 					name: "Owlet",
-					value: `${string.owlet}`,
+					value: `\`\`\`${string.owlet}\`\`\``,
 					inline: true,
 				},
 				{
 					name: "Nyte Gem",
-					value: `${string.nyteGem}`,
+					value: `\`\`\`${string.nyteGem}\`\`\``,
 					inline: true,
 				},
 				{
 					name: "Bank",
-					value: `${string.bank}`,
+					value: `\`\`\`${string.bank}\`\`\``,
 					inline: true,
 				},
 			]);

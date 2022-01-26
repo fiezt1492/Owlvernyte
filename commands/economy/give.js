@@ -25,6 +25,8 @@ module.exports = {
 
 		args = args.filter((e) => !(e.startsWith(`<@`) && e.endsWith(`>`)));
 
+		console.log(args)
+
 		const amount = Number(args.shift());
 
 		if (isNaN(amount) || amount <= 0)

@@ -1,8 +1,8 @@
 const config = require("../../../config");
 const guildPrefix = require("../../../modules/configuration/guildPrefix");
-const Discord = require("discord.js");
-const disableComponent = require("../../../modules/util/disableComponent");
-let already = new Set();
+// const Discord = require("discord.js");
+// const disableComponent = require("../../../modules/util/disableComponent");
+// let already = new Set();
 
 module.exports = {
 	id: "prefixReset",

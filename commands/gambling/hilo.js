@@ -7,6 +7,7 @@ module.exports = {
 	name: "hilo",
 	description: "Tài xỉu - High Low - Sic bo is arrived",
 	category: "gambling",
+	cooldown: 5,
 	aliases: ["sicbo", "taixiu", "highlow", "bigsmall"],
 	usage: "[owlet]",
 	permissions: "SEND_MESSAGES",

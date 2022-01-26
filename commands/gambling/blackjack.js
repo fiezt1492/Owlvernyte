@@ -6,6 +6,7 @@ module.exports = {
 	description: "Playing Vietnamese Blackjack",
 	category: "gambling",
 	aliases: ["bj"],
+	cooldown: 5,
 	args: true,
 	usage: "[owlet]",
 	permissions: "SEND_MESSAGES",

@@ -1,7 +1,7 @@
-const config = require("../../../config");
+// const config = require("../../../config");
 const guildPrefix = require("../../../modules/configuration/guildPrefix");
 const Discord = require("discord.js");
-const disableComponent = require("../../../modules/util/disableComponent");
+// const disableComponent = require("../../../modules/util/disableComponent");
 
 module.exports = {
 	id: "settings",
