@@ -25,7 +25,7 @@ module.exports = {
 
 		args = args.filter((e) => !(e.startsWith(`<@`) && e.endsWith(`>`)));
 
-		console.log(args)
+		// console.log(args)
 
 		const amount = Number(args.shift());
 
