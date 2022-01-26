@@ -73,7 +73,7 @@ module.exports = {
 
 			const chance = Math.round(Math.random() * 99) + 1;
 			let random;
-			if (chance < 10) random = Math.round(Math.random() * 9999) + 1;
+			if (chance < 1) random = Math.round(Math.random() * 9999) + 1;
 			else random = Math.round(Math.random() * 999) + 1;
 			// console.log(random);
 			const string = millify(random);
