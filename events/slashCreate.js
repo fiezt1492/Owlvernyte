@@ -1,6 +1,8 @@
-const { Collection } = require("discord.js");
+// const { Collection } = require("discord.js");
+const Discord = require("discord.js")
 const { prefix, owner } = require("../config");
 const Players = require("../modules/economy/players");
+const ONCE = new Map();
 
 module.exports = {
 	name: "interactionCreate",
@@ -13,6 +15,39 @@ module.exports = {
 		const command = client.slashCommands.get(interaction.commandName);
 
 		if (!command) return;
+
+		if (command.once === true) {
+			if (ONCE.has(interaction.user.id)) {
+				const commandOnce = ONCE.get(interaction.user.id);
+
+				const onceEmbed = new Discord.MessageEmbed()
+					.setTitle("ERROR")
+					.setColor("RED")
+					.setDescription(
+						`You need to finish your previous \`${commandOnce.name}\` command first!`
+					);
+
+				return interaction.reply({
+					// content: `**[Error]** You need to finish your previous \`${command.name}\` command first!`,
+					embeds: [onceEmbed],
+					components: [
+						{
+							type: 1,
+							components: [
+								{
+									type: 2,
+									style: 5,
+									label: `Forward to "${commandOnce.name}" command`,
+									// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
+									url: commandOnce.mURL,
+								},
+							],
+						},
+					],
+					ephemeral: true
+				});
+			}
+		}
 
 		if (command.permissions) {
 			// console.log(interaction)
@@ -40,7 +75,7 @@ module.exports = {
 		const { cooldowns } = client;
 
 		if (!cooldowns.has(command.name)) {
-			cooldowns.set(command.name, new Collection());
+			cooldowns.set(command.name, new Discord.Collection());
 		}
 
 		const now = Date.now();
@@ -84,7 +119,7 @@ module.exports = {
 				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
 			}
 
-			await command.execute(interaction, Player);
+			await command.execute(interaction, Player, ONCE);
 		} catch (err) {
 			console.error(err);
 			await interaction.reply({

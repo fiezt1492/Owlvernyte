@@ -77,9 +77,14 @@ module.exports = {
 
 		if (command.once === true) {
 			if (ONCE.has(author.id)) {
-				const commandOnce = ONCE.get(author.id)
+				const commandOnce = ONCE.get(author.id);
 
-				const onceEmbed = new Discord.MessageEmbed().setTitle("ERROR").setColor("RED").setDescription(`You need to finish your previous \`${commandOnce.name}\` command first!`)
+				const onceEmbed = new Discord.MessageEmbed()
+					.setTitle("ERROR")
+					.setColor("RED")
+					.setDescription(
+						`You need to finish your previous \`${commandOnce.name}\` command first!`
+					);
 
 				return message.reply({
 					// content: `**[Error]** You need to finish your previous \`${command.name}\` command first!`,

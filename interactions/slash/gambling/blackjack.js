@@ -18,33 +18,34 @@ module.exports = {
 		.addIntegerOption((option) =>
 			option.setName("bet").setDescription("Give me an owlet").setRequired(true)
 		),
+	once: true,
 	category: "gambling",
 	permissions: "SEND_MESSAGES",
 
-	async execute(interaction, Player) {
+	async execute(interaction, Player, ONCE) {
 		const { client } = interaction;
 
-		const already = games.get(interaction.user.id);
+		// const already = games.get(interaction.user.id);
 
-		if (games.has(interaction.user.id) && already.cID == interaction.channelId)
-			return interaction.reply({
-				content: "**[Error]** There is a blackjack game playing for you.",
-				components: [
-					{
-						type: 1,
-						components: [
-							{
-								type: 2,
-								style: 5,
-								label: "Forward",
-								// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
-								url: already.mURL,
-							},
-						],
-					},
-				],
-				ephemeral: true,
-			});
+		// if (games.has(interaction.user.id) && already.cID == interaction.channelId)
+		// 	return interaction.reply({
+		// 		content: "**[Error]** There is a blackjack game playing for you.",
+		// 		components: [
+		// 			{
+		// 				type: 1,
+		// 				components: [
+		// 					{
+		// 						type: 2,
+		// 						style: 5,
+		// 						label: "Forward",
+		// 						// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
+		// 						url: already.mURL,
+		// 					},
+		// 				],
+		// 			},
+		// 		],
+		// 		ephemeral: true,
+		// 	});
 
 		// await interaction.reply({
 		// 	content: `Creating game`,
@@ -183,7 +184,8 @@ module.exports = {
 			let msg = await interaction.fetchReply();
 
 			if (bt2.disabled == false)
-				games.set(interaction.user.id, {
+				ONCE.set(interaction.user.id, {
+					name: this.data.name,
 					gID: msg.guild.id,
 					cID: msg.channel.id,
 					mID: msg.id,
@@ -247,7 +249,7 @@ module.exports = {
 			});
 
 			msgCol.on("end", async (collected, reason) => {
-				games.delete(interaction.user.id);
+				ONCE.delete(interaction.user.id);
 				if (reason === "time") {
 					let dealerhand = dealer.cards
 						.map((card) => {
