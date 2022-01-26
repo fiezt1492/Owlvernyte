@@ -4,6 +4,8 @@ const { Collection } = require("discord.js");
 const { owner } = require("../config");
 // const mongo = require("../databases/mongo");
 const Players = require("../modules/economy/players");
+const Discord = require("discord.js");
+const ONCE = new Map();
 
 // Prefix regex, we will use to match in mention prefix.
 
@@ -73,7 +75,32 @@ module.exports = {
 
 		if (!command) return;
 
-		// Owner Only Property, add in your command properties if true.
+		if (command.once === true) {
+			if (ONCE.has(author.id)) {
+				const commandOnce = ONCE.get(author.id)
+
+				const onceEmbed = new Discord.MessageEmbed().setTitle("ERROR").setColor("RED").setDescription(`You need to finish your previous \`${commandOnce.name}\` command first!`)
+
+				return message.reply({
+					// content: `**[Error]** You need to finish your previous \`${command.name}\` command first!`,
+					embeds: [onceEmbed],
+					components: [
+						{
+							type: 1,
+							components: [
+								{
+									type: 2,
+									style: 5,
+									label: `Forward to "${commandOnce.name}" command`,
+									// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
+									url: commandOnce.mURL,
+								},
+							],
+						},
+					],
+				});
+			}
+		}
 
 		if (command.ownerOnly && message.author.id !== owner) {
 			return;
@@ -186,7 +213,7 @@ module.exports = {
 				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
 			}
 
-			command.execute(message, args, guildSettings, Player);
+			command.execute(message, args, guildSettings, Player, ONCE);
 		} catch (error) {
 			console.error(error);
 			message.reply({

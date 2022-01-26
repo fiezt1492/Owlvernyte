@@ -7,6 +7,7 @@ module.exports = {
 	category: "fun",
 	aliases: ["mêm"],
 	usage: "<subreddit>",
+	once: true,
 	permissions: "SEND_MESSAGES",
 
 	async execute(message, args, guildSettings) {

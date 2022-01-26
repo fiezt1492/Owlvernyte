@@ -3,29 +3,29 @@ const Deck = require("./Deck");
 const Hand = require("./Hand");
 const { millify } = require("millify");
 
-let games = new Map();
+// let games = new Map();
 
-module.exports = async (client, message, Player, bet) => {
-	const already = games.get(message.author.id);
+module.exports = async (client, message, Player, ONCE, bet) => {
+	// const already = games.get(message.author.id);
 
-	if (games.has(message.author.id) && already.cID == message.channel.id)
-		return message.reply({
-			content: "**[Error]** There is a blackjack game playing for you.",
-			components: [
-				{
-					type: 1,
-					components: [
-						{
-							type: 2,
-							style: 5,
-							label: "Forward",
-							// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
-							url: already.mURL,
-						},
-					],
-				},
-			],
-		});
+	// if (games.has(message.author.id) && already.cID == message.channel.id)
+	// 	return message.reply({
+	// 		content: "**[Error]** There is a blackjack game playing for you.",
+	// 		components: [
+	// 			{
+	// 				type: 1,
+	// 				components: [
+	// 					{
+	// 						type: 2,
+	// 						style: 5,
+	// 						label: "Forward",
+	// 						// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
+	// 						url: already.mURL,
+	// 					},
+	// 				],
+	// 			},
+	// 		],
+	// 	});
 
 	try {
 		const d = new Deck();
@@ -33,8 +33,8 @@ module.exports = async (client, message, Player, bet) => {
 		const dealer = new Hand();
 		const p1 = new Hand();
 		const string = millify(bet, {
-			precision: 2,  
-		  });
+			precision: 2,
+		});
 
 		p1.draw(d, 2);
 		dealer.draw(d, 2);
@@ -120,8 +120,8 @@ module.exports = async (client, message, Player, bet) => {
 				(p1.is5D() && dealer.is5D() && p1.point < dealer.point)
 			) {
 				deckEmbed.setTitle("WIN");
-				await Player.owlet(bet)
-				deckEmbed.description = `You won \`${string}\` owlets!`
+				await Player.owlet(bet);
+				deckEmbed.description = `You won \`${string}\` owlets!`;
 			} else if (
 				dealer.point === p1.point ||
 				(dealer.isBusted() && p1.isBusted())
@@ -129,8 +129,8 @@ module.exports = async (client, message, Player, bet) => {
 				deckEmbed.setTitle("DRAW");
 			} else {
 				deckEmbed.setTitle("LOSE");
-				await Player.owlet(-bet)
-				deckEmbed.description = `You lose \`${string}\` owlets!`
+				await Player.owlet(-bet);
+				deckEmbed.description = `You lose \`${string}\` owlets!`;
 			}
 		}
 
@@ -149,7 +149,8 @@ module.exports = async (client, message, Player, bet) => {
 		});
 
 		if (bt2.disabled == false)
-			games.set(message.author.id, {
+			ONCE.set(message.author.id, {
+				name: "blackjack",
 				gID: msg.guild.id,
 				cID: msg.channel.id,
 				mID: msg.id,
@@ -212,7 +213,7 @@ module.exports = async (client, message, Player, bet) => {
 		});
 
 		msgCol.on("end", async (collected, reason) => {
-			games.delete(message.author.id);
+			ONCE.delete(message.author.id);
 			if (reason === "time") {
 				let dealerhand = dealer.cards
 					.map((card) => {
@@ -278,8 +279,8 @@ module.exports = async (client, message, Player, bet) => {
 				(p1.is5D() && dealer.is5D() && p1.point > dealer.point)
 			) {
 				deckEmbed.setTitle("WIN 🎉");
-				await Player.owlet(bet)
-				deckEmbed.description = `You won \`${string}\` owlets!`
+				await Player.owlet(bet);
+				deckEmbed.description = `You won \`${string}\` owlets!`;
 			} else if (
 				dealer.point === p1.point ||
 				(dealer.isBusted() && p1.isBusted())
@@ -287,8 +288,8 @@ module.exports = async (client, message, Player, bet) => {
 				deckEmbed.setTitle("DRAW");
 			} else {
 				deckEmbed.setTitle("LOSE :<");
-				await Player.owlet(-bet)
-				deckEmbed.description = `You lose \`${string}\` owlets!`
+				await Player.owlet(-bet);
+				deckEmbed.description = `You lose \`${string}\` owlets!`;
 			}
 
 			bt1 = staybut(true);

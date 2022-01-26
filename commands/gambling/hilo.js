@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const { millify } = require("millify");
 
-let games = new Map();
+// let games = new Map();
 
 module.exports = {
 	name: "hilo",
@@ -10,32 +10,33 @@ module.exports = {
 	cooldown: 5,
 	aliases: ["sicbo", "taixiu", "highlow", "bigsmall"],
 	usage: "[owlet]",
+	once: true,
 	permissions: "SEND_MESSAGES",
 	// maintain: true,
 
-	async execute(message, args, guildSettings, Player) {
+	async execute(message, args, guildSettings, Player, ONCE) {
 		const { client } = message;
 
-		const already = games.get(message.author.id);
+		// const already = games.get(message.author.id);
 
-		if (games.has(message.author.id) && already.cID == message.channel.id)
-			return message.reply({
-				content: `**[Error]** There is a ${this.name} game playing for you.`,
-				components: [
-					{
-						type: 1,
-						components: [
-							{
-								type: 2,
-								style: 5,
-								label: "Forward",
-								// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
-								url: already.mURL,
-							},
-						],
-					},
-				],
-			});
+		// if (games.has(message.author.id) && already.cID == message.channel.id)
+		// 	return message.reply({
+		// 		content: `**[Error]** There is a ${this.name} game playing for you.`,
+		// 		components: [
+		// 			{
+		// 				type: 1,
+		// 				components: [
+		// 					{
+		// 						type: 2,
+		// 						style: 5,
+		// 						label: "Forward",
+		// 						// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
+		// 						url: already.mURL,
+		// 					},
+		// 				],
+		// 			},
+		// 		],
+		// 	});
 
 		let bet = Math.round(Number(args[0]))
 		if (isNaN(bet) || bet <= 0)
@@ -132,7 +133,8 @@ module.exports = {
 			},
 		});
 
-		games.set(message.author.id, {
+		ONCE.set(message.author.id, {
+			name: this.name,
 			gID: msg.guild.id,
 			cID: msg.channel.id,
 			mID: msg.id,
@@ -153,7 +155,7 @@ module.exports = {
 
 		msgCol.on("end", async (collected, reason) => {
 			Embed.description = description;
-			games.delete(message.author.id);
+			ONCE.delete(message.author.id);
 			if (reason === "time") {
 				Embed.title = "TIME OUT";
 

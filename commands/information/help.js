@@ -12,6 +12,7 @@ module.exports = {
 	aliases: ["commands"],
 	category: "information",
 	usage: "<command name>",
+	once: true,
 	cooldown: 5,
 
 	async execute(message, args, guildSettings) {
