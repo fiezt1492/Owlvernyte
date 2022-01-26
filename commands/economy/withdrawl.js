@@ -2,10 +2,10 @@ const Discord = require("discord.js");
 const { millify } = require("millify");
 
 module.exports = {
-	name: "withdrawl",
+	name: "withdrawal",
 	description: "get owlets out of the bank",
 	category: "economy",
-	aliases: ["wdrawl","withdraw","wdraw"],
+	aliases: ["wdrawal","withdraw","wdraw"],
 	usage: "[owlet]",
 	cooldown: 5,
 	args: true,
