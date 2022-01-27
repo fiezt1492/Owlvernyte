@@ -14,9 +14,11 @@ module.exports = {
 	permissions: ["SEND_MESSAGES"],
 
 	async execute(message, args, guildSettings, Player) {
+        const msg = await message.reply({
+            content: `Please wait, im doing stuffs...`
+        })
 		const { client, guild } = message;
 		const collection = new Discord.Collection();
-
 		await Promise.all(
 			guild.members.cache.map(async (member) => {
 				if (member.user.bot) return;
@@ -66,7 +68,8 @@ module.exports = {
 				iconURL: message.author.displayAvatarURL({ dynamic: true }),
 			});
 
-		return message.reply({
+		return msg.edit({
+            content: null,
 			embeds: [Embed],
 			allowedMentions: {
 				repliedUser: false,
