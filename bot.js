@@ -10,7 +10,7 @@ const {
 	dev,
 	web,
 } = require("./config.js");
-const keepAlive = require("./server");
+
 const intents = [
 	"GUILDS",
 	"GUILD_MEMBERS",
@@ -56,7 +56,8 @@ for (const file of eventFiles) {
 /**********************************************************************/
 // Define Collection of Commands, Slash Commands and cooldowns
 
-require("./modules/util/client")(client)
+const keepAlive = require("./server");
+require("./modules/util/client")(client);
 
 client.db = require("./databases/mongo.js");
 client.guildSettings = new Collection();
