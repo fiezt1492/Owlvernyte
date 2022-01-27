@@ -56,6 +56,8 @@ for (const file of eventFiles) {
 /**********************************************************************/
 // Define Collection of Commands, Slash Commands and cooldowns
 
+require("./modules/util/client")(client)
+
 client.db = require("./databases/mongo.js");
 client.guildSettings = new Collection();
 client.commands = new Collection();

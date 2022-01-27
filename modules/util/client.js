@@ -1,3 +1,5 @@
+const Players = require("../economy/players")
+
 module.exports = (client) => {
 	client.sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -15,4 +17,15 @@ module.exports = (client) => {
 		if (!id) return;
 		return client.users.fetch(id);
 	};
+	client.bal = async (id) => {
+		const Player = new Players(id)
+		const player = await Player.get()
+		if (!player) return null
+		const bal = {
+			owlet: player.owlet,
+			nyteGem: player.nyteGem,
+			bank: player.bank
+		}
+		return bal
+	}
 };

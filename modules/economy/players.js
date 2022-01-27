@@ -1,5 +1,4 @@
 const db = require("../../databases/mongo").collection("players");
-
 module.exports = class {
 	constructor(id) {
 		this.id = id;
