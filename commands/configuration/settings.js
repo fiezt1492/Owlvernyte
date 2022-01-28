@@ -2,7 +2,6 @@
 // const config = require("../../config");
 // const guildPrefix = require("../../modules/configuration/guildPrefix");
 const Discord = require("discord.js");
-const disableComponent = require("../../modules/util/disableComponent");
 
 module.exports = {
 	name: "settings",
@@ -18,6 +17,7 @@ module.exports = {
 	permissions: ["ADMINISTRATOR"],
 
 	async execute(message, args, guildSettings) {
+		const {client} = message
 		const Embed = new Discord.MessageEmbed()
 			.setTitle("Guild Settings Panel")
 			.setDescription(
@@ -70,13 +70,13 @@ module.exports = {
 		});
 
 		msgCol.on("end", (collected) => {
-			msg.edit({ components: disableComponent(msg.components) });
+			msg.edit({ components: client.disableComponent(msg.components) });
 
 			// if (collected)
 			// 	return collected.map(async (btn) => {
 			// 		if (btn.replied === false)
 			// 			await btn.update({
-			// 				components: disableComponent(msg.components),
+			// 				components: client.disableComponent(msg.components),
 			// 			});
 			// 	});
 		});
