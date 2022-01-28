@@ -37,6 +37,8 @@ module.exports = {
 			return;
 		}
 
+		require("../modules/util/message")(message)
+
 		// const checkPrefix = (
 		// 	await require("../modules/configuration/guildPrefix").get(message)
 		// ).toLowerCase();

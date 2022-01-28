@@ -1,7 +1,6 @@
 // const config = require("../../../config");
 const guildPrefix = require("../../../modules/configuration/guildPrefix");
 // const Discord = require("discord.js");
-const disableComponent = require("../../../modules/util/disableComponent");
 let already = new Set();
 
 module.exports = {
@@ -37,7 +36,7 @@ module.exports = {
 			});
 
 		message.edit({
-			components: disableComponent(message.components),
+			components: client.disableComponent(message.components),
 		});
 
 		already.add(interaction.user.id);
@@ -74,7 +73,7 @@ module.exports = {
 
 				if (customPrefix.length > 5) {
 					message.edit({
-						components: disableComponent(message.components, false),
+						components: client.disableComponent(message.components, false),
 					});
 
 					return interaction.followUp({
@@ -94,7 +93,7 @@ module.exports = {
 
 				message.edit({
 					embeds: [Embed],
-					components: disableComponent(message.components, false),
+					components: client.disableComponent(message.components, false),
 				});
 
 				return interaction.followUp({
@@ -118,7 +117,7 @@ module.exports = {
 
 			if (reason === "time") {
 				message.edit({
-					components: disableComponent(message.components, false),
+					components: client.disableComponent(message.components, false),
 				});
 				if (collected.size === 0)
 					return interaction.followUp({ content: `Timeout.`, ephemeral: true });

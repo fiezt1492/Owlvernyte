@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 
 module.exports = (message) => {
-	const { components } = message;
-    
-	message.disableComponent = (components, state = true) =>
+	message.disableComponent = (state = true) => {
+		const { components } = message;
+		if (!components || !components.length || components.size <= 0) return null
 		components.map((row) =>
 			new Discord.MessageActionRow().addComponents([
 				row.components.map((component) => {
@@ -28,4 +28,5 @@ module.exports = (message) => {
 				}),
 			])
 		);
+	};
 };

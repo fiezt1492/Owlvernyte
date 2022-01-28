@@ -12,13 +12,43 @@ module.exports = {
 
 	async execute(message, args, guildSettings, Player) {
 		const { client } = message;
-        
-        // await Player.cooldownsPush(this.name, 10000)
-		// await Player.owlet(-1000)
-		// const player = await Player.set(message.author.id);
 
-		// if (!player) return console.log("false");
+		// console.log(message.disableComponent(false));
 
-		// console.log(await Player.cooldownsGet(this.name));
+		const components = [
+			new Discord.MessageActionRow().addComponents(
+				new Discord.MessageButton()
+					.setCustomId("vl")
+					.setStyle("SUCCESS")
+					.setLabel("vl")
+			),
+		];
+
+		const m = await message.channel.send({
+			content: "hai`"
+		})
+
+		const msg = await message.channel.send({
+			content: "vl",
+			components: components
+		})
+
+		const msgCol = msg.createMessageComponentCollector({
+			componentType: "BUTTON",
+			time: 5000,
+		});
+
+		msgCol.on("collect", () => {
+			msgCol.resetTimer();
+			console.log(client.disableComponent(m))
+		});
+
+		msgCol.on("end", () => {
+			// console(m.disableComponent())
+			msg.edit({ components: client.disableComponent(m) });
+		});
+		// msg.edit({
+		// 	components: message.disableComponent()
+		// })
 	},
 };

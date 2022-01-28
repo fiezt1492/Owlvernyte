@@ -1,7 +1,7 @@
 // Deconstructed the constants we need in this file.
 
 const Discord = require("discord.js");
-const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+// const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const fetch = require("node-fetch");
 

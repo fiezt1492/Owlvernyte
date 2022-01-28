@@ -2,7 +2,6 @@
 
 const Discord = require("discord.js");
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const disableComponent = require("../../../modules/util/disableComponent");
 
 module.exports = {
 	// The data needed to register slash commands to Discord.
@@ -20,7 +19,7 @@ module.exports = {
 	permissions: ["ADMINISTRATOR"],
 
 	async execute(interaction) {
-		// const { client } = interaction;
+		const { client } = interaction;
 
 		// console.log(interaction);
 		const Embed = new Discord.MessageEmbed()
@@ -74,13 +73,13 @@ module.exports = {
 		});
 
 		msgCol.on("end", (collected) => {
-			msg.edit({ components: disableComponent(msg.components) });
+			msg.edit({ components: client.disableComponent(msg.components) });
 
 			// if (collected)
 			// 	return collected.map(async (btn) => {
 			// 		if (btn.replied === false)
 			// 			await btn.update({
-			// 				components: disableComponent(msg.components),
+			// 				components: client.disableComponent(msg.components),
 			// 			});
 			// 	});
 		});
