@@ -152,7 +152,7 @@ module.exports = {
 					(c) => c.aliases && c.aliases.includes(string.toLowerCase())
 				);
 
-			if (!command) {
+			if (!command || command.ownerOnly || command.category == 'private') {
 				return interaction.reply({
 					content: "That's not a valid command!",
 					ephemeral: true,

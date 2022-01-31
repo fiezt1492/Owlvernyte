@@ -139,7 +139,7 @@ module.exports = {
 					(c) => c.aliases && c.aliases.includes(args.join(" ").toLowerCase())
 				);
 
-			if (!command || command.category === "private") {
+			if (!command || command.ownerOnly || command.category === "private") {
 				return message.reply({ content: "That's not a valid command!" });
 			}
 
