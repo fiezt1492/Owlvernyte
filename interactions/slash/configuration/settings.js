@@ -55,16 +55,16 @@ module.exports = {
 			components: components(false),
 		});
 
-        const msg = await interaction.fetchReply()
-        const filter = (i) => i.user.id === interaction.user.id;
+		const msg = await interaction.fetchReply();
+		const filter = (i) => i.user.id === interaction.user.id;
 
-        const msgCol = msg.createMessageComponentCollector({
+		const msgCol = msg.createMessageComponentCollector({
 			filter,
 			componentType: "BUTTON",
 			time: 60000,
 		});
 
-        msgCol.on("collect", (i) => {
+		msgCol.on("collect", (i) => {
 			if (i.customId === "cancel") return msgCol.stop();
 			// console.log(i)
 			// i.update()
@@ -72,8 +72,9 @@ module.exports = {
 			// console.log(msgCol)
 		});
 
-		msgCol.on("end", (collected) => {
-			if (reason === 'time') msg.edit({ components: client.disableComponent(msg) });
+		msgCol.on("end", (collected, reason) => {
+			if (reason === "time")
+				msg.edit({ components: client.disableComponent(msg) });
 
 			// if (collected)
 			// 	return collected.map(async (btn) => {
