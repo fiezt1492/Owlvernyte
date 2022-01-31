@@ -202,7 +202,7 @@ module.exports = {
 					result = odd ? 1 : -1;
 					break;
 				case "double":
-					result = double ? 3 : -1;
+					result = double ? Math.round(Math.random() * 1) + 1 : -1;
 					break;
 				case "triple":
 					result = triple ? 30 : -1;
