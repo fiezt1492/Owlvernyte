@@ -12,8 +12,8 @@ module.exports = {
 		// console.log(interaction)
 		await interaction.update({
 			// content: "This was a reply from button handler!",
-			components: client.disableComponent(interaction.message.components),
+			components: client.disableComponent(interaction.message),
 		});
-		return;
+		// return;
 	},
 };

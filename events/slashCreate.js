@@ -2,6 +2,7 @@
 const Discord = require("discord.js")
 const { prefix, owner } = require("../config");
 const Players = require("../modules/economy/players");
+const i18n = require("../modules/util/i18n")
 const ONCE = new Map();
 
 module.exports = {

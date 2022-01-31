@@ -54,6 +54,5 @@ module.exports = {
 			embeds: [Embed],
 			components: components(false),
 		});
-		return;
 	},
 };

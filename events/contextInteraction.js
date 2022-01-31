@@ -1,3 +1,4 @@
+const i18n = require("../modules/util/i18n")
 module.exports = {
 	name: "interactionCreate",
 

@@ -6,6 +6,7 @@ const { owner } = require("../config");
 const Players = require("../modules/economy/players");
 const Discord = require("discord.js");
 const ONCE = new Map();
+const i18n = require("../modules/util/i18n");
 
 // Prefix regex, we will use to match in mention prefix.
 
@@ -29,15 +30,7 @@ module.exports = {
 
 		if (message.author.bot || message.channel.type === "dm") return;
 
-		if (
-			message.content == `<@${client.user.id}>` ||
-			message.content == `<@!${client.user.id}>`
-		) {
-			require("../messages/onMention").execute(message);
-			return;
-		}
-
-		require("../modules/util/message")(message)
+		// require("../modules/util/message")(message)
 
 		// const checkPrefix = (
 		// 	await require("../modules/configuration/guildPrefix").get(message)
@@ -47,6 +40,17 @@ module.exports = {
 		// const checkPrefix = prefix
 		// console.log(guildSettings)
 		const prefix = guildSettings.prefix;
+		const locale = guildSettings.locale;
+
+		i18n.setLocale(locale);
+
+		if (
+			message.content == `<@${client.user.id}>` ||
+			message.content == `<@!${client.user.id}>`
+		) {
+			require("../messages/onMention").execute(message, i18n);
+			return;
+		}
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
@@ -185,9 +189,13 @@ module.exports = {
 			if (now < expirationTime) {
 				// const timeLeft = (expirationTime - now) / 1000;
 				return message.reply({
-					content: `You can use \`${command.name}\` command <t:${Math.floor(
-						expirationTime / 1000
-					)}:R>`,
+					content: i18n.__mf("common.cooldown", {
+						command: command.name,
+						time: Math.floor(expirationTime / 1000),
+					}),
+					// `You can use \`${command.name}\` command <t:${Math.floor(
+					// 	expirationTime / 1000
+					// )}:R>`,
 				});
 			}
 		}
@@ -212,15 +220,18 @@ module.exports = {
 				if (mongoCD) {
 					if (Date.now() - mongoCD.timestamps < mongoCD.duration) {
 						return message.reply({
-							content: `You can use \`${command.name}\` command <t:${Math.floor(
-								(mongoCD.timestamps + mongoCD.duration) / 1000
-							)}:R>`,
+							content: i18n.__mf("common.cooldown", {
+								command: command.name,
+								time: Math.floor(
+									(mongoCD.timestamps + mongoCD.duration) / 1000
+								),
+							}),
 						});
 					} else await Player.cooldownsPull(command.name);
 				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
 			}
 
-			command.execute(message, args, guildSettings, Player, ONCE);
+			command.execute(message, args, guildSettings, Player, ONCE, i18n);
 		} catch (error) {
 			console.error(error);
 			message.reply({

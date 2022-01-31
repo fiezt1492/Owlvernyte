@@ -50,7 +50,7 @@ module.exports = (client) => {
 								.setStyle(component.style);
 
 							if (component.style === "LINK") button.setURL(component.url);
-							else button.setDisabled(state);
+							else button.setDisabled(true);
 							return button;
 
 						case "SELECT_MENU":

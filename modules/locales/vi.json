@@ -1,0 +1,14 @@
+{
+    "onMention": {
+        "reply": "Prefix (tiền tố) của máy chủ này là `{prefix}`. Gõ `{prefix}help` để hiện bảng giúp đỡ."
+    },
+    "common": {
+        "cooldown": "",
+        "error": "There was an error occured!"
+    },
+    "help": {
+        "description": "List all commands of bot or info about a specific command.",
+        "category": "information",
+        "usage": "<command name>"
+    }
+}

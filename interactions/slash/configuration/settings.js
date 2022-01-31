@@ -73,7 +73,7 @@ module.exports = {
 		});
 
 		msgCol.on("end", (collected) => {
-			msg.edit({ components: client.disableComponent(msg.components) });
+			if (reason === 'time') msg.edit({ components: client.disableComponent(msg) });
 
 			// if (collected)
 			// 	return collected.map(async (btn) => {

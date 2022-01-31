@@ -5,6 +5,7 @@ const {
 	MessageSelectMenu,
 	MessageButton,
 } = require("discord.js");
+const i18n = require("../../modules/util/i18n")
 
 module.exports = {
 	name: "help",

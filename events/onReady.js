@@ -39,11 +39,13 @@ module.exports = {
 					},
 					{
 						prefix: 1,
+						locale: 1
 					}
 				);
 
 				client.guildSettings.set(id, {
 					prefix: guild ? guild.prefix : prefix,
+					locale: guild ? guild.locale : "en"
 				});
 
 				if (guilds.indexOf(id) === guilds.length - 1) {

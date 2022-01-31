@@ -1,0 +1,14 @@
+{
+    "onMention": {
+        "reply": "This guild prefix is `{prefix}`. Type `{prefix}help` to spawn help panel."
+    },
+    "common": {
+        "cooldown": "You can use `{command}` command <t:{time}:R>",
+        "error": ""
+    },
+    "help": {
+        "description": "List all commands of bot or info about a specific command.",
+        "category": "information",
+        "usage": "<command name>"
+    }
+}

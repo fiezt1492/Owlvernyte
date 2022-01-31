@@ -37,6 +37,11 @@ module.exports = {
 					.setDisabled(state)
 					.setLabel("Prefix")
 					.setStyle("PRIMARY"),
+				// new Discord.MessageButton()
+				// 	.setCustomId("localepanel")
+				// 	.setDisabled(state)
+				// 	.setLabel("Locale/Language")
+				// 	.setStyle("PRIMARY"),
 				new Discord.MessageButton()
 					.setCustomId("cancel")
 					.setDisabled(state)
@@ -69,8 +74,8 @@ module.exports = {
 			// console.log(msgCol)
 		});
 
-		msgCol.on("end", (collected) => {
-			msg.edit({ components: client.disableComponent(msg.components) });
+		msgCol.on("end", (collected, reason) => {
+			if (reason === 'time') msg.edit({ components: client.disableComponent(msg) });
 
 			// if (collected)
 			// 	return collected.map(async (btn) => {
