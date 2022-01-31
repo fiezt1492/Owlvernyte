@@ -6,7 +6,7 @@ const { Routes } = require("discord-api-types/v9");
 module.exports = {
 	name: "delete",
 	description: "delete slash command",
-	category: "misc",
+	category: "private",
 	args: true,
 	ownerOnly: true,
 

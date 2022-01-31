@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 module.exports = {
 	name: "test",
 	description: "this is a test command",
-	category: "misc",
+	category: "private",
 	// aliases: [""],
 	usage: "",
 	// cooldown: 5,

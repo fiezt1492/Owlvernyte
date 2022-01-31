@@ -24,7 +24,7 @@ module.exports = {
 			const formatString = (str) =>
 				`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
 
-			let categories = [...new Set(commands.filter(cmd => cmd.category !== 'misc').map((cmd) => cmd.category))];
+			let categories = [...new Set(commands.filter(cmd => cmd.category !== 'private').map((cmd) => cmd.category))];
 
 			const commandsList = categories.map((cate) => {
 				const getCommands = commands
@@ -139,7 +139,7 @@ module.exports = {
 					(c) => c.aliases && c.aliases.includes(args.join(" ").toLowerCase())
 				);
 
-			if (!command) {
+			if (!command || command.category === "private") {
 				return message.reply({ content: "That's not a valid command!" });
 			}
 

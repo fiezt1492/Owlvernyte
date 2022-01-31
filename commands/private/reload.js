@@ -5,7 +5,7 @@ const glob = require("glob");
 module.exports = {
 	name: "reload",
 	description: "Reloads a command",
-	category: "misc",
+	category: "private",
 	// args: true,
 	ownerOnly: true,
 

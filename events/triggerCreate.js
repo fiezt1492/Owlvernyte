@@ -2,9 +2,9 @@ const { token, client_id, test_guild_id } = require("../config");
 
 module.exports = {
 	name: "messageCreate",
+	skip: true,
 
 	async execute(message) {
-		return;
 
 		const { client, guild, channel, content, author } = message;
 

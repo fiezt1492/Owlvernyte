@@ -1,7 +1,7 @@
 module.exports = {
 	name: "restart",
 	description: "Restart the bot",
-	category: "misc",
+	category: "private",
 	// args: true,
 	ownerOnly: true,
 
