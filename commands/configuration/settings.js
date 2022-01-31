@@ -17,7 +17,7 @@ module.exports = {
 	permissions: ["ADMINISTRATOR"],
 
 	async execute(message, args, guildSettings) {
-		const {client} = message
+		const { client } = message;
 		const Embed = new Discord.MessageEmbed()
 			.setTitle("Guild Settings Panel")
 			.setDescription(
@@ -75,7 +75,8 @@ module.exports = {
 		});
 
 		msgCol.on("end", (collected, reason) => {
-			if (reason === 'time') msg.edit({ components: client.disableComponent(msg) });
+			if (reason === "time")
+				msg.edit({ components: client.disableComponent(msg) });
 
 			// if (collected)
 			// 	return collected.map(async (btn) => {
