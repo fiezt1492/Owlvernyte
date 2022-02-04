@@ -8,7 +8,7 @@ const Deck = require("../../../modules/gambling/Blackjack/Deck");
 const Hand = require("../../../modules/gambling/Blackjack/Hand");
 const { millify } = require("millify");
 
-let games = new Map();
+// let games = new Map();
 
 module.exports = {
 	// The data needed to register slash commands to Discord.

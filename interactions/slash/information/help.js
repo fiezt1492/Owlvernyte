@@ -22,12 +22,15 @@ module.exports = {
 				.setDescription("The specific command to see the info of.")
 				.setRequired(false)
 		),
+	once: true,
 
-	async execute(interaction) {
+	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
 		const { commands } = client;
 		// const slashCommands = client.slashCommands;
-		const prefix = client.guildSettings.get(interaction.guildId).prefix.toLowerCase()
+		const prefix = client.guildSettings
+			.get(interaction.guildId)
+			.prefix.toLowerCase();
 		const string = interaction.options.getString("command");
 
 		if (!string) {
@@ -35,22 +38,22 @@ module.exports = {
 				`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
 			let categories = [...new Set(commands.map((cmd) => cmd.category))];
 
-			categories = categories.filter((cate) => cate !== "misc");
+			categories = categories.filter((cate) => cate !== "private");
 
 			const commandsList = categories.map((cate) => {
 				const getCommands = commands
 					.filter((cmd) => cmd.category === cate)
 					.map((cmd) => {
 						return {
-							name: cmd.name || "None",
-							aliases: cmd.aliases || "None",
-							description: cmd.description || "None",
-							usage: cmd.usage || "None",
+							name: cmd.name || null,
+							aliases: cmd.aliases || null,
+							description: cmd.description || null,
+							usage: cmd.usage || null,
 						};
 					});
 
 				return {
-					category: formatString(cate),
+					category: cate,
 					commands: getCommands,
 				};
 			});
@@ -65,16 +68,18 @@ module.exports = {
 			let helpEmbed = new MessageEmbed()
 				.setColor("RANDOM")
 				.setURL(process.env.URL)
-				.setTitle("Help Panel")
+				.setTitle(i18n.__("help.helpEmbed.title"))
 				.setDescription(
-					`You can use \`${prefix}help <command name>\` to get info on a specific command!`
+					i18n.__mf("help.helpEmbed.description", {
+						prefix: prefix,
+					})
 				)
 				.addField(
-					"CONNECT WITH US",
+					i18n.__("help.helpEmbed.field0.title"),
 					"**[Youtube](https://www.youtube.com/channel/UCEG5sgFKieaUuHsu5VG-kBg)** | **[Discord](https://discord.io/owlvernyte+)** | **[Facebook](https://www.facebook.com/owlvernyte)**"
 				)
 				.addField(
-					"Buy me a coffee",
+					i18n.__("help.helpEmbed.field1.title"),
 					`**[Playerduo](https://playerduo.com/owlvernyte)** | **[buymeacoffee](https://buymeacoffee.com/fiezt)**`
 				)
 				.setFooter({ text: `Select one of these categories below` });
@@ -83,26 +88,27 @@ module.exports = {
 				new MessageActionRow().addComponents(
 					new MessageSelectMenu()
 						.setCustomId("helpPanel")
-						.setPlaceholder("Please select a category")
+						.setPlaceholder(i18n.__("help.components.placeholder"))
 						.setDisabled(state)
 						.addOptions({
-							label: "Home",
+							label: i18n.__("help.components.home.label"),
 							value: "home",
-							description: "Showing homepage",
+							description: i18n.__("help.components.home.description"),
 						})
 						.addOptions({
-							label: "Slash Commands Panel",
+							label: i18n.__("help.components.slash.label"),
 							value: "slashCommandPanel",
-							description: `Show Slash Commands Panel`,
+							description: i18n.__("help.components.slash.description"),
 						})
 						.addOptions(
 							commandsList.map((cmd) => {
 								return {
-									label: cmd.category,
+									label: formatString(cmd.category),
 									value: cmd.category.toLowerCase(),
-									description: `Get commands from ${formatString(
-										cmd.category
-									)} category`,
+									description: i18n.__mf(
+										"help.components.category.description",
+										{ category: formatString(cmd.category) }
+									),
 								};
 							})
 						)
@@ -111,15 +117,15 @@ module.exports = {
 					new MessageButton()
 						.setStyle("LINK")
 						.setURL("https://top.gg/bot/853623967180259369/invite")
-						.setLabel("Invite me"),
+						.setLabel(i18n.__("help.components.invite")),
 					new MessageButton()
 						.setStyle("LINK")
 						.setURL("https://top.gg/bot/853623967180259369/vote")
-						.setLabel("Vote me"),
+						.setLabel(i18n.__("help.components.vote")),
 					new MessageButton()
 						.setStyle("LINK")
 						.setURL("https://discord.io/owlvernyte")
-						.setLabel("Support Server")
+						.setLabel(i18n.__("help.components.supportserver"))
 				),
 			];
 
@@ -133,6 +139,14 @@ module.exports = {
 			const msg = await interaction.fetchReply();
 			// console.log(msg)
 
+			ONCE.set(interaction.user.id, {
+				name: this.data.name,
+				gID: msg.guild.id,
+				cID: msg.channel.id,
+				mID: msg.id,
+				mURL: msg.url,
+			});
+
 			const msgCol = msg.createMessageComponentCollector({
 				componentType: "SELECT_MENU",
 				time: 60000,
@@ -144,6 +158,7 @@ module.exports = {
 
 			msgCol.on("end", () => {
 				msg.edit({ components: components(true) });
+				ONCE.delete(interaction.user.id);
 			});
 		} else {
 			const command =
@@ -152,7 +167,7 @@ module.exports = {
 					(c) => c.aliases && c.aliases.includes(string.toLowerCase())
 				);
 
-			if (!command || command.ownerOnly || command.category == 'private') {
+			if (!command || command.ownerOnly || command.category == "private") {
 				return interaction.reply({
 					content: "That's not a valid command!",
 					ephemeral: true,
@@ -171,15 +186,28 @@ module.exports = {
 
 			if (command.aliases && command.aliases.length > 0)
 				commandEmbed
-					.addField("Aliases", `\`${command.aliases.join(", ")}\``, true)
-					.addField("Cooldown", `${command.cooldown || 3} second(s)`, true);
+					.addField(
+						i18n.__("help.commandEmbed.fieldAliases"),
+						`\`${command.aliases.join(", ")}\``,
+						true
+					)
+					.addField(
+						i18n.__("help.commandEmbed.fieldCooldown"),
+						`${command.cooldown || 3} second(s)`,
+						true
+					);
 			if (command.usage)
 				commandEmbed.addField(
-					"Usage",
+					i18n.__("help.commandEmbed.fieldUsage"),
 					`\`${prefix}${command.name} ${command.usage}\``,
 					true
 				);
-			else commandEmbed.addField("Usage", `\`${prefix}${command.name}\``, true);
+			else
+				commandEmbed.addField(
+					i18n.__("help.commandEmbed.fieldUsage"),
+					`\`${prefix}${command.name}\``,
+					true
+				);
 
 			return interaction.reply({ embeds: [commandEmbed] });
 		}

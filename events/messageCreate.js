@@ -6,7 +6,6 @@ const { owner } = require("../config");
 const Players = require("../modules/economy/players");
 const Discord = require("discord.js");
 const ONCE = new Map();
-const i18n = require("../modules/util/i18n");
 
 // Prefix regex, we will use to match in mention prefix.
 
@@ -42,6 +41,7 @@ module.exports = {
 		const prefix = guildSettings.prefix;
 		const locale = guildSettings.locale;
 
+		const i18n = client.i18n
 		i18n.setLocale(locale);
 
 		if (
@@ -86,10 +86,13 @@ module.exports = {
 				const commandOnce = ONCE.get(author.id);
 
 				const onceEmbed = new Discord.MessageEmbed()
-					.setTitle("ERROR")
+					.setTitle(i18n.__("ONCE.title"))
 					.setColor("RED")
 					.setDescription(
-						`You need to finish your previous \`${commandOnce.name}\` command first!`
+						i18n.__mf("ONCE.description", {
+							command: commandOnce.name,
+						})
+						// `You need to finish your previous \`${commandOnce.name}\` command first!`
 					);
 
 				return message.reply({
@@ -102,7 +105,10 @@ module.exports = {
 								{
 									type: 2,
 									style: 5,
-									label: `Forward to "${commandOnce.name}" command`,
+									label: i18n.__mf("ONCE.label", {
+										command: commandOnce.name,
+									}),
+									// `Forward to "${commandOnce.name}" command`,
 									// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
 									url: commandOnce.mURL,
 								},
@@ -119,8 +125,8 @@ module.exports = {
 
 		if (command.maintain) {
 			return message.reply({
-				content:
-					"This command is currently under maintenance. Please wait until we completely fixed it.",
+				content: i18n.__("messageCreate.maintain"),
+				// "This command is currently under maintenance. Please wait until we completely fixed it.",
 			});
 		}
 
@@ -129,22 +135,34 @@ module.exports = {
 		if (command.permissions) {
 			const authorPerms = message.channel.permissionsFor(message.author);
 			if (!authorPerms || !authorPerms.has(command.permissions)) {
-				return message.reply({ content: "You can not do this!" });
+				return message.reply({
+					content: i18n.__("messageCreate.permissions"),
+					// "You can not do this!"
+				});
 			}
 		}
 
 		if (command.guildOwner === true) {
 			if (author.id !== guild.ownerId)
-				return message.reply("This command is only for guild owner.");
+				return message.reply(
+					i18n.__("messageCreate.guildOwner")
+					// "This command is only for guild owner."
+				);
 		}
 
 		// Args missing
 
 		if (command.args && !args.length) {
-			let reply = `You didn't provide any arguments!`;
+			let reply = i18n.__("messageCreate.args");
+			// `You didn't provide any arguments!`;
 
 			if (command.usage) {
-				reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+				reply += i18n.__mf("messageCreate.usage", {
+					prefix: prefix,
+					command: command.name,
+					usage: command.usage,
+				});
+				// `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
 			}
 
 			if (command.options && command.options.length > 0) {
@@ -152,7 +170,10 @@ module.exports = {
 					.map((o) => `${prefix}${command.name} ${o.toLowerCase()}`)
 					.join("\n");
 
-				reply += `\n\`\`\`Usage:\n${options}\`\`\``;
+				reply += i18n.__("messageCreate.options", {
+					options: options,
+				});
+				// `\n\`\`\`Usage:\n${options}\`\`\``;
 			}
 
 			return message.reply({ content: reply });
@@ -235,7 +256,7 @@ module.exports = {
 		} catch (error) {
 			console.error(error);
 			message.reply({
-				content: "There was an error trying to execute that command!",
+				content: i18n.__("common.error"),
 			});
 		}
 	},

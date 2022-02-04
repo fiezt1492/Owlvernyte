@@ -1,8 +1,7 @@
 // const { Collection } = require("discord.js");
-const Discord = require("discord.js")
+const Discord = require("discord.js");
 const { prefix, owner } = require("../config");
 const Players = require("../modules/economy/players");
-const i18n = require("../modules/util/i18n")
 const ONCE = new Map();
 
 module.exports = {
@@ -16,16 +15,22 @@ module.exports = {
 		const command = client.slashCommands.get(interaction.commandName);
 
 		if (!command) return;
+		// console.log(interaction);
+		const guildSettings = await client.guildSettings.get(interaction.guildId);
+		const i18n = client.i18n;
+		i18n.setLocale(guildSettings.locale);
 
 		if (command.once === true) {
 			if (ONCE.has(interaction.user.id)) {
 				const commandOnce = ONCE.get(interaction.user.id);
 
 				const onceEmbed = new Discord.MessageEmbed()
-					.setTitle("ERROR")
+					.setTitle(i18n.__("ONCE.title"))
 					.setColor("RED")
 					.setDescription(
-						`You need to finish your previous \`${commandOnce.name}\` command first!`
+						i18n.__mf("ONCE.description", {
+							command: commandOnce.name,
+						})
 					);
 
 				return interaction.reply({
@@ -38,14 +43,16 @@ module.exports = {
 								{
 									type: 2,
 									style: 5,
-									label: `Forward to "${commandOnce.name}" command`,
+									label: i18n.__mf("ONCE.label", {
+										command: commandOnce.name,
+									}),
 									// url: `https://discord.com/channels/${already.gID}/${already.cID}/${already.mID}`
 									url: commandOnce.mURL,
 								},
 							],
 						},
 					],
-					ephemeral: true
+					ephemeral: true,
 				});
 			}
 		}
@@ -59,7 +66,7 @@ module.exports = {
 			// if (!authorPerms || !authorPerms.has(command.permissions))
 			if (!interaction.member.permissions.has(command.permissions)) {
 				return interaction.reply({
-					content: "You can not do this!",
+					content: i18n.__("messageCreate.permissions"),
 					ephemeral: true,
 				});
 			}
@@ -68,7 +75,7 @@ module.exports = {
 		if (command.guildOwner === true) {
 			if (interaction.user.id !== interaction.member.guild.ownerId)
 				return interaction.reply({
-					content: "This command is only for guild owner.",
+					content: i18n.__("messageCreate.guildOwner"),
 					ephemeral: true,
 				});
 		}
@@ -88,11 +95,12 @@ module.exports = {
 				timestamps.get(interaction.user.id) + cooldownAmount;
 
 			if (now < expirationTime) {
-				const timeLeft = (expirationTime - now) / 1000;
+				// const timeLeft = (expirationTime - now) / 1000;
 				return interaction.reply({
-					content: `Please wait **${timeLeft.toFixed(
-						1
-					)}** more second(s) before reusing the \`${command.name}\` command.`,
+					content: i18n.__mf("common.cooldown", {
+						command: command.name,
+						time: Math.floor(expirationTime / 1000),
+					}),
 					ephemeral: true,
 				});
 			}
@@ -111,20 +119,23 @@ module.exports = {
 				if (mongoCD) {
 					if (Date.now() - mongoCD.timestamps < mongoCD.duration) {
 						return interaction.reply({
-							content: `You can use \`${command.name}\` command <t:${Math.floor(
-								(mongoCD.timestamps + mongoCD.duration) / 1000
-							)}:R>`,
+							content: i18n.__mf("common.cooldown", {
+								command: command.name,
+								time: Math.floor(
+									(mongoCD.timestamps + mongoCD.duration) / 1000
+								),
+							}),
 							ephemeral: true,
 						});
 					} else await Player.cooldownsPull(command.name);
 				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
 			}
 
-			await command.execute(interaction, Player, ONCE);
+			await command.execute(interaction, Player, ONCE, i18n);
 		} catch (err) {
 			console.error(err);
 			await interaction.reply({
-				content: "There was an issue while executing that command!",
+				content: i18n.__("common.error"),
 				ephemeral: true,
 			});
 		}

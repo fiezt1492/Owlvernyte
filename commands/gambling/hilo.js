@@ -11,6 +11,7 @@ module.exports = {
 	aliases: ["sicbo", "taixiu", "highlow", "bigsmall"],
 	usage: "[owlet]",
 	once: true,
+	args: true,
 	permissions: "SEND_MESSAGES",
 	// maintain: true,
 
