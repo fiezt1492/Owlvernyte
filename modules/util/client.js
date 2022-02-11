@@ -44,25 +44,37 @@ module.exports = (client) => {
 					switch (component.type) {
 						case "BUTTON":
 							const button = new Discord.MessageButton()
-								.setCustomId(component.customId)
 								.setEmoji(component.emoji)
 								.setLabel(component.label)
 								.setStyle(component.style);
 
 							if (component.style === "LINK") button.setURL(component.url);
-							else button.setDisabled(true);
+							else {
+								button.setCustomId(component.customId).setDisabled(state);
+							}
+							// console.log(button);
 							return button;
 
 						case "SELECT_MENU":
+							// console.log(component)
 							return new Discord.MessageSelectMenu()
-								.setCustomId(component.customId)
-								.setPlaceholder(component.placeholder)
+								.setCustomId(String(component.customId))
+								.setPlaceholder(String(component.placeholder))
+								.addOptions({
+									label: "A",
+									value: "B",
+									description: "C",
+								})
 								.setDisabled(state);
 					}
 				}),
 			])
 		);
-
+		// console.log(COMPONENTS)
 		return COMPONENTS;
 	};
+
+	client.prefix = require("../configuration/guildPrefix");
+
+	client.locale = require("../configuration/guildLocale");
 };

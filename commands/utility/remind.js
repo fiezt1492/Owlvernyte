@@ -8,7 +8,7 @@ module.exports = {
 	usage: "[note]",
 	cooldown: 5,
 	args: true,
-	ownerOnly: false,
+	ownerOnly: true,
 	permissions: ["SEND_MESSAGES"],
 
 	async execute(message, args, guildSettings, Player) {

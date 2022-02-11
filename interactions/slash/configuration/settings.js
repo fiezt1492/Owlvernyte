@@ -15,10 +15,11 @@ module.exports = {
 	// 		.setDescription("Provide a subreddit to get memes in it.")
 	// 		.setRequired(false)
 	// ),
+	once: true,
 	guildOwner: true,
 	permissions: ["ADMINISTRATOR"],
 
-	async execute(interaction) {
+	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		// console.log(interaction);
@@ -41,6 +42,11 @@ module.exports = {
 					.setDisabled(state)
 					.setLabel("Prefix")
 					.setStyle("PRIMARY"),
+				// new Discord.MessageButton()
+				// 	.setCustomId("localepanel")
+				// 	.setDisabled(state)
+				// 	.setLabel("Locale/Language")
+				// 	.setStyle("PRIMARY"),
 				new Discord.MessageButton()
 					.setCustomId("cancel")
 					.setDisabled(state)
@@ -56,6 +62,15 @@ module.exports = {
 		});
 
 		const msg = await interaction.fetchReply();
+
+		ONCE.set(interaction.user.id, {
+			name: this.data.name,
+			gID: msg.guild.id,
+			cID: msg.channel.id,
+			mID: msg.id,
+			mURL: msg.url,
+		});
+
 		const filter = (i) => i.user.id === interaction.user.id;
 
 		const msgCol = msg.createMessageComponentCollector({
@@ -73,6 +88,7 @@ module.exports = {
 		});
 
 		msgCol.on("end", (collected, reason) => {
+			ONCE.delete(interaction.user.id);
 			if (reason === "time")
 				msg.edit({ components: client.disableComponent(msg) });
 

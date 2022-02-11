@@ -12,11 +12,12 @@ module.exports = {
 	cooldown: 5,
 	// options: ["reset", "set", "get"],
 	// args: true,
+	once: true,
 	ownerOnly: false,
 	guildOwner: true,
 	permissions: ["ADMINISTRATOR"],
 
-	async execute(message, args, guildSettings) {
+	async execute(message, args, guildSettings, Player, ONCE, i18n) {
 		const { client } = message;
 		const Embed = new Discord.MessageEmbed()
 			.setTitle("Guild Settings Panel")
@@ -58,6 +59,14 @@ module.exports = {
 			},
 		});
 
+		ONCE.set(message.author.id, {
+			name: this.name,
+			gID: msg.guild.id,
+			cID: msg.channel.id,
+			mID: msg.id,
+			mURL: msg.url,
+		});
+
 		const filter = (i) => i.user.id === message.author.id;
 
 		const msgCol = msg.createMessageComponentCollector({
@@ -75,6 +84,7 @@ module.exports = {
 		});
 
 		msgCol.on("end", (collected, reason) => {
+			ONCE.delete(message.author.id);
 			if (reason === "time")
 				msg.edit({ components: client.disableComponent(msg) });
 

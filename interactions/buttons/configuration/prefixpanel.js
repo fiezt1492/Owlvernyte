@@ -1,14 +1,12 @@
-const guildPrefix = require("../../../modules/configuration/guildPrefix");
 const config = require("../../../config");
 const Discord = require("discord.js");
-// const disableComponent = require("../../../modules/util/disableComponent");
 
 module.exports = {
 	id: "prefixpanel",
 	filter: "author",
 
 	async execute(interaction) {
-		// const { client } = interaction;
+		const { client } = interaction;
 
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
@@ -17,7 +15,7 @@ module.exports = {
 			})
 			.setTitle("Guild Prefix")
 			.setColor("RANDOM")
-			.addField("Current Prefix", guildPrefix.get(interaction.message))
+			.addField("Current Prefix", client.prefix.get(interaction.message))
 			.setDescription(
 				`\`Set\` button -> set new guild prefix\n\`Reset\` button -> reset your current guild prefix to default prefix: \`${config.prefix}\``
 			);

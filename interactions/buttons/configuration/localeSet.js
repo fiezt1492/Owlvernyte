@@ -1,7 +1,7 @@
 // let already = new Set();
 
 module.exports = {
-	id: "prefixSet",
+	id: "localeSet",
 	filter: "author",
 
 	async execute(interaction, i18n, already) {
@@ -17,7 +17,7 @@ module.exports = {
 
 			if (now - old < 60000)
 				return await interaction.reply({
-					content: `You have just changed your guild prefix. Please wait \`${(
+					content: `You have just changed your guild locale. Please wait \`${(
 						(60000 - (now - old)) /
 						1000
 					).toFixed(1)}s\``,
@@ -33,13 +33,13 @@ module.exports = {
 		// 	});
 
 		message.edit({
-			components: client.disableComponent(message),
+			components: client.disableComponent(message, true),
 		});
 
 		already.add(interaction.user.id);
 
 		await interaction.reply({
-			content: `Please type below your wish custom prefix to set. You 5 characters limit. Expired <t:${
+			content: `Please enter a locale from **Supported Locales** (Example: en). Expired <t:${
 				Math.round(Date.now() / 1000) + 60
 			}:R>`,
 			ephemeral: true,
@@ -66,45 +66,51 @@ module.exports = {
 			already.delete(interaction.user.id);
 			if (collected.size === 1) {
 				already.delete(interaction.user.id);
-				const customPrefix = collected.first().content;
-
+				const locale = collected
+					.first()
+					.content.toLowerCase()
+					.replace(/[&\/\\#^+()$~%.'":*?<>{}!@ ]/g, "");
+				// console.log(locale)
 				collected.first().delete();
 				// console.log(ifetch)
+				let locales = i18n.getLocales();
 
-				if (customPrefix.length > 5) {
-					message.edit({
-						components: client.disableComponent(message, false),
-					});
+				if (!locales.includes(locale))
+					return interaction
+						.followUp({
+							content: `Unknown \`${locale}\` locale.`,
+							ephemeral: true,
+						})
+						.then(() => {
+							message.edit({
+								components: client.disableComponent(message, false),
+							});
+						});
 
-					return interaction.followUp({
-						content: `Prefix length limitation is **5**. Please make it shorter and click \`Set\` button again.`,
-						ephemeral: true,
-					});
-				}
-
-				return client.prefix.set(message, customPrefix).then((prefix) => {
+				return client.locale.set(message, locale).then((locale) => {
 					cooldowns.set(message.guildId, Date.now());
 
 					Embed.fields[0] = {
-						name: "Current Prefix",
-						value: prefix,
+						name: "Current Locale",
+						value: "`" + locale + "`",
 					};
 
 					message.edit({
 						embeds: [Embed],
-						components: client.disableComponent(message, false),
+                        components: client.disableComponent(message, false),
 					});
 
 					return interaction.followUp({
-						content: `Successfully changed your guild prefix to \`${prefix}\``,
+						content: `Successfully changed your guild locale to \`${locale}\``,
 						ephemeral: true,
 					});
 				});
 			}
 
+			// let value = await client.locale.get(message);
 			// Embed.fields[0] = {
-			// 	name: "Current Prefix",
-			// 	value: value,
+			// 	name: "Current Locale",
+			// 	value: "`" + value + "`",
 			// };
 
 			// message.edit({

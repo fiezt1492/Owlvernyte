@@ -7,10 +7,10 @@ module.exports = {
 		type: 2, // 2 is for user context menus
 	},
 
-	async execute(interaction) {
+	async execute(interaction, member, i18n) {
 		const { client } = interaction;
 
-		const user = await client.users.fetch(interaction.targetId);
+		const user = member.user;
 		const banner = await getUserBannerUrl(client, user.id);
 
 		if (!banner)

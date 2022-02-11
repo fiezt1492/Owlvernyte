@@ -39,10 +39,9 @@ module.exports = {
 		// const checkPrefix = prefix
 		// console.log(guildSettings)
 		const prefix = guildSettings.prefix;
-		const locale = guildSettings.locale;
-
+		
 		const i18n = client.i18n
-		i18n.setLocale(locale);
+		i18n.setLocale(guildSettings.locale);
 
 		if (
 			message.content == `<@${client.user.id}>` ||

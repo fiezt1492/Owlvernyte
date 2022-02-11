@@ -3,23 +3,13 @@ const defaultPrefix = prefix;
 
 module.exports = {
 	get(message) {
-		// try {
-		// 	const { client } = message;
-		// 	const DB = client.db.collection("guildSettings");
-		// 	const guild = await DB.findOne(
-		// 		{ gID: message.guild.id },
-		// 		{
-		// 			prefix: 1,
-		// 		}
-		// 	);
-		// 	return String(guild ? guild.prefix : prefix).toLowerCase();
-		// } catch (e) {
-		// 	console.log(e);
-		// }
-		return String(message.client.guildSettings.get(message.guild.id).prefix.toLowerCase())
+		return String(
+			message.client.guildSettings.get(message.guild.id).prefix.toLowerCase()
+		);
 	},
 
 	async set(message, prefix = defaultPrefix) {
+		if (prefix.length >= 5 || prefix.length <= 0) return -1;
 		try {
 			const { client } = message;
 			const DB = client.db.collection("guildSettings");
@@ -29,7 +19,7 @@ module.exports = {
 				},
 				{
 					$set: {
-						gID: message.guild.id,
+						// gID: message.guild.id,
 						prefix: String(prefix).toLowerCase(),
 					},
 				},
@@ -38,9 +28,13 @@ module.exports = {
 				}
 			);
 
-			client.guildSettings.set(message.guild.id, {
-				prefix: String(prefix).toLowerCase(),
-			});
+			let guildSettings = await client.guildSettings.get(message.guild.id);
+
+			guildSettings.prefix = String(prefix).toLowerCase();
+
+			client.guildSettings.set(message.guild.id, guildSettings);
+
+			return await client.guildSettings.get(message.guild.id).prefix
 		} catch (e) {
 			console.log(e);
 		}

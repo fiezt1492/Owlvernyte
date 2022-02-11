@@ -6,15 +6,15 @@ module.exports = {
 		type: 2, // 2 is for user context menus
 	},
 
-	async execute(interaction) {
+	async execute(interaction, member, i18n) {
 		const { client } = interaction;
 
-		const user = await client.users.fetch(interaction.targetId);
+		const user = member.user;
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
 				name: user.username + "#" + user.discriminator + "'s avatar",
 			})
-			.setImage(user.displayAvatarURL({ dynamic: true }));
+			.setImage(user.displayAvatarURL({ dynamic: true, size: 256 }));
 
 		const JPG = new Discord.MessageButton()
 			.setStyle("LINK")

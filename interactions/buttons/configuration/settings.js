@@ -1,5 +1,5 @@
 // const config = require("../../../config");
-const guildPrefix = require("../../../modules/configuration/guildPrefix");
+// const guildPrefix = require("../../../modules/configuration/guildPrefix");
 const Discord = require("discord.js");
 // const disableComponent = require("../../../modules/util/disableComponent");
 
@@ -8,6 +8,8 @@ module.exports = {
 	filter: "author",
 
 	async execute(interaction) {
+		const { client } = interaction;
+
 		const Embed = new Discord.MessageEmbed()
 			.setTitle("Guild Settings Panel")
 			.setColor("RANDOM")
@@ -15,7 +17,7 @@ module.exports = {
 				name: interaction.message.guild.name,
 				iconURL: interaction.message.guild.iconURL(),
 			})
-			.addField("Prefix", guildPrefix.get(interaction.message));
+			.addField("Prefix", client.prefix.get(interaction.message));
 
 		const components = (state) => [
 			new Discord.MessageActionRow().addComponents(
@@ -23,6 +25,11 @@ module.exports = {
 					.setCustomId("prefixpanel")
 					.setDisabled(state)
 					.setLabel("Prefix")
+					.setStyle("PRIMARY"),
+				new Discord.MessageButton()
+					.setCustomId("localepanel")
+					.setDisabled(state)
+					.setLabel("Locale/Language")
 					.setStyle("PRIMARY"),
 				new Discord.MessageButton()
 					.setCustomId("cancel")

@@ -19,6 +19,9 @@ module.exports = {
 			return;
 		}
 
+		const guildSettings = await client.guildSettings.get(interaction.guildId);
+		const i18n = client.i18n;
+		i18n.setLocale(guildSettings.locale);
 		// A try to execute the interaction.
 
 		try {
@@ -28,7 +31,7 @@ module.exports = {
 					if (interaction.message.interaction) {
 						if (interaction.message.interaction.user.id !== interaction.user.id)
 							return await interaction.reply({
-								content: "This message is not for you!",
+								content: i18n.__("interactionCreate.author"),
 								ephemeral: true,
 							});
 					}
@@ -46,7 +49,7 @@ module.exports = {
 
 						if (message.author.id !== interaction.user.id)
 							return await interaction.reply({
-								content: "This message is not for you!",
+								content: i18n.__("interactionCreate.author"),
 								ephemeral: true,
 							});
 					}
@@ -76,12 +79,12 @@ module.exports = {
 				}
 			}
 
-			await command.execute(interaction);
+			await command.execute(interaction, i18n);
 			return;
 		} catch (err) {
 			console.error(err);
 			await interaction.reply({
-				content: "There was an issue while executing that select menu option!",
+				content: i18n.__("common.error"),
 				ephemeral: true,
 			});
 			return;

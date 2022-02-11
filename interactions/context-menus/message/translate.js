@@ -8,68 +8,39 @@ module.exports = {
 		type: 3,
 	},
 
-	async execute(interaction) {
+	async execute(interaction, message, i18n) {
 		const { client } = interaction;
-		const guild = await client.guilds.cache.get(interaction.guildId);
-		const channel = await guild.channels.cache.get(interaction.channelId);
-		const msg = await channel.messages.fetch(interaction.targetId);
 
-		if (!msg.content || msg.content.length === 0) {
+		if (!message.content || message.content.length === 0) {
 			return await interaction.reply({
 				content: `I will not translate a message without content.`,
 				ephemeral: true,
 			});
 		}
+		const { guild } = message;
 
-		// console.log(msg);
+		let langs = Object.keys(locale);
 
-		// let langs = Object.keys(locale)
-		// 	.filter((key) => key !== "auto")
-		// 	.map((key) => {
-		// 		return {
-		// 			locale: String(key),
-		// 			lang: String(locale[key]),
-		// 		};
-		// 	});
+		let TO = guild.preferredLocale ? guild.preferredLocale : "en";
 
-        let langs = Object.keys(locale)
+		if (TO == "en-US") TO = "en";
 
-		console.log(langs);
+		if (!langs.includes(TO))
+			return await interaction.reply({
+				content: `This language is not supported`,
+				ephemeral: true,
+			});
 
-		// const components = [
-		// 	new Discord.MessageActionRow().addComponents(
-		// 		new Discord.MessageSelectMenu()
-		// 			.setCustomId("translate-locale")
-		// 			.setPlaceholder(`Select a language to translate`)
-		// 			.addOptions(langs.map(l => {
-		//                 return {
-		//                     label: l.lang,
-		//                     value: l.locale,
-		//                     description: `Translate to ${l.lang}`
-		//                 }
-		//             }))
-		// 	),
-		// ];
-
-        let TO = guild.preferredLocale ? guild.preferredLocale : "en"
-
-        if (TO == 'en-US') TO = 'en'
-
-        if (!langs.includes(TO)) return await interaction.reply({
-            content: `This language is not supported`,
-            ephemeral: true,
-        });
-
-		let description = await translate(msg.content, {
+		let description = await translate(message.content, {
 			from: "auto",
 			to: TO,
 		});
 
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: msg.author.tag,
-				iconURL: msg.author.displayAvatarURL({ dynamic: true }),
-				url: msg.url,
+				name: message.author.tag,
+				iconURL: message.author.displayAvatarURL({ dynamic: true }),
+				url: message.url,
 			})
 			.setDescription(description)
 			.setColor("RANDOM")

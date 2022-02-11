@@ -6,11 +6,11 @@ module.exports = {
 		type: 2, // 2 is for user context menus
 	},
 
-	async execute(interaction) {
+	async execute(interaction, member, i18n) {
 		const { client } = interaction;
 
 		// console.log(interaction);
-		const opponent = await client.users.fetch(interaction.targetId);
+		const opponent = member.user;
 
 		if (opponent.id === interaction.user.id)
 			return interaction.reply({

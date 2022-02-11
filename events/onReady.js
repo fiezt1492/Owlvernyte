@@ -1,4 +1,5 @@
 const { prefix } = require("../config.js");
+const defaultPrefix = prefix;
 
 module.exports = {
 	name: "ready",
@@ -39,17 +40,21 @@ module.exports = {
 					},
 					{
 						prefix: 1,
-						locale: 1
+						locale: 1,
 					}
 				);
 
 				client.guildSettings.set(id, {
-					prefix: guild ? guild.prefix : prefix,
-					locale: guild ? guild.locale : "en"
+					prefix: guild
+						? guild.prefix
+							? guild.prefix
+							: defaultPrefix
+						: defaultPrefix,
+					locale: guild ? (guild.locale ? guild.locale : "en") : "en",
 				});
 
 				if (guilds.indexOf(id) === guilds.length - 1) {
-					client.ready = true
+					client.ready = true;
 				}
 			});
 		} catch (error) {
