@@ -117,3 +117,6 @@ commands/misc/template
 
 # ignore prettierrc
 .prettierrc
+
+# dot vs folder
+.vs

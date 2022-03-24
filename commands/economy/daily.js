@@ -10,11 +10,12 @@ module.exports = {
 	usage: "",
 	cooldown: 3,
 	// mongoCD: 24 * 60 * 60,
+	once: true,
 	args: false,
 	ownerOnly: false,
 	permissions: ["SEND_MESSAGES"],
 
-	async execute(message, args, guildSettings, Player) {
+	async execute(message, args, guildSettings, Player, ONCE) {
 		const { client } = message;
 
 		const mongoCD = await Player.cooldownsGet(this.name);
@@ -50,6 +51,14 @@ module.exports = {
 			},
 		});
 
+		ONCE.set(message.author.id, {
+			name: this.name,
+			gID: msg.guild.id,
+			cID: msg.channel.id,
+			mID: msg.id,
+			mURL: msg.url,
+		});
+
 		const filter = (interaction) => interaction.user.id === message.author.id;
 
 		const msgCol = msg.createMessageComponentCollector({
@@ -63,6 +72,7 @@ module.exports = {
 		});
 
 		msgCol.on("end", async (collected, reason) => {
+			ONCE.delete(message.author.id);
 			if (reason === "time") {
 				Embed.color = "RED";
 				return msg.edit({
