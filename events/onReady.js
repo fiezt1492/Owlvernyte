@@ -25,7 +25,7 @@ module.exports = {
 				afk: false,
 				activities: [
 					{
-						name: `/help | Testing with bugs`,
+						name: `https://owlvernyte.tk`,
 						type: 0,
 					},
 				],

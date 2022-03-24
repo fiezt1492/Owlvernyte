@@ -33,6 +33,7 @@ module.exports = {
 					.setStyle("LINK")
 					.setURL(`https://top.gg/servers/830110554604961824/vote`)
 			);
+			
 		return message.reply({
 			content: `Here you go.`,
 			components: [components],
