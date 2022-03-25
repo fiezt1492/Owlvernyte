@@ -25,7 +25,7 @@ module.exports = {
 				afk: false,
 				activities: [
 					{
-						name: `https://owlvernyte.tk/recard`,
+						name: `owlvernyte.tk/recard`,
 						type: 0,
 					},
 				],
