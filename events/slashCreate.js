@@ -80,6 +80,13 @@ module.exports = {
 				});
 		}
 
+		if (command.maintain) {
+			return interaction.reply({
+				content: i18n.__("messageCreate.maintain"),
+				// "This command is currently under maintenance. Please wait until we completely fixed it.",
+			});
+		}
+
 		const { cooldowns } = client;
 
 		if (!cooldowns.has(command.name)) {

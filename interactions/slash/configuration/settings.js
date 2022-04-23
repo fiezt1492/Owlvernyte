@@ -17,6 +17,7 @@ module.exports = {
 	// ),
 	once: true,
 	guildOwner: true,
+	maintain: true,
 	permissions: ["ADMINISTRATOR"],
 
 	async execute(interaction, Player, ONCE, i18n) {

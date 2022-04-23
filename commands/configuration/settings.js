@@ -12,6 +12,7 @@ module.exports = {
 	cooldown: 5,
 	// options: ["reset", "set", "get"],
 	// args: true,
+	maintain: true,
 	once: true,
 	ownerOnly: false,
 	guildOwner: true,
