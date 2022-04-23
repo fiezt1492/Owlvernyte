@@ -80,7 +80,7 @@ module.exports = {
 				});
 		}
 
-		if (command.maintain) {
+		if (command.maintain || command.maintain == true) {
 			return interaction.reply({
 				content: i18n.__("messageCreate.maintain"),
 				// "This command is currently under maintenance. Please wait until we completely fixed it.",
