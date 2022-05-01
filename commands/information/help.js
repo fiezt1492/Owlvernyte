@@ -14,7 +14,7 @@ module.exports = {
 	category: "information",
 	usage: "<command name>",
 	once: true,
-	maintain: true,
+	// maintain: true,
 	cooldown: 5,
 
 	async execute(message, args, guildSettings, Player, ONCE, i18n) {

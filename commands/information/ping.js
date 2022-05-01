@@ -6,7 +6,7 @@ module.exports = {
 	category: "information",
 	aliases: ["uptime"],
 	usage: "",
-	maintain: true,
+	// maintain: true,
 	permissions: "SEND_MESSAGES",
 
 	async execute(message, args, guildSettings) {

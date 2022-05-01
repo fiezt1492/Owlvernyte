@@ -21,7 +21,7 @@ module.exports = {
 
 		try {
 			client.user.setPresence({
-				status: "idle",
+				status: "dnd",
 				afk: false,
 				activities: [
 					{

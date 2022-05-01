@@ -9,7 +9,7 @@ module.exports = {
 	category: "information",
 	aliases: ["shard", "stat", "stats"],
 	usage: "",
-	maintain: true,
+	// maintain: true,
 	permissions: "SEND_MESSAGES",
 
 	async execute(message, args, guildSettings) {

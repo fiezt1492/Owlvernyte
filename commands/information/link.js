@@ -9,7 +9,7 @@ module.exports = {
 	cooldown: 1,
 	args: false,
 	ownerOnly: false,
-	maintain: true,
+	// maintain: true,
 	permissions: ["SEND_MESSAGES"],
 
 	async execute(message, args, guildSettings) {
