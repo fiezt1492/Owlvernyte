@@ -42,7 +42,7 @@ module.exports = {
 		await interaction.reply({
 			embeds: [Embed],
 			components: [ROW],
-			ephemeral: user.bot,
+			ephemeral: true,
 		});
 		return;
 	},

@@ -12,6 +12,12 @@ module.exports = {
 		// console.log(interaction);
 		const opponent = member.user;
 
+		if (!opponent.bot)
+			return await interaction.reply({
+				content: `Please use /rps to play with user!`,
+				ephemeral: true,
+			});
+
 		if (opponent.id === interaction.user.id)
 			return interaction.reply({
 				content: `You can't play against yourself!`,

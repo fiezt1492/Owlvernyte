@@ -53,7 +53,7 @@ module.exports = {
 
 				if (client.guildSettings.size == client.guilds.cache.size) {
 					client.ready = true;
-					console.log("Ready to emit events!")
+					console.log("Ready to listening events!")
 
 					client.user.setPresence({
 						status: "online",
