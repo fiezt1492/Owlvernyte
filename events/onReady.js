@@ -53,6 +53,7 @@ module.exports = {
 
 				if (client.guildSettings.size == client.guilds.cache.size) {
 					client.ready = true;
+					console.log("Ready to emit events!")
 				}
 			});
 		} catch (error) {
@@ -71,6 +72,6 @@ module.exports = {
 		} finally {
 		}
 
-		console.log(`Ready! Logged in as ${client.user.tag}`);
+		console.log(`Logged in as ${client.user.tag}!`);
 	},
 };
