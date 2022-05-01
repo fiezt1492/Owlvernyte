@@ -166,14 +166,12 @@ for (const module of selectMenus) {
 const rest = new REST({ version: "9" }).setToken(token);
 
 const commandJsonData = [
-	...Array.from(client.commands.values()).map((c) => {
-		if (dev !== "on" && c.dev) return;
-		return c.data.toJSON();
-	}),
-	...Array.from(client.contextCommands.values()).map((c) => {
-		if (dev !== "on" && c.dev) return;
-		return c.data;
-	}),
+	...Array.from(client.commands.values())
+		.filter((c) => dev !== "on" && c.dev)
+		.map((c) => c.data.toJSON()),
+	...Array.from(client.contextCommands.values())
+		.filter((c) => dev !== "on" && c.dev)
+		.map((c) => c.data),
 ];
 
 (async () => {
@@ -202,7 +200,11 @@ const commandJsonData = [
 			});
 		}
 
-		console.log(`Successfully reloaded ${dev === "on" ? "guild " + test_guild_id : "global"} application (/) commands.`);
+		console.log(
+			`Successfully reloaded ${
+				dev === "on" ? "guild " + test_guild_id : "global"
+			} application (/) commands.`
+		);
 	} catch (error) {
 		console.error(error);
 	}
