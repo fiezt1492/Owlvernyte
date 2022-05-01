@@ -6,7 +6,7 @@ module.exports = {
 	// skip: true,
 	async execute(guild, client) {
 		client.guildSettings.set(guild.id, {
-			prefix: String(prefix).toLowerCase(),
+			// prefix: String(prefix).toLowerCase(),
 		});
 	},
 };

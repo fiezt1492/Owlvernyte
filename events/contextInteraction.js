@@ -6,6 +6,11 @@ module.exports = {
 		// Deconstructed client from interaction object.
 		const { client } = interaction;
 
+		if (!client.ready) return interaction.reply({
+			content: "Please try again...",
+			ephemeral: true,
+		});
+
 		// Checks if the interaction is a button interaction (to prevent weird bugs)
 
 		if (!interaction.isContextMenu()) return;
@@ -15,6 +20,14 @@ module.exports = {
 		const guildSettings = await client.guildSettings.get(interaction.guildId);
 		const i18n = client.i18n;
 		i18n.setLocale(guildSettings.locale);
+
+		if (command.maintain || command.maintain == true) {
+			return interaction.reply({
+				content: i18n.__("messageCreate.maintain"),
+				ephemeral: true,
+				// "This command is currently under maintenance. Please wait until we completely fixed it.",
+			});
+		}
 
 		// Checks if the interaction target was a user
 

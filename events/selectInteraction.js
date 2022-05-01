@@ -7,6 +7,11 @@ module.exports = {
 
 		// Checks if the interaction is a select menu interaction (to prevent weird bugs)
 
+		if (!client.ready) return interaction.reply({
+			content: "Please try again...",
+			ephemeral: true,
+		});
+
 		if (!interaction.isSelectMenu()) return;
 
 		const command = client.selectCommands.get(interaction.customId);
@@ -23,6 +28,14 @@ module.exports = {
 		const i18n = client.i18n;
 		i18n.setLocale(guildSettings.locale);
 		// A try to execute the interaction.
+
+		if (command.maintain || command.maintain == true) {
+			return interaction.reply({
+				content: i18n.__("messageCreate.maintain"),
+				ephemeral: true,
+				// "This command is currently under maintenance. Please wait until we completely fixed it.",
+			});
+		}
 
 		try {
 			// console.log(interaction);

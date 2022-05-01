@@ -1,7 +1,7 @@
 {
-	"name": "Owlvernyte",
+	"name": "Recard",
 	"version": "1.0.0",
-	"description": "OWLVERNYTE",
+	"description": "Recard",
 	"main": "bot.js",
 	"engines": {
 		"node": "16.x",
@@ -11,7 +11,7 @@
 		"start": "node index.js",
 		"dev": "nodemon bot.js"
 	},
-	"author": "Fiezt",
+	"author": "Owlvernyte",
 	"license": "ISC",
 	"dependencies": {
 		"@discordjs/builders": "^0.6.0",

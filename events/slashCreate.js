@@ -10,7 +10,11 @@ module.exports = {
 	async execute(interaction) {
 		const { client } = interaction;
 
-		if (!client.ready) return;
+		if (!client.ready)
+			return interaction.reply({
+				content: "Please try again...",
+				ephemeral: true,
+			});
 
 		if (!interaction.isCommand()) return;
 
@@ -87,6 +91,7 @@ module.exports = {
 		if (command.maintain || command.maintain == true) {
 			return interaction.reply({
 				content: i18n.__("messageCreate.maintain"),
+				ephemeral: true,
 				// "This command is currently under maintenance. Please wait until we completely fixed it.",
 			});
 		}
