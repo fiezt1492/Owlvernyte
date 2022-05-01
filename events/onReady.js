@@ -21,11 +21,11 @@ module.exports = {
 
 		try {
 			client.user.setPresence({
-				status: "online",
+				status: "idle",
 				afk: false,
 				activities: [
 					{
-						name: `owlvernyte.tk/recard`,
+						name: `Preparing stuffs...`,
 						type: 0,
 					},
 				],
@@ -54,6 +54,17 @@ module.exports = {
 				if (client.guildSettings.size == client.guilds.cache.size) {
 					client.ready = true;
 					console.log("Ready to emit events!")
+
+					client.user.setPresence({
+						status: "online",
+						afk: false,
+						activities: [
+							{
+								name: `owlvernyte.tk/recard`,
+								type: 0,
+							},
+						],
+					});
 				}
 			});
 		} catch (error) {
