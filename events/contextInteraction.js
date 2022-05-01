@@ -21,14 +21,6 @@ module.exports = {
 		const i18n = client.i18n;
 		i18n.setLocale(guildSettings.locale);
 
-		if (command.maintain || command.maintain == true) {
-			return interaction.reply({
-				content: i18n.__("messageCreate.maintain"),
-				ephemeral: true,
-				// "This command is currently under maintenance. Please wait until we completely fixed it.",
-			});
-		}
-
 		// Checks if the interaction target was a user
 
 		if (interaction.targetType === "USER") {
@@ -37,6 +29,14 @@ module.exports = {
 			);
 			const guild = await client.guilds.cache.get(interaction.guildId);
 			const member = await guild.members.cache.get(interaction.targetId);
+
+			if (command.maintain || command.maintain == true) {
+				return interaction.reply({
+					content: i18n.__("messageCreate.maintain"),
+					ephemeral: true,
+					// "This command is currently under maintenance. Please wait until we completely fixed it.",
+				});
+			}
 
 			// A try to execute the interaction.
 
@@ -60,6 +60,14 @@ module.exports = {
 			const guild = await client.guilds.cache.get(interaction.guildId);
 			const channel = await guild.channels.cache.get(interaction.channelId);
 			const message = await channel.messages.fetch(interaction.targetId);
+
+			if (command.maintain || command.maintain == true) {
+				return interaction.reply({
+					content: i18n.__("messageCreate.maintain"),
+					ephemeral: true,
+					// "This command is currently under maintenance. Please wait until we completely fixed it.",
+				});
+			}
 
 			// A try to execute the interaction.
 
