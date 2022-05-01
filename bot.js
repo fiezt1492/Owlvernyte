@@ -103,7 +103,7 @@ for (const module of commands) {
 
 	for (const commandFile of commandFiles) {
 		const command = require(`./interactions/slash/${module}/${commandFile}`);
-		if (dev !== "on" && c.dev) continue;
+		if (dev !== "on" && command.dev) continue;
 		client.commands.set(command.data.name, command);
 	}
 }
