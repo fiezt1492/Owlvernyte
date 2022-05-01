@@ -18,24 +18,23 @@ module.exports = {
 		)
 		.addStringOption((option) =>
 			option
-				.setName("command")
-				.setDescription("The specific command to see the info of.")
-				.setRequired(false)
+				.setName("topic")
+				.setDescription("Select a topic")
+				.setRequired(true)
+				.addChoice("Get command list", "commands")
+				.addChoice("Get relevant links", "links")
+				.addChoice("Support server", "support")
 		),
-	once: true,
+	category: "information",
+	// once: true,
 
 	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
 		const { commands } = client;
 		// const slashCommands = client.slashCommands;
-		const prefix = client.guildSettings
-			.get(interaction.guildId)
-			.prefix.toLowerCase();
-		const string = interaction.options.getString("command");
+		const topic = interaction.options.getString("topic");
 
-		if (!string) {
-			const formatString = (str) =>
-				`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
+		if (topic == "commands") {
 			let categories = [...new Set(commands.map((cmd) => cmd.category))];
 
 			categories = categories.filter((cate) => cate !== "private");
@@ -45,10 +44,8 @@ module.exports = {
 					.filter((cmd) => cmd.category === cate)
 					.map((cmd) => {
 						return {
-							name: cmd.name || null,
-							aliases: cmd.aliases || null,
-							description: cmd.description || null,
-							usage: cmd.usage || null,
+							name: cmd.data.name || null,
+							description: cmd.data.description || null,
 						};
 					});
 
@@ -58,22 +55,15 @@ module.exports = {
 				};
 			});
 
-			// const slashHelpEmbed = new MessageEmbed()
-			// 	.setColor("RANDOM")
-			// 	.setTitle("List of all my slash commands")
-			// 	.setDescription(
-			// 		"`" + slashCommands.map((command) => command.data.name).join("`, `") + "`"
-			// 	);
-
 			let helpEmbed = new MessageEmbed()
 				.setColor("RANDOM")
 				.setURL(process.env.URL)
 				.setTitle(i18n.__("help.helpEmbed.title"))
-				.setDescription(
-					i18n.__mf("help.helpEmbed.description", {
-						prefix: prefix,
-					})
-				)
+				// .setDescription(
+				// 	i18n.__mf("help.helpEmbed.description", {
+				// 		prefix: prefix,
+				// 	})
+				// )
 				.addField(
 					i18n.__("help.helpEmbed.field0.title"),
 					"**[Youtube](https://www.youtube.com/channel/UCEG5sgFKieaUuHsu5VG-kBg)** | **[Discord](https://discord.io/owlvernyte+)** | **[Facebook](https://www.facebook.com/owlvernyte)**"
@@ -95,19 +85,14 @@ module.exports = {
 							value: "home",
 							description: i18n.__("help.components.home.description"),
 						})
-						.addOptions({
-							label: i18n.__("help.components.slash.label"),
-							value: "slashCommandPanel",
-							description: i18n.__("help.components.slash.description"),
-						})
 						.addOptions(
 							commandsList.map((cmd) => {
 								return {
-									label: formatString(cmd.category),
+									label: cmd.category.toUpperCase(),
 									value: cmd.category.toLowerCase(),
 									description: i18n.__mf(
 										"help.components.category.description",
-										{ category: formatString(cmd.category) }
+										{ category: cmd.category.toUpperCase() }
 									),
 								};
 							})
@@ -134,18 +119,19 @@ module.exports = {
 			await interaction.reply({
 				embeds: [helpEmbed],
 				components: components(false),
+				ephemeral: true,
 			});
 
 			const msg = await interaction.fetchReply();
 			// console.log(msg)
 
-			ONCE.set(interaction.user.id, {
-				name: this.data.name,
-				gID: msg.guild.id,
-				cID: msg.channel.id,
-				mID: msg.id,
-				mURL: msg.url,
-			});
+			// ONCE.set(interaction.user.id, {
+			// 	name: this.data.name,
+			// 	gID: msg.guild.id,
+			// 	cID: msg.channel.id,
+			// 	mID: msg.id,
+			// 	mURL: msg.url,
+			// });
 
 			const msgCol = msg.createMessageComponentCollector({
 				componentType: "SELECT_MENU",
@@ -156,60 +142,42 @@ module.exports = {
 				msgCol.resetTimer();
 			});
 
-			msgCol.on("end", () => {
-				msg.edit({ components: components(true) });
-				ONCE.delete(interaction.user.id);
+			msgCol.on("end", async () => {
+				await interaction.editReply({ components: components(true) });
+				// ONCE.delete(interaction.user.id);
 			});
-		} else {
-			const command =
-				commands.get(string.toLowerCase()) ||
-				commands.find(
-					(c) => c.aliases && c.aliases.includes(string.toLowerCase())
+		} else if (topic == "links") {
+			let components = new MessageActionRow().addComponents(
+				new MessageButton()
+					.setLabel("Invite me")
+					.setStyle("LINK")
+					.setURL(
+						`https://discord.com/api/oauth2/authorize?client_id=853623967180259369&permissions=8&scope=applications.commands%20bot`
+					),
+				new MessageButton()
+					.setLabel("Vote me")
+					.setStyle("LINK")
+					.setURL(`https://top.gg/bot/853623967180259369/vote`)
+			);
+
+			if (interaction.guild.id === "830110554604961824")
+				components.addComponents(
+					new MessageButton()
+						.setLabel("Vote this server")
+						.setStyle("LINK")
+						.setURL(`https://top.gg/servers/830110554604961824/vote`)
 				);
 
-			if (!command || command.ownerOnly || command.category == "private") {
-				return interaction.reply({
-					content: "That's not a valid command!",
-					ephemeral: true,
-				});
-			}
-
-			let commandEmbed = new MessageEmbed()
-				.setColor("RANDOM")
-				.setDescription(
-					`Find information on the command provided.\nMandatory arguments \`[]\`, optional arguments \`<>\`.`
-				)
-				.setTitle(command.name);
-
-			if (command.description)
-				commandEmbed.addField("Description", `${command.description}`);
-
-			if (command.aliases && command.aliases.length > 0)
-				commandEmbed
-					.addField(
-						i18n.__("help.commandEmbed.fieldAliases"),
-						`\`${command.aliases.join(", ")}\``,
-						true
-					)
-					.addField(
-						i18n.__("help.commandEmbed.fieldCooldown"),
-						`${command.cooldown || 3} second(s)`,
-						true
-					);
-			if (command.usage)
-				commandEmbed.addField(
-					i18n.__("help.commandEmbed.fieldUsage"),
-					`\`${prefix}${command.name} ${command.usage}\``,
-					true
-				);
-			else
-				commandEmbed.addField(
-					i18n.__("help.commandEmbed.fieldUsage"),
-					`\`${prefix}${command.name}\``,
-					true
-				);
-
-			return interaction.reply({ embeds: [commandEmbed] });
+			return await interaction.reply({
+				content: `Here you go.`,
+				components: [components],
+				ephemeral: true,
+			});
+		} else if (topic == "support") {
+			return await interaction.reply({
+				content: `https://discord.gg/F7ZK6ssMUm`,
+				ephemeral: true,
+			});
 		}
 	},
 };

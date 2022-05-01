@@ -28,11 +28,8 @@ module.exports = {
 
 		await interaction.reply({
 			embeds: [Embed],
-			allowedMentions: {
-				repliedUser: false,
-			},
 			// components: [ROW] ,
-			// ephemeral: true
+			ephemeral: user.bot,
 		});
 		return;
 	},

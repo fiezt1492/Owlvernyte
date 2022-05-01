@@ -17,6 +17,7 @@ module.exports = {
 			return message.reply(
 				`**[ERROR]** Null character are not allowed here. (Separate your options with \`,\`)`
 			);
+			
 		const rs = choices[Math.floor(Math.random() * choices.length)];
 
 		// const Embed = new Discord.MessageEmbed()

@@ -1,5 +1,5 @@
 const { prefix } = require("../../../config");
-
+const fs = require("fs");
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
@@ -12,47 +12,35 @@ module.exports = {
 		const { commands } = message.client;
 		const slashCommands = message.client.slashCommands;
 
-		const formatString = (str) =>
-			`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
+		// const formatString = (str) =>
+		// 	`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
 
 		let categories = [...new Set(commands.map((cmd) => cmd.category))];
-
-		categories = categories.filter((cate) => cate !== "misc");
+		categories = categories.filter((cate) => cate !== "private");
 
 		const commandsList = categories.map((cate) => {
 			const getCommands = commands
 				.filter((cmd) => cmd.category === cate)
 				.map((cmd) => {
 					return {
-						name: cmd.name || "None",
-						aliases: cmd.aliases || "None",
-						description: cmd.description || "None",
-						usage: cmd.usage || "None",
+						name: cmd.data.name || "None",
+						description: cmd.data.description || "None",
 					};
 				});
 
 			return {
-				category: formatString(cate),
+				category: cate,
 				commands: getCommands,
 			};
 		});
-
-		const slashHelpEmbed = new MessageEmbed()
-			.setColor("RANDOM")
-			.setTitle("List of all my slash commands")
-			.setDescription(
-				"`" +
-					slashCommands.map((command) => command.data.name).join("`, `") +
-					"`"
-			).addField('Missing Slash Commands?',`Reinvite the bot via the **Invite me** button below`);
 
 		const helpEmbed = new MessageEmbed()
 			.setColor("RANDOM")
 			.setURL(process.env.URL)
 			.setTitle("Help Panel")
-			.setDescription(
-				`You can use \`${prefix}help <command name>\` to get info on a specific command!`
-			)
+			// .setDescription(
+			// 	`You can use \`${prefix}help <command name>\` to get info on a specific command!`
+			// )
 			.addField(
 				"CONNECT WITH US",
 				"**[Youtube](https://www.youtube.com/channel/UCEG5sgFKieaUuHsu5VG-kBg)** | **[Discord](https://discord.io/owlvernyte+)** | **[Facebook](https://www.facebook.com/owlvernyte)**"
@@ -63,11 +51,8 @@ module.exports = {
 			)
 			.setFooter({ text: `Select one of these categories below` });
 
-		if (interaction.values.includes("slashCommandPanel"))
-			return interaction.update({ embeds: [slashHelpEmbed] });
-
 		if (interaction.values.includes("home"))
-			return interaction.update({ embeds: [helpEmbed] });
+			return interaction.update({ embeds: [helpEmbed], ephemeral: true });
 
 		const [category] = interaction.values;
 		const list = commandsList.find(
@@ -78,13 +63,13 @@ module.exports = {
 			.setTitle(`Help Panel`)
 			.setColor("RANDOM")
 			.setURL(process.env.URL)
-			.setDescription(
-				`You can use \`${prefix}help <command name>\` to get info on a specific command!`
-			)
+			// .setDescription(
+			// 	`You can use \`${prefix}help <command name>\` to get info on a specific command!`
+			// )
 			.addField(
 				list.category.toUpperCase(),
 				"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
 			);
-		return interaction.update({ embeds: [categoryEmbed] });
+		return interaction.update({ embeds: [categoryEmbed], ephemeral: true });
 	},
 };

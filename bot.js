@@ -34,6 +34,9 @@ const client = new Client({
 	disableMentions: "everyone",
 	restTimeOffset: 0,
 	shard: "auto",
+	allowedMentions: {
+		repliedUser: false,
+	},
 });
 
 const eventFiles = fs
@@ -64,17 +67,14 @@ client.db = require("./databases/mongo.js");
 client.guildSettings = new Collection();
 client.commands = new Collection();
 client.ready = false;
-// client.aliases = new Discord.Collection();
-client.slashCommands = new Collection();
+client.private = new Collection();
 client.buttonCommands = new Collection();
 client.selectCommands = new Collection();
 client.contextCommands = new Collection();
 client.cooldowns = new Collection();
 client.triggers = new Collection();
 
-/**********************************************************************/
-// Registration of Message-Based Commands
-
+// private
 const commandFolders = fs.readdirSync("./commands");
 
 // Loop through all files and store commands in commands collection.
@@ -85,25 +85,25 @@ for (const folder of commandFolders) {
 		.filter((file) => file.endsWith(".js"));
 	for (const file of commandFiles) {
 		const command = require(`./commands/${folder}/${file}`);
-		client.commands.set(command.name, command);
+		client.private.set(command.name, command);
 	}
 }
 
 /**********************************************************************/
 // Registration of Slash-Command Interactions.
 
-const slashCommands = fs.readdirSync("./interactions/slash");
+const commands = fs.readdirSync("./interactions/slash");
 
 // Loop through all files and store slash-commands in slashCommands collection.
 
-for (const module of slashCommands) {
+for (const module of commands) {
 	const commandFiles = fs
 		.readdirSync(`./interactions/slash/${module}`)
 		.filter((file) => file.endsWith(".js"));
 
 	for (const commandFile of commandFiles) {
 		const command = require(`./interactions/slash/${module}/${commandFile}`);
-		client.slashCommands.set(command.data.name, command);
+		client.commands.set(command.data.name, command);
 	}
 }
 
@@ -166,7 +166,7 @@ for (const module of selectMenus) {
 const rest = new REST({ version: "9" }).setToken(token);
 
 const commandJsonData = [
-	...Array.from(client.slashCommands.values()).map((c) => c.data.toJSON()),
+	...Array.from(client.commands.values()).map((c) => c.data.toJSON()),
 	...Array.from(client.contextCommands.values()).map((c) => c.data),
 ];
 
@@ -174,6 +174,7 @@ const commandJsonData = [
 	try {
 		console.log("Started refreshing application (/) commands.");
 		if (dev === "on") {
+			if (!test_guild_id || !client_id) return console.log("Missing required guild");
 			await rest.put(
 				/**
 			 * Here we are sending to discord our slash commands to be registered.

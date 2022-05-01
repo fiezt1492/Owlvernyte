@@ -31,29 +31,27 @@ module.exports = {
 				],
 			});
 
-			const guilds = await client.guilds.cache.map((guild) => guild.id);
-
-			guilds.forEach(async (id) => {
-				const guild = await gDB.findOne(
+			client.guilds.cache.forEach(async (guild) => {
+				const guildDB = await gDB.findOne(
 					{
-						gID: id,
+						gID: guild.id,
 					},
 					{
-						prefix: 1,
+						// prefix: 1,
 						locale: 1,
 					}
 				);
 
-				client.guildSettings.set(id, {
-					prefix: guild
-						? guild.prefix
-							? guild.prefix
-							: defaultPrefix
-						: defaultPrefix,
-					locale: guild ? (guild.locale ? guild.locale : "en") : "en",
+				client.guildSettings.set(guild.id, {
+					// prefix: guild
+					// 	? guild.prefix
+					// 		? guild.prefix
+					// 		: defaultPrefix
+					// 	: defaultPrefix,
+					locale: guildDB ? (guildDB.locale ? guildDB.locale : "en") : "en",
 				});
 
-				if (guilds.indexOf(id) === guilds.length - 1) {
+				if (client.guildSettings.size == client.guilds.cache.size) {
 					client.ready = true;
 				}
 			});
@@ -65,11 +63,12 @@ module.exports = {
 				afk: false,
 				activities: [
 					{
-						name: `${prefix}help | Testing with bugs`,
+						name: `/help | Restarting...`,
 						type: 0,
 					},
 				],
 			});
+		} finally {
 		}
 
 		console.log(`Ready! Logged in as ${client.user.tag}`);

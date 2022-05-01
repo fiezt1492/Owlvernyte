@@ -1,32 +1,29 @@
+// Deconstructed the constants we need in this file.
+
 const Discord = require("discord.js");
-// const { collection } = require("../../databases/mongo");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { millify } = require("millify");
 
 module.exports = {
-	name: "daily",
-	description: "Get daily reward",
+	// The data needed to register slash commands to Discord.
+	data: new SlashCommandBuilder()
+		.setName("daily")
+		.setDescription("Get your daily reward"),
 	category: "economy",
-	aliases: [""],
-	usage: "",
-	cooldown: 3,
-	// mongoCD: 24 * 60 * 60,
 	once: true,
-	args: false,
-	ownerOnly: false,
-	permissions: ["SEND_MESSAGES"],
+	async execute(interaction, Player, ONCE, i18n) {
+		const { client } = interaction;
 
-	async execute(message, args, guildSettings, Player, ONCE) {
-		const { client } = message;
-
-		const mongoCD = await Player.cooldownsGet(this.name);
+		const mongoCD = await Player.cooldownsGet(this.data.name);
 		if (mongoCD) {
 			if (Date.now() - mongoCD.timestamps < mongoCD.duration) {
-				return message.reply({
-					content: `You can use \`${this.name}\` command <t:${Math.floor(
+				return interaction.reply({
+					content: `You can use \`${this.data.name}\` command <t:${Math.floor(
 						(mongoCD.timestamps + mongoCD.duration) / 1000
 					)}:R>`,
+					ephemeral: true,
 				});
-			} else await Player.cooldownsPull(this.name);
+			} else await Player.cooldownsPull(this.data.name);
 		}
 
 		const Embed = new Discord.MessageEmbed()
@@ -43,20 +40,22 @@ module.exports = {
 			),
 		];
 
-		const msg = await message.reply({
+		await interaction.reply({
 			embeds: [Embed],
 			components: components(false),
 		});
 
-		ONCE.set(message.author.id, {
-			name: this.name,
+		const msg = await interaction.fetchReply();
+
+		ONCE.set(interaction.user.id, {
+			name: this.data.name,
 			gID: msg.guild.id,
 			cID: msg.channel.id,
 			mID: msg.id,
 			mURL: msg.url,
 		});
 
-		const filter = (interaction) => interaction.user.id === message.author.id;
+		const filter = (i) => i.user.id === interaction.user.id;
 
 		const msgCol = msg.createMessageComponentCollector({
 			filter,
@@ -65,14 +64,14 @@ module.exports = {
 		});
 
 		msgCol.on("collect", () => {
-			return msgCol.stop();
+			msgCol.stop();
 		});
 
 		msgCol.on("end", async (collected, reason) => {
-			ONCE.delete(message.author.id);
+			ONCE.delete(interaction.user.id);
 			if (reason === "time") {
 				Embed.color = "RED";
-				return msg.edit({
+				return interaction.editReply({
 					embeds: [Embed],
 					components: components(true),
 				});

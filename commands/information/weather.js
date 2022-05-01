@@ -9,6 +9,7 @@ module.exports = {
 	aliases: [],
 	usage: "<location>",
 	permissions: "SEND_MESSAGES",
+	maintain: true,
 
 	async execute(message, args, guildSettings) {
 		// const { client } = message;

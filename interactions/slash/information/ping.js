@@ -1,16 +1,15 @@
+// Deconstructed the constants we need in this file.
+
 const Discord = require("discord.js");
+// const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
-	name: "ping",
-	description: "Get bot's uptime and ping",
+	// The data needed to register slash commands to Discord.
+	data: new SlashCommandBuilder().setName("ping").setDescription("Get ping"),
 	category: "information",
-	aliases: ["uptime"],
-	usage: "",
-	maintain: true,
-	permissions: "SEND_MESSAGES",
-
-	async execute(message, args, guildSettings) {
-		const { client } = message;
+	async execute(interaction) {
+		const { client } = interaction;
 
 		let totalSeconds = client.uptime / 1000;
 		let days = Math.floor(totalSeconds / 86400);
@@ -37,19 +36,21 @@ module.exports = {
 			.addField(
 				"Client Latency",
 				"```" +
-					Math.round(Date.now() - message.createdTimestamp) +
+					Math.round(Date.now() - interaction.createdTimestamp) +
 					"ms" +
 					"```",
 				true
 			)
 			.setFooter({
-				text: `${message.guild.name}'s Shard: #${message.guild.shardId}`,
+				text: `${interaction.guild.name}'s Shard: #${interaction.guild.shardId}`,
 			});
-		return message.reply({
+
+		// const embed = new Discord.MessageEmbed().setColor("RANDOM");
+
+		await interaction.reply({
 			embeds: [Embed],
-			allowedMentions: {
-				repliedUser: false,
-			},
+			ephemeral: true,
+			// components: row(false),
 		});
 	},
 };

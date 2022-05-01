@@ -8,7 +8,8 @@
 	},
 	"interactionCreate": {
 		"author": "This message is not for you!",
-		"missingComponents": "This message doesn't have components!"
+		"missingComponents": "This message doesn't have components!",
+		"notMyMessage": "This message is not mine!"
 	},
 	"messageCreate": {
 		"guildOwner": "This command is only for guild owner.",
@@ -44,12 +45,8 @@
 		"components": {
 			"placeholder": "Please select a category",
 			"home": {
-				"label": "Home",
+				"label": "HOME",
 				"description": "Showing homepage"
-			},
-			"slash": {
-				"label": "Slash Commands Panel",
-				"description": "Show Slash Commands Panel"
 			},
 			"category": {
 				"label": "{category}",

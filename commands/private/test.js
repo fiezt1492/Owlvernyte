@@ -13,8 +13,7 @@ module.exports = {
 	async execute(message, args, guildSettings, Player, ONCE, i18n) {
 		const { client } = message;
 
-		client.locale.set(message, "vi")
-		
-		return console.log(i18n.__("common.none"))
+		console.log(client.commands)
+
 	},
 };

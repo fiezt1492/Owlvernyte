@@ -16,7 +16,7 @@ module.exports = {
 				.setDescription("Provide a subreddit to get memes in it.")
 				.setRequired(false)
 		),
-
+	category: "fun",
 	async execute(interaction) {
 		const { client } = interaction;
 
@@ -50,7 +50,7 @@ module.exports = {
 			// console.log(post)
 			if (post)
 				if (post.code)
-					return message.reply(
+					return interaction.reply(
 						`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
 					);
 			embed
@@ -80,12 +80,9 @@ module.exports = {
 		await interaction.reply({
 			embeds: [embed],
 			components: row(false),
-			// allowedMentions: {
-			// 	repliedUser: false,
-			// },
 		});
 
-        const m = await interaction.fetchReply()
+		const m = await interaction.fetchReply();
 
 		const filter = (b) => b.user.id === interaction.user.id;
 

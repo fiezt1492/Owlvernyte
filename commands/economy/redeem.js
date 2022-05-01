@@ -70,9 +70,6 @@ module.exports = {
 
 		return message.reply({
 			embeds: [Embed],
-			allowedMentions: {
-				repliedUser: false,
-			},
 		});
 	},
 };

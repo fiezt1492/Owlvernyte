@@ -1,6 +1,6 @@
 // const { Collection } = require("discord.js");
 const Discord = require("discord.js");
-const { prefix, owner } = require("../config");
+const { owner } = require("../config");
 const Players = require("../modules/economy/players");
 const ONCE = new Map();
 
@@ -10,9 +10,13 @@ module.exports = {
 	async execute(interaction) {
 		const { client } = interaction;
 
+		if (!client.ready) return;
+
 		if (!interaction.isCommand()) return;
 
-		const command = client.slashCommands.get(interaction.commandName);
+		const command = client.commands.get(interaction.commandName);
+
+		// console.log(interaction)
 
 		if (!command) return;
 		// console.log(interaction);

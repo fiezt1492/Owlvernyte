@@ -1,16 +1,24 @@
+// Deconstructed the constants we need in this file.
+
 const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
-	data: {
-		name: "Rock Paper Scissors",
-		type: 2, // 2 is for user context menus
-	},
-
-	async execute(interaction, member, i18n) {
+	// The data needed to register slash commands to Discord.
+	data: new SlashCommandBuilder()
+		.setName("rps")
+		.setDescription("rockpaperscissors")
+		.addUserOption((option) =>
+			option
+				.setName("target")
+				.setDescription("Mention a user you want to play with")
+				.setRequired(false)
+		),
+	category: "fun",
+	async execute(interaction) {
 		const { client } = interaction;
 
-		// console.log(interaction);
-		const opponent = member.user;
+		const opponent = interaction.options.getUser("target") || client.user;
 
 		if (opponent.id === interaction.user.id)
 			return interaction.reply({
@@ -143,11 +151,6 @@ module.exports = {
 					});
 			});
 		});
-
-		// interaction.editReply({
-		// 	embeds: [Embed],
-		// 	components: components(true),
-		// })
 	},
 };
 

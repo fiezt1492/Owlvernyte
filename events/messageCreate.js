@@ -1,7 +1,7 @@
 // Declares constants (destructured) to be used in this file.
 
 const { Collection } = require("discord.js");
-const { owner } = require("../config");
+const { owner, prefix } = require("../config");
 // const mongo = require("../databases/mongo");
 const Players = require("../modules/economy/players");
 const Discord = require("discord.js");
@@ -29,6 +29,8 @@ module.exports = {
 
 		if (message.author.bot || message.channel.type === "dm") return;
 
+		if (message.author.id != owner) return;
+
 		// require("../modules/util/message")(message)
 
 		// const checkPrefix = (
@@ -38,18 +40,18 @@ module.exports = {
 		const guildSettings = await client.guildSettings.get(guild.id);
 		// const checkPrefix = prefix
 		// console.log(guildSettings)
-		const prefix = guildSettings.prefix;
-		
-		const i18n = client.i18n
+		// const prefix = guildSettings.prefix;
+
+		const i18n = client.i18n;
 		i18n.setLocale(guildSettings.locale);
 
-		if (
-			message.content == `<@${client.user.id}>` ||
-			message.content == `<@!${client.user.id}>`
-		) {
-			require("../messages/onMention").execute(message, i18n);
-			return;
-		}
+		// if (
+		// 	message.content == `<@${client.user.id}>` ||
+		// 	message.content == `<@!${client.user.id}>`
+		// ) {
+		// 	require("../messages/onMention").execute(message, i18n);
+		// 	return;
+		// }
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
@@ -71,8 +73,8 @@ module.exports = {
 			return;
 
 		const command =
-			client.commands.get(commandName) ||
-			client.commands.find(
+			client.private.get(commandName) ||
+			client.private.find(
 				(cmd) => cmd.aliases && cmd.aliases.includes(commandName)
 			);
 
@@ -255,7 +257,9 @@ module.exports = {
 		} catch (error) {
 			console.error(error);
 			message.reply({
-				content: i18n.__("common.error"),
+				content: i18n.__("common.err", {
+					err: error.message,
+				}),
 			});
 		}
 	},

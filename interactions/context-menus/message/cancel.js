@@ -25,6 +25,12 @@ module.exports = {
 					content: i18n.__("common.done"),
 					ephemeral: true,
 				});
+			})
+			.catch((error) => {
+				interaction.reply({
+					content: i18n.__("common.notMyMessage"),
+					ephemeral: true,
+				});
 			});
 	},
 };

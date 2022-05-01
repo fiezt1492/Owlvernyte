@@ -6,9 +6,9 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
 	// The data needed to register slash commands to Discord.
 	data: new SlashCommandBuilder()
+		.setDefaultPermission(false)
 		.setName("settings")
 		.setDescription("Config your guild"),
-	// .setDefaultPermission(true),
 	// .addStringOption((option) =>
 	// 	option
 	// 		.setName("subreddit")
@@ -19,7 +19,7 @@ module.exports = {
 	guildOwner: true,
 	maintain: true,
 	permissions: ["ADMINISTRATOR"],
-
+	category: "configuration",
 	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
 

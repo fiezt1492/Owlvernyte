@@ -71,9 +71,6 @@ module.exports = {
 		return msg.edit({
             content: null,
 			embeds: [Embed],
-			allowedMentions: {
-				repliedUser: false,
-			},
 		});
 	},
 };

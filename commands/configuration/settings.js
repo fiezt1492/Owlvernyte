@@ -55,9 +55,6 @@ module.exports = {
 		const msg = await message.reply({
 			embeds: [Embed],
 			components: components(false),
-			allowedMentions: {
-				repliedUser: false,
-			},
 		});
 
 		ONCE.set(message.author.id, {

@@ -52,7 +52,7 @@ module.exports = {
 		await interaction.reply({
 			embeds: [Embed],
 			// components: components ,
-			// ephemeral: true,
+			ephemeral: true,
 		});
 
 		let chance = Math.random() * 101;
@@ -60,6 +60,7 @@ module.exports = {
 		if (chance < 10)
 			await interaction.followUp({
 				content: `> **Note**: *You can change language to translate by changing your guild preferred locale.*`,
+				ephemeral: true,
 			});
 		return;
 	},

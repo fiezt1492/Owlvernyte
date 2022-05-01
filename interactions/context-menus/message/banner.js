@@ -29,7 +29,7 @@ module.exports = {
 		await interaction.reply({
 			embeds: [Embed],
 			// components: [ROW] ,
-			// ephemeral: true
+			ephemeral: user.bot,
 		});
 		return;
 	},

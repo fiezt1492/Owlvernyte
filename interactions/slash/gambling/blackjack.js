@@ -22,7 +22,7 @@ module.exports = {
 	category: "gambling",
 	permissions: "SEND_MESSAGES",
 
-	async execute(interaction, Player, ONCE) {
+	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		// const already = games.get(interaction.user.id);
@@ -56,6 +56,13 @@ module.exports = {
 		if (bet <= 0)
 			return interaction.reply({
 				content: `Please provide a positive number!`,
+				ephemeral: true,
+			});
+
+		const player = await Player.get();
+		if (bet > player.owlet)
+			return interaction.reply({
+				content: `You dont have enough owlet!`,
 				ephemeral: true,
 			});
 
@@ -176,9 +183,6 @@ module.exports = {
 			await interaction.reply({
 				embeds: [deckEmbed],
 				components: [row1],
-				allowedMentions: {
-					repliedUser: false,
-				},
 			});
 
 			let msg = await interaction.fetchReply();
