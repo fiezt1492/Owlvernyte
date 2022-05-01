@@ -69,13 +69,13 @@ module.exports = {
 			});
 		} catch (error) {
 			console.log(error);
-
+			client.ready = false;
 			client.user.setPresence({
 				status: "idle",
 				afk: false,
 				activities: [
 					{
-						name: `/help | Restarting...`,
+						name: `/help | Things gone wrong!`,
 						type: 0,
 					},
 				],
