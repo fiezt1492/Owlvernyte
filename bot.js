@@ -103,6 +103,7 @@ for (const module of commands) {
 
 	for (const commandFile of commandFiles) {
 		const command = require(`./interactions/slash/${module}/${commandFile}`);
+		if (dev !== "on" && c.dev) continue;
 		client.commands.set(command.data.name, command);
 	}
 }
@@ -167,10 +168,8 @@ const rest = new REST({ version: "9" }).setToken(token);
 
 const commandJsonData = [
 	...Array.from(client.commands.values())
-		.filter((c) => dev !== "on" && c.dev)
 		.map((c) => c.data.toJSON()),
 	...Array.from(client.contextCommands.values())
-		.filter((c) => dev !== "on" && c.dev)
 		.map((c) => c.data),
 ];
 
