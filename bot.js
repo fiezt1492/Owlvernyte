@@ -62,7 +62,7 @@ for (const file of eventFiles) {
 const keepAlive = require("./server");
 require("./modules/util/client")(client);
 
-client.i18n = require("./modules/util/i18n")
+client.i18n = require("./modules/util/i18n");
 client.db = require("./databases/mongo.js");
 client.guildSettings = new Collection();
 client.commands = new Collection();
@@ -166,15 +166,22 @@ for (const module of selectMenus) {
 const rest = new REST({ version: "9" }).setToken(token);
 
 const commandJsonData = [
-	...Array.from(client.commands.values()).map((c) => c.data.toJSON()),
-	...Array.from(client.contextCommands.values()).map((c) => c.data),
+	...Array.from(client.commands.values()).map((c) => {
+		if (dev !== "on" && c.dev) return;
+		return c.data.toJSON();
+	}),
+	...Array.from(client.contextCommands.values()).map((c) => {
+		if (dev !== "on" && c.dev) return;
+		return c.data;
+	}),
 ];
 
 (async () => {
 	try {
 		console.log("Started refreshing application (/) commands.");
 		if (dev === "on") {
-			if (!test_guild_id || !client_id) return console.log("Missing required guild");
+			if (!test_guild_id || !client_id)
+				return console.log("Missing required guild");
 			await rest.put(
 				/**
 			 * Here we are sending to discord our slash commands to be registered.
@@ -195,7 +202,7 @@ const commandJsonData = [
 			});
 		}
 
-		console.log("Successfully reloaded application (/) commands.");
+		console.log(`Successfully reloaded ${dev === "on" ? "guild " + test_guild_id : "global"} application (/) commands.`);
 	} catch (error) {
 		console.error(error);
 	}

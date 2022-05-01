@@ -93,12 +93,46 @@ module.exports = {
 		} else if (sub == "user") {
 			const user = interaction.options.getUser("target") || interaction.user;
 
+			const getUserBannerUrl = require("../../../modules/info/getUserBannerUrl");
+
+			const guild = await client.guilds.fetch(interaction.guildId);
+
+			const invites = await guild.invites.fetch();
+
+			const invite = invites.size > 0 ? invites.first() : null;
+
+			const member = await guild.members.fetch(user.id);
+
 			const Embed = new Discord.MessageEmbed()
 				.setColor("RANDOM")
 				.setAuthor({
-					name: user.username + "#" + user.discriminator + "'s avatar",
+					name: user.tag,
 				})
-				.setImage(user.displayAvatarURL({ dynamic: true }));
+				.setThumbnail(user.displayAvatarURL({ dynamic: true }))
+				.setDescription(
+					`${
+						member.avatar
+							? "[Guild Avatar](" +
+							  member.displayAvatarURL({ dynamic: true }) +
+							  ")\n"
+							: ""
+					}Joined Discord since <t:${Math.round(
+						user.createdTimestamp / 1000
+					)}:R>\nJoined **${
+						invite == null
+							? guild.name
+							: "[" + guild.name + "](" + invite.url + ")"
+					}** since <t:${Math.round(member.joinedTimestamp / 1000)}:R>${
+						member.premiumSinceTimestamp
+							? "\nServer boosting since <t:" +
+							  Math.round(member.premiumSinceTimestamp / 1000) +
+							  ":R>"
+							: ""
+					}`
+				)
+				.setImage(await getUserBannerUrl(client, user.id));
+
+			if (member.nickname) Embed.setTitle(member.nickname);
 
 			const JPG = new Discord.MessageButton()
 				.setStyle("LINK")
@@ -130,7 +164,7 @@ module.exports = {
 			return await interaction.reply({
 				embeds: [Embed],
 				components: [ROW],
-				ephemeral: interaction.user == user,
+				ephemeral: interaction.user == user || user.bot,
 			});
 		}
 	},

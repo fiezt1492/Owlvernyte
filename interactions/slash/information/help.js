@@ -149,16 +149,24 @@ module.exports = {
 		} else if (topic == "links") {
 			let components = new MessageActionRow().addComponents(
 				new MessageButton()
-					.setLabel("Invite me")
+					.setLabel("Invite link (Unrestricted)")
 					.setStyle("LINK")
 					.setURL(
 						`https://discord.com/api/oauth2/authorize?client_id=853623967180259369&permissions=8&scope=applications.commands%20bot`
 					),
 				new MessageButton()
-					.setLabel("Vote me")
+					.setLabel("Invite link (Restricted)")
+					.setStyle("LINK")
+					.setURL(
+						`https://discord.com/api/oauth2/authorize?client_id=874183713020330015&permissions=137976155200&scope=applications.commands%20bot`
+					),
+				new MessageButton()
+					.setLabel("Vote")
 					.setStyle("LINK")
 					.setURL(`https://top.gg/bot/853623967180259369/vote`)
 			);
+
+			// safe invite https://discord.com/api/oauth2/authorize?client_id=874183713020330015&permissions=137976155200&scope=applications.commands%20bot
 
 			if (interaction.guild.id === "830110554604961824")
 				components.addComponents(
