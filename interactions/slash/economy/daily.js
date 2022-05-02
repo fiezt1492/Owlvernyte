@@ -10,7 +10,7 @@ module.exports = {
 		.setName("daily")
 		.setDescription("Get your daily reward"),
 	category: "economy",
-	mongoCD: 24 * 60 * 60,
+	// mongoCD: 24 * 60 * 60,
 	once: true,
 	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
@@ -85,7 +85,10 @@ module.exports = {
 			else random = Math.round(Math.random() * 999) + 1;
 			// console.log(random);
 			const string = millify(random);
-			await Player.cooldownsPush(this.name, 24 * 60 * 60 * 1000);
+
+			// important
+			await Player.cooldownsPush(this.data.name, 24 * 60 * 60 * 1000);
+
 			await Player.owlet(random);
 			Embed.title = "SUCCESS!";
 			Embed.color = "GREEN";
