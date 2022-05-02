@@ -6,6 +6,7 @@ const {
 	MessageActionRow,
 	MessageSelectMenu,
 } = require("discord.js");
+const { client_id } = require("../../../config");
 const { SlashCommandBuilder } = require("@discordjs/builders");
 // const { prefix } = require("../../../config");
 
@@ -152,13 +153,13 @@ module.exports = {
 					.setLabel("Invite link (Unrestricted)")
 					.setStyle("LINK")
 					.setURL(
-						`https://discord.com/api/oauth2/authorize?client_id=853623967180259369&permissions=8&scope=applications.commands%20bot`
+						`https://discord.com/api/oauth2/authorize?client_id=${client_id}&permissions=8&scope=applications.commands%20bot`
 					),
 				new MessageButton()
 					.setLabel("Invite link (Restricted)")
 					.setStyle("LINK")
 					.setURL(
-						`https://discord.com/api/oauth2/authorize?client_id=874183713020330015&permissions=137976155200&scope=applications.commands%20bot`
+						`https://discord.com/api/oauth2/authorize?client_id=${client_id}&permissions=137976155200&scope=applications.commands%20bot`
 					),
 				new MessageButton()
 					.setLabel("Vote")
