@@ -7,5 +7,6 @@ module.exports = {
 	test_guild_id: String(process.env.TEST_GUILD_ID),
 	dev: String(process.env.DEVMODE) || "on",
 	port: Number(process.env.PORT) || 80,
-	web: String(process.env.WEB) || "off"
+	web: String(process.env.WEB) || "off",
+	topggToken: String(process.env.TOPGG_TOKEN),
 }
