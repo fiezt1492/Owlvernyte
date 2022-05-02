@@ -25,7 +25,9 @@
 		"label": "Forward to {command} command"
 	},
 	"onMention": {
-		"reply": "This guild prefix is `{prefix}`. Type `{prefix}help` to spawn help panel."
+		"reply": "You no need to use a prefix to call me out! Just use slash command `/help` and select a suitable topic!\n\nCan't find my slash commands? Reinvite me via this button and make sure you gave me required permissions!",
+		"buttonLabel": "Reinvite me!",
+		"sentFrom": "Sent from {guildName}"
 	},
 	"help": {
 		"description": "List all commands of bot or info about a specific command.",

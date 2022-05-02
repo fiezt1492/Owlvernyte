@@ -45,13 +45,14 @@ module.exports = {
 		const i18n = client.i18n;
 		i18n.setLocale(guildSettings.locale);
 
-		// if (
-		// 	message.content == `<@${client.user.id}>` ||
-		// 	message.content == `<@!${client.user.id}>`
-		// ) {
-		// 	require("../messages/onMention").execute(message, i18n);
-		// 	return;
-		// }
+		if (
+			message.content == `<@${client.user.id}>` ||
+			message.content == `<@!${client.user.id}>`
+		) {
+			return message.reply({
+				content: "duh"
+			})
+		}
 
 		const prefixRegex = new RegExp(
 			`^(<@!?${client.user.id}>|${escapeRegex(prefix)})\\s*`
@@ -66,6 +67,7 @@ module.exports = {
 		const args = content.slice(matchedPrefix.length).trim().split(/ +/);
 
 		const commandName = args.shift().toLowerCase();
+		console.log(commandName)
 
 		// Check if mesage does not starts with prefix, or message author is bot. If yes, return.
 
