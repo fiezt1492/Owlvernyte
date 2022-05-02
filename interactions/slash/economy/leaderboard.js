@@ -39,16 +39,22 @@ module.exports = {
 				.limit(10)
 				.toArray();
 
-			const data = players.map((o) => {
-				const bal = o.owlet + o.bank;
-				return {
-					top: String(players.indexOf(o) + 1),
-					owlets: millify(bal),
-					player: client.users.cache.get(o.id).tag,
-				};
-			});
+			const data = await Promise.all(
+				players.map(async (o) => {
+					const bal = o.owlet + o.bank;
+					let p =
+						(await client.users.fetch(o.id)) ||
+						(await client.users.cache.get(o.id));
+					// console.log(p)
+					return {
+						top: String(players.indexOf(o) + 1),
+						owlets: `${millify(bal)}`,
+						player: `${p.tag}`,
+					};
+				})
+			);
 
-			const table = stringTable.create(data, {
+			const table = await stringTable.create(data, {
 				capitalizeHeaders: true,
 				formatters: {
 					top: function (value, header) {
@@ -78,7 +84,7 @@ module.exports = {
 			const collection = new Discord.Collection();
 			await Promise.all(
 				guild.members.cache.map(async (member) => {
-					if (member.user.bot) return;
+					// if (member.user.bot) return;
 					const id = member.id;
 					const b = await client.bal(id);
 					if (b === null) return;
@@ -97,14 +103,19 @@ module.exports = {
 
 			const keys = collection.map((v) => v.id);
 
-			const array = data.first(10).map((v, i) => {
-				const bal = millify(v.bal);
-				return {
-					top: String(i + 1).padStart(2, 0),
-					owlets: bal,
-					players: client.users.cache.get(v.id).tag,
-				};
-			});
+			const array = await Promise.all(
+				data.first(10).map(async (v, i) => {
+					const bal = millify(v.bal);
+					const p =
+						(await client.users.fetch(v.id)) ||
+						(await client.users.cache.get(v.id));
+					return {
+						top: String(i + 1).padStart(2, 0),
+						owlets: bal,
+						player: p.tag,
+					};
+				})
+			);
 
 			const table = stringTable.create(array, {
 				capitalizeHeaders: true,
