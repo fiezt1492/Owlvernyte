@@ -6,7 +6,7 @@ module.exports = {
 	name: "daily",
 	description: "Get daily reward",
 	category: "economy",
-	aliases: [""],
+	aliases: [],
 	usage: "",
 	cooldown: 3,
 	// mongoCD: 24 * 60 * 60,
