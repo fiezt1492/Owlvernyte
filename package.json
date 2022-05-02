@@ -33,6 +33,7 @@
 		"pm2": "^5.1.2",
 		"short-number": "^1.0.7",
 		"string-table": "^0.1.5",
+		"topgg-autoposter": "^2.0.1",
 		"translate-google": "^1.5.0",
 		"util": "^0.12.4",
 		"weather-js": "^2.0.0"
