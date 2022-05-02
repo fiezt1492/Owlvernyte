@@ -131,20 +131,20 @@ module.exports = {
 			}
 
 			if (command.mongoCD && command.mongoCD > 0) {
-				const mongoCD = await Player.cooldownsGet(command.name);
+				const mongoCD = await Player.cooldownsGet(command.data.name);
 				if (mongoCD) {
 					if (Date.now() - mongoCD.timestamps < mongoCD.duration) {
 						return interaction.reply({
 							content: i18n.__mf("common.cooldown", {
-								command: command.name,
+								command: command.data.name,
 								time: Math.floor(
 									(mongoCD.timestamps + mongoCD.duration) / 1000
 								),
 							}),
 							ephemeral: true,
 						});
-					} else await Player.cooldownsPull(command.name);
-				} else await Player.cooldownsPush(command.name, command.mongoCD * 1000);
+					} else await Player.cooldownsPull(command.data.name);
+				} else await Player.cooldownsPush(command.data.name, command.mongoCD * 1000);
 			}
 
 			await command.execute(interaction, Player, ONCE, i18n);

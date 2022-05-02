@@ -10,6 +10,7 @@ module.exports = {
 		.setName("daily")
 		.setDescription("Get your daily reward"),
 	category: "economy",
+	mongoCD: 24 * 60 * 60,
 	once: true,
 	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
@@ -43,6 +44,7 @@ module.exports = {
 		await interaction.reply({
 			embeds: [Embed],
 			components: components(false),
+			ephemeral: true,
 		});
 
 		const msg = await interaction.fetchReply();
