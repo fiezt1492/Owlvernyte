@@ -64,7 +64,7 @@ module.exports = {
 			});
 
 			const rate = players.map((o) => o.id);
-			const footer = `${interaction.user.tag} • #`;
+			const footer = `${interaction.user.username} • #`;
 
 			const Embed = new Discord.MessageEmbed()
 				.setTitle(`Global Top ${data.length}`)
