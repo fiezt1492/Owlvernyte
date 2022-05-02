@@ -28,8 +28,51 @@ module.exports = {
 		const type = interaction.options.getString("type");
 
 		if (type == "global") {
+			const db = await client.db.collection("players");
+
+			const players = await db
+				.find()
+				.sort({
+					owlet: -1,
+					bank: -1,
+				})
+				.limit(10)
+				.toArray();
+
+			const data = players.map((o) => {
+				const bal = o.owlet + o.bank;
+				return {
+					top: String(players.indexOf(o) + 1),
+					owlets: millify(bal),
+					player: client.users.cache.get(o.id).tag,
+				};
+			});
+
+			const table = stringTable.create(data, {
+				capitalizeHeaders: true,
+				formatters: {
+					top: function (value, header) {
+						return `#${value}`;
+					},
+				},
+			});
+
+			const rate = players.map((o) => o.id);
+			const footer = `${interaction.user.tag} • #`;
+
+			const Embed = new Discord.MessageEmbed()
+				.setTitle(`Global Top ${data.length}`)
+				.setColor("RANDOM")
+				.setDescription("```" + table + "```")
+				.setFooter({
+					text: rate.some((id) => id === interaction.user.id)
+						? `${footer}${rate.indexOf(interaction.user.id) + 1}`
+						: `${footer}10+`,
+					iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
+				});
+
 			return interaction.editReply({
-				content: "Currently working on this...",
+				embeds: [Embed],
 			});
 		} else if (type == "guild") {
 			const collection = new Discord.Collection();

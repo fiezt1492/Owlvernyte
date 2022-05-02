@@ -45,10 +45,17 @@ module.exports = {
 				return;
 			} catch (err) {
 				console.error(err);
-				await interaction.reply({
-					content: i18n.__("common.error"),
-					ephemeral: true,
-				});
+				if (interaction.deferred || interaction.replied) {
+					await interaction.editReply({
+						content: i18n.__("common.error"),
+						ephemeral: true,
+					});
+				} else {
+					await interaction.reply({
+						content: i18n.__("common.error"),
+						ephemeral: true,
+					});
+				}
 				return;
 			}
 		}
@@ -106,10 +113,17 @@ module.exports = {
 				return;
 			} catch (err) {
 				console.error(err);
-				await interaction.reply({
-					content: i18n.__("common.error"),
-					ephemeral: true,
-				});
+				if (interaction.deferred || interaction.replied) {
+					await interaction.editReply({
+						content: i18n.__("common.error"),
+						ephemeral: true,
+					});
+				} else {
+					await interaction.reply({
+						content: i18n.__("common.error"),
+						ephemeral: true,
+					});
+				}
 				return;
 			}
 		}
