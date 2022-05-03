@@ -15,7 +15,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("help")
 		.setDescription(
-			"List all commands of bot or info about a specific command."
+			"This command will help you out"
 		)
 		.addStringOption((option) =>
 			option

@@ -56,7 +56,11 @@
 			},
 			"invite": "Invite me",
 			"vote": "Vote me",
-			"supportserver": "Support Server"
+			"supportserver": "Support Server",
+			"slash": {
+				"label": "help.components.slash.label",
+				"description": "help.components.slash.description"
+			}
 		},
 		"invalid": "That's not a valid command!",
 		"commandEmbed": {

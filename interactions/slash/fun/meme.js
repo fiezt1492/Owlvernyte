@@ -51,7 +51,10 @@ module.exports = {
 			if (post)
 				if (post.code)
 					return interaction.reply(
-						`**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``
+						{
+							content: `**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``,
+							ephemeral: true
+						}
 					);
 			embed
 				.setAuthor({ name: `u/${post.author}` })
@@ -75,6 +78,7 @@ module.exports = {
 			embed.setColor("RED").setTitle("ERROR").setDescription(error);
 			return interaction.reply({
 				embeds: [embed],
+				ephemeral: true
 			});
 		}
 		await interaction.reply({
