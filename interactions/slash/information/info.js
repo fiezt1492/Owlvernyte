@@ -2,7 +2,13 @@
 
 const Discord = require("discord.js");
 // const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const os = require("os");
+const packageJSON = require("../../../package.json");
+const {
+	SlashCommandBuilder,
+	SlashCommandSubcommandGroupBuilder,
+	SlashCommandSubcommandBuilder,
+} = require("@discordjs/builders");
 
 module.exports = {
 	// The data needed to register slash commands to Discord.
@@ -11,6 +17,9 @@ module.exports = {
 		.setDescription("Get information about something")
 		.addSubcommand((sub) =>
 			sub.setName("guild").setDescription("Information about this guild")
+		)
+		.addSubcommand((sub) =>
+			sub.setName("bot").setDescription("Information about the bot")
 		)
 		.addSubcommand((sub) =>
 			sub
@@ -30,24 +39,15 @@ module.exports = {
 		let sub = interaction.options.getSubcommand();
 
 		if (sub == "guild") {
-			const owner = await guild.members.fetch(guild.ownerId);
+			const { client, guild } = interaction;
+			const owner = await guild.fetchOwner();
+			const guildChannels = await guild.channels.fetch();
+			const guildRoles = await guild.roles.fetch();
+			const guildMembers = await guild.members.fetch();
 
-			const guildChannels = guild.channels.cache;
-			const guildMembers = guild.members.cache;
-			// console.log(guildMembers);
 			const channels = {
-				voice: guildChannels.filter((c) => c.type === "GUILD_VOICE").size,
-				voiceL: guildChannels.filter(
-					(c) =>
-						c.type === "GUILD_VOICE" &&
-						!c.permissionsFor(guild.roles.everyone).has(["CONNECT"])
-				).size,
-				text: guildChannels.filter((c) => c.type === "GUILD_TEXT").size,
-				textL: guildChannels.filter(
-					(c) =>
-						c.type === "GUILD_TEXT" &&
-						!c.permissionsFor(guild.roles.everyone).has(["SEND_MESSAGES"])
-				).size,
+				voice: guildChannels.filter((c) => c.isVoice()).size,
+				text: guildChannels.filter((c) => c.isText()).size,
 			};
 
 			const members = {
@@ -55,24 +55,27 @@ module.exports = {
 				bot: guildMembers.filter((m) => m.user.bot === true).size,
 			};
 
+			const features = await guild.features.map((f) =>
+				capitalizeFirstLetter(f.toLowerCase().replace(/_+/g, " "))
+			);
+
 			const Embed = new Discord.MessageEmbed()
 				.setTitle(guild.name + "'s Informations")
 				.setColor("RANDOM")
-				// .setDescription(timeConverter(guild.joinedTimestamp))
 				.setThumbnail(guild.iconURL({ size: 1024, dynamic: true }))
-				.addField("Owner", `\`\`\`${owner.user.tag}\`\`\``, true)
-				// .addField("Prefix", `\`\`\`${guildSettings.prefix}\`\`\``, true)
-				.addField("Roles", "```" + guild.roles.cache.size + " roles```", true)
+				.addField("Owner", `\`\`\`${owner.user.tag}\`\`\``)
+				.addField("Roles", "```" + guildRoles.size + " roles```", true)
 				.addField(
-					guildChannels.size + " Channels",
-					`\`\`\`Texts: ${channels.text} (${channels.textL} locked)\nVoices: ${channels.voice} (${channels.voiceL} locked)\`\`\``,
+					channels.voice + channels.text + " Channels",
+					`\`\`\`Texts: ${channels.text}\nVoices: ${channels.voice}\`\`\``,
 					true
 				)
 				.addField(
-					guildMembers.size + " Members",
+					guild.memberCount + " Members",
 					`\`\`\`Users: ${members.user}\nBots: ${members.bot}\`\`\``,
 					true
 				)
+				.addField("Features", "```" + features.join(", ") + "```")
 				.addField(
 					"Additional",
 					`\`\`\`Created at: ${timeConverter(
@@ -83,10 +86,10 @@ module.exports = {
 						guild.premiumSubscriptionCount
 					}\nPreferred Locale: ${guild.preferredLocale}\`\`\``
 				)
-				.setFooter({ text: `ID: ${guild.id}` })
+				.setFooter({ text: `Guild ID: ${guild.id}` })
 				.setTimestamp(guild.joinedTimestamp);
 
-			return await interaction.reply({
+			return interaction.reply({
 				embeds: [Embed],
 				ephemeral: true,
 			});
@@ -166,6 +169,56 @@ module.exports = {
 				components: [ROW],
 				ephemeral: interaction.user == user || user.bot,
 			});
+		} else if (sub == "bot") {
+			const cpu = await os.cpus();
+			const memTotal = await os.totalmem();
+			const memFree = await os.freemem();
+			const memUsed = memTotal - memFree;
+			const memUsedInPercentage = Math.round((memUsed / memTotal) * 100);
+			const processHeapUsed = Math.round(
+				process.memoryUsage().heapUsed / 1024 / 1024
+			);
+			const processHeapTotal = Math.round(
+				process.memoryUsage().heapTotal / 1024 / 1024
+			);
+			const processHeapUsedInPercentage = Math.round((processHeapUsed / processHeapTotal) * 100);
+
+			const operatingSystemPlatform = `${os.platform()}`;
+			const cpuModel = `${cpu[0].model}`;
+			const sysMemoryUsage = `${memUsedInPercentage}% (TOTAL: ${Math.round(
+				memTotal / (1024 * 1024 * 1024)
+			)}GB)`;
+
+			const processField = `${processHeapUsedInPercentage}% (TOTAL: ${processHeapTotal}MB)`;
+
+			const guildSize =
+				client.shard == null
+					? client.guilds.cache.size
+					: await client.shard.fetchClientValues("guilds.cache.size");
+
+			// console.log(client.shard)
+			const Embed = new Discord.MessageEmbed()
+				.setTitle(
+					client.user.username + "'s STAT (ver: " + packageJSON.version + ")"
+				)
+				.setColor("RANDOM")
+				.setThumbnail(client.user.displayAvatarURL())
+				.addField("OSP", "```" + operatingSystemPlatform + "```", true)
+				.addField("CPU", "```" + cpuModel + "```", true)
+				.addField(
+					"MEMORY",
+					"```" + `SYSTEM: ${sysMemoryUsage}\nPROCESS: ${processField}` + "```",
+					true
+				)
+				.addField("NODEJS", "```" + process.version + "```", true)
+				.addField("DISCORD.JS", "```" + Discord.version + "```", true)
+				.addField("GUILDS", "```" + guildSize + "```", true)
+				.setFooter({ text: `A product of Owlvernyte` });
+
+			return await interaction.reply({
+				embeds: [Embed],
+				ephemeral: true,
+			});
 		}
 	},
 };
@@ -195,4 +248,8 @@ function timeConverter(UNIX_timestamp) {
 	var time =
 		month + " " + date + " " + year + " " + hour + ":" + min + ":" + sec;
 	return time;
+}
+
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }

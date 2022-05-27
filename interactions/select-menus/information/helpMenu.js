@@ -25,6 +25,7 @@ module.exports = {
 					return {
 						name: cmd.data.name || "None",
 						description: cmd.data.description || "None",
+						maintain: cmd.maintain || false
 					};
 				});
 
@@ -63,12 +64,16 @@ module.exports = {
 			.setTitle(`Help Panel`)
 			.setColor("RANDOM")
 			.setURL(process.env.URL)
-			// .setDescription(
-			// 	`You can use \`${prefix}help <command name>\` to get info on a specific command!`
-			// )
+			.setDescription(
+				`A maintaining command will look like this: ~~\`command\`~~`
+			)
 			.addField(
 				list.category.toUpperCase(),
-				"`" + list.commands.map((cmd) => cmd.name).join("`, `") + "`"
+				list.commands
+					.map((cmd) =>
+						cmd.maintain ? `~~\`${cmd.name}\`~~` : `\`${cmd.name}\``
+					)
+					.join(", ")
 			);
 		return interaction.update({ embeds: [categoryEmbed], ephemeral: true });
 	},

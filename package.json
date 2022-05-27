@@ -1,7 +1,7 @@
 {
 	"name": "Recard",
 	"version": "1.0.0",
-	"description": "Recard",
+	"description": "a card game bot",
 	"main": "bot.js",
 	"engines": {
 		"node": "16.x",
@@ -29,6 +29,7 @@
 		"mongodb": "^4.3.0",
 		"mongoose": "^6.3.1",
 		"node-fetch": "^2.6.1",
+		"os": "^0.1.2",
 		"path": "^0.12.7",
 		"pm2": "^5.1.2",
 		"short-number": "^1.0.7",
