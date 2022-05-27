@@ -81,43 +81,37 @@ module.exports = {
 				embeds: [Embed],
 			});
 		} else if (type == "guild") {
-			const collection = new Discord.Collection();
-			await Promise.all(
-				guild.members.cache.map(async (member) => {
-					// if (member.user.bot) return;
-					const id = member.id;
-					const b = await client.bal(id);
-					if (b === null) return;
-					const bal = b.owlet + b.bank;
-					return b !== 0
-						? collection.set(id, {
-								id,
-								bal,
-						  })
-						: null;
+			const playerCol = await client.db.collection("players");
+			const guildMembers = await guild.members.fetch();
+			const guildMembersId = await guildMembers
+				.filter((m) => !m.user.bot)
+				.map((m) => m.id);
+
+			const players = await playerCol
+				.find({ id: { $in: guildMembersId } })
+				.sort({
+					owlet: -1,
+					bank: -1,
 				})
-			);
+				.limit(10)
+				.toArray();
 
-			const data = collection.sort((a, b) => b.bal - a.bal);
-			// console.log(data);
-
-			const keys = collection.map((v) => v.id);
-
-			const array = await Promise.all(
-				data.first(10).map(async (v, i) => {
-					const bal = millify(v.bal);
-					const p =
-						(await client.users.fetch(v.id)) ||
-						(await client.users.cache.get(v.id));
+			const data = await Promise.all(
+				players.map(async (o) => {
+					const bal = o.owlet + o.bank;
+					let p =
+						(await client.users.fetch(o.id)) ||
+						(await client.users.cache.get(o.id));
+					// console.log(p)
 					return {
-						top: String(i + 1).padStart(2, 0),
-						owlets: bal,
-						player: p.tag,
+						top: String(players.indexOf(o) + 1),
+						owlets: `${millify(bal)}`,
+						player: `${p.tag}`,
 					};
 				})
 			);
 
-			const table = stringTable.create(array, {
+			const table = stringTable.create(data, {
 				capitalizeHeaders: true,
 				formatters: {
 					top: function (value, header) {
@@ -126,14 +120,17 @@ module.exports = {
 				},
 			});
 
+			const rate = players.map((o) => o.id);
+			const footer = `${interaction.user.username} • #`;
+
 			const Embed = new Discord.MessageEmbed()
-				.setTitle(`${guild.name}'s Top ${array.length}`)
+				.setTitle(`${guild.name}'s Top ${data.length}`)
 				.setColor("RANDOM")
 				.setDescription("```" + table + "```")
 				.setFooter({
-					text:
-						`${interaction.user.username} • #` +
-						(keys.indexOf(interaction.user.id) + 1),
+					text: rate.some((id) => id === interaction.user.id)
+						? `${footer}${rate.indexOf(interaction.user.id) + 1}`
+						: `${footer}10+`,
 					iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
 				});
 
