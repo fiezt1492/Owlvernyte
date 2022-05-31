@@ -71,6 +71,7 @@ client.private = new Collection();
 client.buttonCommands = new Collection();
 client.selectCommands = new Collection();
 client.contextCommands = new Collection();
+client.modalCommands = new Collection();
 client.cooldowns = new Collection();
 client.triggers = new Collection();
 
@@ -104,6 +105,8 @@ for (const module of commands) {
 	for (const commandFile of commandFiles) {
 		const command = require(`./interactions/slash/${module}/${commandFile}`);
 		if (dev !== "on" && command.dev) continue;
+		if (command.maintain || command.guildOwner || command.permissions)
+			command.data.setDefaultPermission(false);
 		client.commands.set(command.data.name, command);
 	}
 }
@@ -145,6 +148,29 @@ for (const module of buttonCommands) {
 }
 
 /**********************************************************************/
+// Registration of Modal-Command Interactions.
+
+/**
+ * @type {String[]}
+ * @description All modal commands.
+ */
+
+const modalCommands = fs.readdirSync("./interactions/modals");
+
+// Loop through all files and store modal-commands in modalCommands collection.
+
+for (const module of modalCommands) {
+	const commandFiles = fs
+		.readdirSync(`./interactions/modals/${module}`)
+		.filter((file) => file.endsWith(".js"));
+
+	for (const commandFile of commandFiles) {
+		const command = require(`./interactions/modals/${module}/${commandFile}`);
+		client.modalCommands.set(command.id, command);
+	}
+}
+
+/**********************************************************************/
 // Registration of select-menus Interactions
 
 const selectMenus = fs.readdirSync("./interactions/select-menus");
@@ -167,10 +193,8 @@ for (const module of selectMenus) {
 const rest = new REST({ version: "10" }).setToken(token);
 
 const commandJsonData = [
-	...Array.from(client.commands.values())
-		.map((c) => c.data.toJSON()),
-	...Array.from(client.contextCommands.values())
-		.map((c) => c.data),
+	...Array.from(client.commands.values()).map((c) => c.data.toJSON()),
+	...Array.from(client.contextCommands.values()).map((c) => c.data),
 ];
 
 (async () => {

@@ -6,7 +6,9 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
 	// The data needed to register slash commands to Discord.
-	data: new SlashCommandBuilder().setName("ping").setDescription("Get ping"),
+	data: new SlashCommandBuilder()
+		.setName("ping")
+		.setDescription("Show bot's uptime and latency"),
 	category: "information",
 	async execute(interaction) {
 		const { client } = interaction;

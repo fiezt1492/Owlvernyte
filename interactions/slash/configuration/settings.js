@@ -6,7 +6,6 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 module.exports = {
 	// The data needed to register slash commands to Discord.
 	data: new SlashCommandBuilder()
-		.setDefaultPermission(false)
 		.setName("settings")
 		.setDescription("Config your guild"),
 	// .addStringOption((option) =>

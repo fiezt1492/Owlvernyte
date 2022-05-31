@@ -12,6 +12,7 @@ module.exports = {
 		.addIntegerOption((option) =>
 			option
 				.setName("owlet")
+				.setMinValue(1)
 				.setDescription("Give me an owlet")
 				.setRequired(true)
 		),
@@ -21,11 +22,11 @@ module.exports = {
 		const { client } = interaction;
 
 		let input = interaction.options.getInteger("owlet");
-		if (input <= 0)
-			return interaction.reply({
-				content: `Please provide a positive number!`,
-				ephemeral: true,
-			});
+		// if (input <= 0)
+		// 	return interaction.reply({
+		// 		content: `Please provide a positive number!`,
+		// 		ephemeral: true,
+		// 	});
 		const player = await Player.get();
 
 		if (input > player.owlet)

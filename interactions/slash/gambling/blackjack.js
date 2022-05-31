@@ -16,7 +16,11 @@ module.exports = {
 		.setName("blackjack")
 		.setDescription("Play Vietnamese Blackjack")
 		.addIntegerOption((option) =>
-			option.setName("bet").setDescription("Give me an owlet").setRequired(true)
+			option
+				.setName("bet")
+				.setDescription("Give me an owlet")
+				.setRequired(true)
+				.setMinValue(1)
 		),
 	once: true,
 	category: "gambling",
@@ -53,11 +57,11 @@ module.exports = {
 
 		// const message = await interaction.fetchReply();
 		const bet = interaction.options.getInteger("bet");
-		if (bet <= 0)
-			return interaction.reply({
-				content: `Please provide a positive number!`,
-				ephemeral: true,
-			});
+		// if (bet <= 0)
+		// 	return interaction.reply({
+		// 		content: `Please provide a positive number!`,
+		// 		ephemeral: true,
+		// 	});
 
 		const player = await Player.get();
 		if (bet > player.owlet)

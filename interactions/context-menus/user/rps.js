@@ -69,7 +69,7 @@ module.exports = {
 		];
 
 		await interaction.reply({
-			content: `<@!${interaction.user.id}> **VS** <@!${opponent.id}>`,
+			content: `${interaction.member} **VS** ${opponent}`,
 			embeds: [Embed],
 			components: components(false),
 			ephemeral: opponent.bot,

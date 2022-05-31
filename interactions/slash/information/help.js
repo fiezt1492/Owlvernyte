@@ -14,17 +14,17 @@ module.exports = {
 	// The data needed to register slash commands to Discord.
 	data: new SlashCommandBuilder()
 		.setName("help")
-		.setDescription(
-			"This command will help you out"
-		)
+		.setDescription("This command will help you out")
 		.addStringOption((option) =>
 			option
 				.setName("topic")
 				.setDescription("Select a topic")
 				.setRequired(true)
-				.addChoice("Get command list", "commands")
-				.addChoice("Get relevant links", "links")
-				.addChoice("Support server", "support")
+				.addChoices(
+					{ name: "Get command list", value: "commands" },
+					{ name: "Get relevant links", value: "links" },
+					{ name: "Support server", value: "support" }
+				)
 		),
 	category: "information",
 	// once: true,

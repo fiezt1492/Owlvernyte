@@ -10,13 +10,9 @@ module.exports = {
 	// once: true,
 
 	async execute(interaction, Player, ONCE, i18n) {
-		const { client } = interaction;
-		const user = await client.users.fetch("445102575314927617")
-		const guild = await client.guilds.fetch(interaction.guildId)
-		const member = await guild.members.fetch(user.id)
-		const invites = await guild.invites.fetch()
-		console.log(invites.first())
-		console.log(user)
-		console.log(member)
+		const { client, guild } = interaction;
+		const guildCommands = await guild.commands.fetch()
+		// console.log(guildCommands.find(c => c.name == 'settings'))
+		// console.log(client.commands);
 	},
 };

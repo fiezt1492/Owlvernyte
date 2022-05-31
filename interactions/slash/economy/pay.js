@@ -13,6 +13,7 @@ module.exports = {
 		.addIntegerOption((option) =>
 			option
 				.setName("amount")
+				.setMinValue(1)
 				.setDescription("Give me an owlet")
 				.setRequired(true)
 		)
@@ -36,11 +37,11 @@ module.exports = {
 
 		const amount = interaction.options.getInteger("amount");
 
-		if (amount <= 0)
-			return interaction.reply({
-				content: `Please provide a positive number!`,
-				ephemeral: true,
-			});
+		// if (amount <= 0)
+		// 	return interaction.reply({
+		// 		content: `Please provide a positive number!`,
+		// 		ephemeral: true,
+		// 	});
 
 		const player = await Player.get();
 

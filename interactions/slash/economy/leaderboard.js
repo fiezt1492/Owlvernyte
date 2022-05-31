@@ -9,14 +9,22 @@ module.exports = {
 	// The data needed to register slash commands to Discord.
 	data: new SlashCommandBuilder()
 		.setName("leaderboard")
-		.setDescription("Show your guild top players")
+		.setDescription("Show top players")
 		.addStringOption((option) =>
 			option
 				.setName("type")
-				.setDescription("Select which leaderboard you want me to show")
+				.setDescription("Select which leaderboard type you want me to show")
 				.setRequired(true)
-				.addChoice("Global leaderboard", "global")
-				.addChoice("Current guild leaderboard", "guild")
+				.addChoices(
+					{
+						name: "Global leaderboard",
+						value: "global",
+					},
+					{
+						name: "Current guild leaderboard",
+						value: "guild",
+					}
+				)
 		),
 	cooldown: 10,
 	category: "economy",

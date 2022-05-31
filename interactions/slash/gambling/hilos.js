@@ -16,7 +16,11 @@ module.exports = {
 		.setName("hilo")
 		.setDescription("Play simple Highlow - Sicbo")
 		.addIntegerOption((option) =>
-			option.setName("bet").setDescription("Give me an owlet").setRequired(true)
+			option
+				.setName("bet")
+				.setDescription("Give me an owlet")
+				.setRequired(true)
+				.setMinValue(1)
 		),
 	once: true,
 	category: "gambling",
@@ -53,11 +57,11 @@ module.exports = {
 
 		// const message = await interaction.fetchReply();
 		let bet = interaction.options.getInteger("bet");
-		if (bet <= 0)
-			return interaction.reply({
-				content: `Please provide a positive number!`,
-				ephemeral: true,
-			});
+		// if (bet <= 0)
+		// 	return interaction.reply({
+		// 		content: `Please provide a positive number!`,
+		// 		ephemeral: true,
+		// 	});
 
 		const player = await Player.get();
 		if (bet > player.owlet)
@@ -145,7 +149,7 @@ module.exports = {
 			content: `Have fun good luck!`,
 			embeds: [Embed],
 			components: components(false),
-            ephemeral: true,
+			ephemeral: true,
 		});
 
 		let msg = await interaction.fetchReply();
