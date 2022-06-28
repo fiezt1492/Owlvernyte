@@ -148,7 +148,7 @@ module.exports = {
 			content: `Have fun good luck!`,
 			embeds: [Embed],
 			components: components(false),
-			ephemeral: true,
+			// ephemeral: true,
 		});
 
 		let msg = await interaction.fetchReply();
