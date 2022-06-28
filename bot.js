@@ -105,8 +105,9 @@ for (const module of commands) {
 	for (const commandFile of commandFiles) {
 		const command = require(`./interactions/slash/${module}/${commandFile}`);
 		if (dev !== "on" && command.dev) continue;
-		if (command.maintain || command.guildOwner || command.permissions)
+		if (command.maintain || command.guildOwner)
 			command.data.setDefaultPermission(false);
+		if (command.dm) command.data.setDMPermission(false);
 		client.commands.set(command.data.name, command);
 	}
 }

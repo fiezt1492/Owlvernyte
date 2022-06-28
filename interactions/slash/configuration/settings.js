@@ -17,7 +17,7 @@ module.exports = {
 	once: true,
 	guildOwner: true,
 	maintain: true,
-	permissions: ["ADMINISTRATOR"],
+	// permissions: ["ADMINISTRATOR"],
 	category: "configuration",
 	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;

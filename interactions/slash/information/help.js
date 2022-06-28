@@ -26,6 +26,7 @@ module.exports = {
 					{ name: "Support server", value: "support" }
 				)
 		),
+	dm: true,
 	category: "information",
 	// once: true,
 

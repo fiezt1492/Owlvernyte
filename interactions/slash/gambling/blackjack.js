@@ -24,7 +24,6 @@ module.exports = {
 		),
 	once: true,
 	category: "gambling",
-	permissions: "SEND_MESSAGES",
 
 	async execute(interaction, Player, ONCE, i18n) {
 		const { client } = interaction;
