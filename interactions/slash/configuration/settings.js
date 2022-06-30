@@ -29,6 +29,7 @@ module.exports = {
 			// content: "alo"
 			embeds: Embed,
 			components: components(false),
+			ephemeral: true,
 		});
 
 		const msg = await interaction.fetchReply();
