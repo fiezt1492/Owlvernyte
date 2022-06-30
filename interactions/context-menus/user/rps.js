@@ -6,13 +6,13 @@ module.exports = {
 		type: 2, // 2 is for user context menus
 	},
 
-	async execute(interaction, member, i18n) {
+	async execute(interaction, guildSettings, i18n) {
 		const { client } = interaction;
 
 		// console.log(interaction);
-		const opponent = member.user;
+		const opponent = interaction.targetMember;
 
-		if (!opponent.bot)
+		if (!opponent.user.bot)
 			return await interaction.reply({
 				content: `Please use /rps to play with user!`,
 				ephemeral: true,
@@ -33,7 +33,7 @@ module.exports = {
 			.setDescription(`**ROCK PAPER SCISSORS WAR!**`)
 			.setColor("RANDOM")
 			.setFooter({
-				text: opponent.tag,
+				text: opponent.user.tag,
 				iconURL: opponent.displayAvatarURL({ dynamic: true }),
 			});
 
@@ -72,7 +72,7 @@ module.exports = {
 			content: `${interaction.member} **VS** ${opponent}`,
 			embeds: [Embed],
 			components: components(false),
-			ephemeral: opponent.bot,
+			ephemeral: opponent.user.bot,
 		});
 
 		const msg = await interaction.fetchReply();
@@ -93,7 +93,7 @@ module.exports = {
 
 			game.set(i.user.id, i.customId);
 
-			if (opponent.bot === true) {
+			if (opponent.user.bot === true) {
 				let choices = ["rock", "paper", "scissors"];
 				let choice = choices[Math.floor(Math.random() * choices.length)];
 				game.set(opponent.id, choice);
@@ -125,7 +125,7 @@ module.exports = {
 			let title = ``;
 			let description = `**${interaction.user.username}** chose \`${game.get(
 				interaction.user.id
-			)}\`\n**${opponent.username}** chose \`${game.get(opponent.id)}\``;
+			)}\`\n**${opponent.user.username}** chose \`${game.get(opponent.id)}\``;
 
 			switch (result) {
 				case 0:
@@ -135,7 +135,7 @@ module.exports = {
 					title = `${interaction.user.username} WON!`;
 					break;
 				case 2:
-					title = `${opponent.username} WON!`;
+					title = `${opponent.user.username} WON!`;
 					break;
 				default:
 					title = `SOMETHING WENT WRONG`;

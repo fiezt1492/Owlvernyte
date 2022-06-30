@@ -6,13 +6,13 @@ module.exports = {
 		type: 2, // 2 is for user context menus
 	},
 
-	async execute(interaction, member, i18n) {
-		const { client } = interaction;
+	async execute(interaction, guildSettings, i18n) {
+		const { client, targetUser } = interaction;
 
-		const user = member.user;
+		const user = targetUser;
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: user.username + "#" + user.discriminator + "'s avatar",
+				name: user.tag + "'s avatar",
 			})
 			.setImage(user.displayAvatarURL({ dynamic: true, size: 256 }));
 

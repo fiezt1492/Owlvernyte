@@ -7,10 +7,10 @@ module.exports = {
 		type: 2, // 2 is for user context menus
 	},
 
-	async execute(interaction, member, i18n) {
-		const { client } = interaction;
+	async execute(interaction, guildSettings, i18n) {
+		const { client, targetUser } = interaction;
 
-		const user = member.user;
+		const user = targetUser;
 		const banner = await getUserBannerUrl(client, user.id);
 
 		if (!banner)
@@ -21,7 +21,7 @@ module.exports = {
 
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: user.username + "#" + user.discriminator + "'s banner",
+				name: user.tag + "'s banner",
 				iconURL: user.displayAvatarURL({ dynamic: true }),
 			})
 			.setImage(banner);

@@ -6,14 +6,16 @@ module.exports = {
 		type: 3, // 3 is for message context menus
 	},
 
-	async execute(interaction, message, i18n) {
+	async execute(interaction, guildSettings, i18n) {
 		const { client } = interaction;
+
+		const message = interaction.targetMessage;
 
 		const user = await client.users.fetch(message.author.id);
 
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: user.username + "#" + user.discriminator + "'s avatar",
+				name: user.tag + "'s avatar",
 			})
 			.setImage(
 				`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`

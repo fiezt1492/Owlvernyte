@@ -27,8 +27,10 @@ module.exports = {
 			const command = client.contextCommands.get(
 				"USER " + interaction.commandName
 			);
-			const guild = await client.guilds.cache.get(interaction.guildId);
-			const member = await guild.members.cache.get(interaction.targetId);
+			// const guild = await client.guilds.cache.get(interaction.guildId);
+			// const member = await guild.members.cache.get(interaction.targetId);
+
+			// console.log(interaction)
 
 			if (command.maintain || command.maintain == true) {
 				return interaction.reply({
@@ -41,7 +43,7 @@ module.exports = {
 			// A try to execute the interaction.
 
 			try {
-				await command.execute(interaction, guildSettings, member, i18n);
+				await command.execute(interaction, guildSettings, i18n);
 				return;
 			} catch (err) {
 				console.error(err);
@@ -64,9 +66,10 @@ module.exports = {
 			const command = client.contextCommands.get(
 				"MESSAGE " + interaction.commandName
 			);
-			const guild = await client.guilds.cache.get(interaction.guildId);
-			const channel = await guild.channels.cache.get(interaction.channelId);
-			const message = await channel.messages.fetch(interaction.targetId);
+
+			// console.log(interaction.targetMessage);
+
+			const message = interaction.targetMessage;
 
 			if (command.maintain || command.maintain == true) {
 				return interaction.reply({
@@ -109,7 +112,7 @@ module.exports = {
 					}
 				}
 
-				await command.execute(interaction, message, i18n);
+				await command.execute(interaction, guildSettings, i18n);
 				return;
 			} catch (err) {
 				console.error(err);

@@ -8,8 +8,9 @@ module.exports = {
 		type: 3,
 	},
 
-	async execute(interaction, message, i18n) {
+	async execute(interaction, guildSettings, i18n) {
 		const { client } = interaction;
+		const message = interaction.targetMessage;
 
 		if (!message.content || message.content.length === 0) {
 			return await interaction.reply({

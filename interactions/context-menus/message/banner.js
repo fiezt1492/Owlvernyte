@@ -7,9 +7,9 @@ module.exports = {
 		type: 3,
 	},
 
-	async execute(interaction, message, i18n) {
+	async execute(interaction, guildSettings, i18n) {
 		const { client } = interaction;
-
+		const message = interaction.targetMessage;
 		const user = await client.users.fetch(message.author.id);
 		const banner = await getUserBannerUrl(client, user.id);
 
@@ -21,7 +21,7 @@ module.exports = {
 
 		const Embed = new Discord.MessageEmbed()
 			.setAuthor({
-				name: user.username + "#" + user.discriminator + "'s banner",
+				name: user.tag + "'s banner",
 				iconURL: user.displayAvatarURL({ dynamic: true }),
 			})
 			.setImage(banner);
