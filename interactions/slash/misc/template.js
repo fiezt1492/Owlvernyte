@@ -7,8 +7,7 @@ module.exports = {
 	dev: true,
 	// once: true,
 
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
-		
 	},
 };

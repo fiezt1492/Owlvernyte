@@ -17,7 +17,7 @@ module.exports = {
 				.setRequired(false)
 		),
 	category: "economy",
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		const user = interaction.options.getUser("target") || interaction.user;
@@ -62,7 +62,7 @@ module.exports = {
 
 		return interaction.reply({
 			embeds: [Embed],
-			ephemeral: interaction.user == user,
+			ephemeral: guildSettings.ephemeral,
 		});
 	},
 };

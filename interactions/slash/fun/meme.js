@@ -17,7 +17,7 @@ module.exports = {
 				.setRequired(false)
 		),
 	category: "fun",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client } = interaction;
 
 		let subreddit = interaction.options.getString("subreddit");
@@ -50,12 +50,10 @@ module.exports = {
 			// console.log(post)
 			if (post)
 				if (post.code)
-					return interaction.reply(
-						{
-							content: `**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``,
-							ephemeral: true
-						}
-					);
+					return interaction.reply({
+						content: `**Error code**: \`${post.code}\` - **Error message**: \`${post.message}\``,
+						ephemeral: true,
+					});
 			embed
 				.setAuthor({ name: `u/${post.author}` })
 				.setTitle(String(post.title))
@@ -78,12 +76,13 @@ module.exports = {
 			embed.setColor("RED").setTitle("ERROR").setDescription(error);
 			return interaction.reply({
 				embeds: [embed],
-				ephemeral: true
+				ephemeral: true,
 			});
 		}
 		await interaction.reply({
 			embeds: [embed],
 			components: row(false),
+			ephemeral: guildSettings.ephemeral,
 		});
 
 		const m = await interaction.fetchReply();

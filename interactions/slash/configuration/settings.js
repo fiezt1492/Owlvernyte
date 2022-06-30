@@ -8,56 +8,26 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("settings")
 		.setDescription("Config your guild"),
-	// .addStringOption((option) =>
-	// 	option
-	// 		.setName("subreddit")
-	// 		.setDescription("Provide a subreddit to get memes in it.")
-	// 		.setRequired(false)
-	// ),
 	once: true,
 	guildOwner: true,
-	maintain: true,
-	// permissions: ["ADMINISTRATOR"],
+	// maintain: true,
 	category: "configuration",
-	async execute(interaction, Player, ONCE, i18n) {
-		const { client } = interaction;
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
+		const { client, guild } = interaction;
+		// console.log(guildSettings);
 
 		// console.log(interaction);
-		const Embed = new Discord.MessageEmbed()
-			.setTitle("Guild Settings Panel")
-			.setDescription(
-				`With this Settings Panel, you will able to config your server settings in just one command!`
-			)
-			.setColor("RANDOM")
-			.setAuthor({
-				name: interaction.member.guild.name,
-				iconURL: interaction.member.guild.iconURL(),
-			});
-		// .addField("Prefix", await guildPrefix.get(message));
+		const Embed = require("../../../constants/embeds/settings")(
+			guild.name,
+			guild.iconURL(),
+			guildSettings
+		);
 
-		const components = (state) => [
-			new Discord.MessageActionRow().addComponents(
-				new Discord.MessageButton()
-					.setCustomId("prefixpanel")
-					.setDisabled(state)
-					.setLabel("Prefix")
-					.setStyle("PRIMARY"),
-				// new Discord.MessageButton()
-				// 	.setCustomId("localepanel")
-				// 	.setDisabled(state)
-				// 	.setLabel("Locale/Language")
-				// 	.setStyle("PRIMARY"),
-				new Discord.MessageButton()
-					.setCustomId("cancel")
-					.setDisabled(state)
-					.setLabel("Cancel")
-					.setStyle("DANGER")
-			),
-		];
+		const components = require("../../../constants/buttons/settings");
 
 		await interaction.reply({
 			// content: "alo"
-			embeds: [Embed],
+			embeds: Embed,
 			components: components(false),
 		});
 

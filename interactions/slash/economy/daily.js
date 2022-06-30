@@ -12,7 +12,7 @@ module.exports = {
 	category: "economy",
 	// mongoCD: 24 * 60 * 60,
 	once: true,
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		const mongoCD = await Player.cooldownsGet(this.data.name);
@@ -29,7 +29,7 @@ module.exports = {
 
 		const Embed = new Discord.MessageEmbed()
 			.setColor("RANDOM")
-			.setTitle("GET YOUR DAILY REWARD BY CLICK ON THE ABOVE BUTTON!");
+			.setTitle("GET YOUR DAILY REWARD BY CLICK ON THE BELOW BUTTON!");
 
 		const components = (state) => [
 			new Discord.MessageActionRow().addComponents(
@@ -44,7 +44,7 @@ module.exports = {
 		await interaction.reply({
 			embeds: [Embed],
 			components: components(false),
-			ephemeral: true,
+			ephemeral: guildSettings.ephemeral,
 		});
 
 		const msg = await interaction.fetchReply();

@@ -87,7 +87,7 @@ module.exports = {
 							});
 						});
 
-				return client.locale.set(message, locale).then((locale) => {
+				return client.locale.set(interaction, locale).then((locale) => {
 					cooldowns.set(message.guildId, Date.now());
 
 					Embed.fields[0] = {

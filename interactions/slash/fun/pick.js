@@ -15,7 +15,7 @@ module.exports = {
 				.setRequired(true)
 		),
 	category: "fun",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client } = interaction;
 
 		let choices = interaction.options
@@ -35,6 +35,7 @@ module.exports = {
 
 		return interaction.reply({
 			content: `I chose \`${rs}\`.`,
+			ephemeral: guildSettings.ephemeral,
 		});
 	},
 };

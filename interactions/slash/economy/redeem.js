@@ -16,7 +16,7 @@ module.exports = {
 		),
 	cooldown: 10,
 	category: "economy",
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
 		const db = client.db.collection("giftcode");
 
@@ -32,13 +32,13 @@ module.exports = {
 		if (!code.remain || code.remain === 0)
 			return interaction.reply({
 				content: `Out of giftcode!`,
-                ephemeral: true,
+				ephemeral: true,
 			});
 
 		if (code.claimed.includes(interaction.user.id))
 			return interaction.reply({
 				content: `You had already redeemed this code!`,
-                ephemeral: true,
+				ephemeral: true,
 			});
 
 		let o = code.prize.owlet || 10;
@@ -78,7 +78,7 @@ module.exports = {
 
 		return interaction.reply({
 			embeds: [Embed],
-			ephemeral: true,
+			ephemeral: guildSettings.ephemeral,
 		});
 	},
 };

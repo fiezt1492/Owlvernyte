@@ -1,5 +1,5 @@
-const { prefix } = require("../config.js");
-const defaultPrefix = prefix;
+// const { prefix } = require("../config.js");
+// const defaultPrefix = prefix;
 
 module.exports = {
 	name: "ready",
@@ -37,23 +37,35 @@ module.exports = {
 						gID: guild.id,
 					},
 					{
-						// prefix: 1,
+						ephemeral: 1,
 						locale: 1,
 					}
 				);
 
-				client.guildSettings.set(guild.id, {
-					// prefix: guild
-					// 	? guild.prefix
-					// 		? guild.prefix
-					// 		: defaultPrefix
-					// 	: defaultPrefix,
-					locale: guildDB ? (guildDB.locale ? guildDB.locale : "en") : "en",
-				});
+				if (!guildDB) {
+					client.guildSettings.set(guild.id, {
+						ephemeral: true,
+						locale: "en",
+					});
+				} else if (guildDB) {
+					// console.log(guildDB);
+					client.guildSettings.set(guild.id, {
+						ephemeral:
+							guildDB.ephemeral !== null && guildDB.ephemeral !== undefined
+								? guildDB.ephemeral === true
+									? true
+									: false
+								: true,
+						locale:
+							guildDB.locale !== null && guildDB.locale !== undefined
+								? guildDB.locale
+								: "en",
+					});
+				}
 
 				if (client.guildSettings.size == client.guilds.cache.size) {
 					client.ready = true;
-					console.log("Ready to listening events!")
+					console.log("Ready to listening events!");
 
 					client.user.setPresence({
 						status: "online",
@@ -65,6 +77,8 @@ module.exports = {
 							},
 						],
 					});
+
+					// console.log(client.guildSettings);
 				}
 			});
 		} catch (error) {

@@ -10,7 +10,7 @@ module.exports = {
 		.setName("ping")
 		.setDescription("Show bot's uptime and latency"),
 	category: "information",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client } = interaction;
 
 		let totalSeconds = client.uptime / 1000;
@@ -51,7 +51,7 @@ module.exports = {
 
 		await interaction.reply({
 			embeds: [Embed],
-			ephemeral: true,
+			ephemeral: guildSettings.ephemeral,
 			// components: row(false),
 		});
 	},

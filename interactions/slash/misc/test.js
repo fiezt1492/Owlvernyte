@@ -9,9 +9,9 @@ module.exports = {
 	dev: true,
 	// once: true,
 
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client, guild } = interaction;
-		const guildCommands = await guild.commands.fetch()
+		const guildCommands = await guild.commands.fetch();
 		// console.log(guildCommands.find(c => c.name == 'settings'))
 		// console.log(client.commands);
 	},

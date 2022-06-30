@@ -107,7 +107,9 @@ for (const module of commands) {
 		if (dev !== "on" && command.dev) continue;
 		if (command.maintain || command.guildOwner)
 			command.data.setDefaultPermission(false);
-		if (command.dm) command.data.setDMPermission(false);
+		if (command.dm && command.dm == true) command.data.setDMPermission(true);
+		else if (!command.dm || (command.dm && command.dm == false))
+			command.data.setDMPermission(false);
 		client.commands.set(command.data.name, command);
 	}
 }

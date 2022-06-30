@@ -8,14 +8,15 @@ module.exports = {
 		// Deconstructed client from interaction object.
 		const { client } = interaction;
 
-		if (!client.ready) return interaction.reply({
-			content: "Please try again...",
-			ephemeral: true,
-		});
-
 		// Checks if the interaction is a button interaction (to prevent weird bugs)
 
 		if (!interaction.isButton()) return;
+
+		if (!client.ready)
+			return interaction.reply({
+				content: "Please try again...",
+				ephemeral: true,
+			});
 
 		const command = client.buttonCommands.get(interaction.customId);
 
@@ -81,7 +82,7 @@ module.exports = {
 					});
 			}
 
-			await command.execute(interaction, i18n, already);
+			await command.execute(interaction, guildSettings, i18n, already);
 			return;
 		} catch (err) {
 			console.error(err);

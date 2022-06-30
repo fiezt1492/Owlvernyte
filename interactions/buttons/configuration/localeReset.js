@@ -7,13 +7,13 @@ module.exports = {
 
 		const Embed = message.embeds[0];
 
-		if (client.locale.get(message) == "en")
+		if (client.locale.get(interaction) == "en")
 			return interaction.reply({
 				content: `Your locale is already default! You dont need to reset it.`,
 				ephemeral: true,
 			});
 
-		client.locale.set(message).then((locale) => {
+		client.locale.set(interaction).then((locale) => {
 			Embed.fields[0] = {
 				name: "Current Locale",
 				value: "`" + locale + "`",

@@ -24,7 +24,7 @@ module.exports = {
 				.setRequired(true)
 		),
 	category: "fun",
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		const member = interaction.options.getUser("target") || client.user;

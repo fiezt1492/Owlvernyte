@@ -28,10 +28,10 @@ module.exports = {
 		),
 	cooldown: 10,
 	category: "economy",
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client, guild } = interaction;
 
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: guildSettings.ephemeral });
 
 		const type = interaction.options.getString("type");
 

@@ -10,13 +10,13 @@ module.exports = {
 	async execute(interaction) {
 		const { client } = interaction;
 
+		if (!interaction.isCommand()) return;
+
 		if (!client.ready)
 			return interaction.reply({
 				content: "Please try again...",
 				ephemeral: true,
 			});
-
-		if (!interaction.isCommand()) return;
 
 		const command = client.commands.get(interaction.commandName);
 
@@ -144,10 +144,11 @@ module.exports = {
 							ephemeral: true,
 						});
 					} else await Player.cooldownsPull(command.data.name);
-				} else await Player.cooldownsPush(command.data.name, command.mongoCD * 1000);
+				} else
+					await Player.cooldownsPush(command.data.name, command.mongoCD * 1000);
 			}
-
-			await command.execute(interaction, Player, ONCE, i18n);
+			// console.log(guildSettings);
+			await command.execute(interaction, guildSettings, Player, ONCE, i18n);
 		} catch (err) {
 			console.error(err);
 			if (interaction.deferred || interaction.replied) {

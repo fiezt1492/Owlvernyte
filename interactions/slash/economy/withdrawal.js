@@ -18,7 +18,7 @@ module.exports = {
 		),
 	cooldown: 10,
 	category: "economy",
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		let input = interaction.options.getInteger("owlet");
@@ -41,7 +41,7 @@ module.exports = {
 		});
 		return interaction.reply({
 			content: `Successfully ${this.data.name} \`${string}\` owlets to your balance!`,
-			ephemeral: true,
+			ephemeral: guildSettings.ephemeral,
 		});
 	},
 };

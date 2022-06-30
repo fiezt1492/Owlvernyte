@@ -1,18 +1,15 @@
 // const { prefix } = require("../../config");
 // const defaultPrefix = prefix;
-const i18n = require("../util/i18n");
 
 module.exports = {
 	get(interaction) {
-		return String(
-			interaction.client.guildSettings.get(interaction.guild.id).locale.toLowerCase()
+		return Boolean(
+			interaction.client.guildSettings.get(interaction.guild.id).ephemeral
 		);
 	},
 
-	async set(interaction, locale = "en") {
-		if (!isNaN(locale) || typeof locale !== "string") return -1;
-		const locales = i18n.getLocales();
-		if (!locales.includes(locale)) return -1;
+	async set(interaction, state = true) {
+		if (state !== true && state !== false) return -1;
 		try {
 			const { client } = interaction;
 			const DB = client.db.collection("guildSettings");
@@ -22,8 +19,8 @@ module.exports = {
 				},
 				{
 					$set: {
-						// gID: interaction.guild.id,
-						locale: String(locale).toLowerCase(),
+						// gID: message.guild.id,
+						ephemeral: Boolean(state),
 					},
 				},
 				{
@@ -33,11 +30,11 @@ module.exports = {
 
 			let guildSettings = await client.guildSettings.get(interaction.guild.id);
 
-			guildSettings.locale = String(locale).toLowerCase();
+			guildSettings.ephemeral = Boolean(state);
 
 			client.guildSettings.set(interaction.guild.id, guildSettings);
 
-			return await client.guildSettings.get(interaction.guild.id).locale
+			return await client.guildSettings.get(interaction.guild.id).ephemeral;
 		} catch (e) {
 			console.log(e);
 		}

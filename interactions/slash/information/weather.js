@@ -17,7 +17,7 @@ module.exports = {
 				.setRequired(false)
 		),
 	category: "information",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client } = interaction;
 
 		const string = interaction.options.getString("location");
@@ -62,7 +62,7 @@ module.exports = {
 
 					await interaction.reply({
 						embeds: [embed],
-						ephemeral: true,
+						ephemeral: guildSettings.ephemeral,
 					});
 				} catch (err) {
 					return await interaction.reply({

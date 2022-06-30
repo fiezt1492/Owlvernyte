@@ -25,6 +25,12 @@ module.exports = {
 		 * @type {import("discord.js").ModalSubmitInteraction}
 		 */
 
+		if (!client.ready)
+			return interaction.reply({
+				content: "Please try again...",
+				ephemeral: true,
+			});
+
 		const command = client.modalCommands.get(interaction.customId);
 
 		// If the interaction is not a command in cache, return error message.

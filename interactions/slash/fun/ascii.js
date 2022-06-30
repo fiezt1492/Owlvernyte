@@ -18,7 +18,7 @@ module.exports = {
 				.setRequired(true)
 		),
 	category: "fun",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client } = interaction;
 
 		let Content = interaction.options
@@ -41,6 +41,7 @@ module.exports = {
 
 		return interaction.reply({
 			embeds: [embed],
+			ephemeral: guildSettings.ephemeral,
 		});
 	},
 };

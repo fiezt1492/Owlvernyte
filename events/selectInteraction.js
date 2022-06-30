@@ -7,12 +7,13 @@ module.exports = {
 
 		// Checks if the interaction is a select menu interaction (to prevent weird bugs)
 
-		if (!client.ready) return interaction.reply({
-			content: "Please try again...",
-			ephemeral: true,
-		});
-
 		if (!interaction.isSelectMenu()) return;
+
+		if (!client.ready)
+			return interaction.reply({
+				content: "Please try again...",
+				ephemeral: true,
+			});
 
 		const command = client.selectCommands.get(interaction.customId);
 
@@ -92,7 +93,7 @@ module.exports = {
 				}
 			}
 
-			await command.execute(interaction, i18n);
+			await command.execute(interaction, guildSettings, i18n);
 			return;
 		} catch (err) {
 			console.error(err);

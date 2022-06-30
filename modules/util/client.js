@@ -74,7 +74,7 @@ module.exports = (client) => {
 		return COMPONENTS;
 	};
 
-	client.prefix = require("../configuration/guildPrefix");
+	client.ephemeral = require("../configuration/guildEphemeral");
 
 	client.locale = require("../configuration/guildLocale");
 };

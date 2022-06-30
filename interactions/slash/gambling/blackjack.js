@@ -25,7 +25,7 @@ module.exports = {
 	once: true,
 	category: "gambling",
 
-	async execute(interaction, Player, ONCE, i18n) {
+	async execute(interaction, guildSettings, Player, ONCE, i18n) {
 		const { client } = interaction;
 
 		// const already = games.get(interaction.user.id);
@@ -186,6 +186,7 @@ module.exports = {
 			await interaction.reply({
 				embeds: [deckEmbed],
 				components: [row1],
+				ephemeral: guildSettings.ephemeral,
 			});
 
 			let msg = await interaction.fetchReply();

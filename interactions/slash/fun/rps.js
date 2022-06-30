@@ -15,7 +15,7 @@ module.exports = {
 				.setRequired(false)
 		),
 	category: "fun",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client } = interaction;
 
 		const opponent = interaction.options.getUser("target") || client.user;

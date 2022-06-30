@@ -33,7 +33,7 @@ module.exports = {
 				)
 		),
 	category: "information",
-	async execute(interaction) {
+	async execute(interaction, guildSettings) {
 		const { client, guild } = interaction;
 
 		let sub = interaction.options.getSubcommand();
@@ -91,7 +91,7 @@ module.exports = {
 
 			return interaction.reply({
 				embeds: [Embed],
-				ephemeral: true,
+				ephemeral: guildSettings.ephemeral,
 			});
 		} else if (sub == "user") {
 			const user = interaction.options.getUser("target") || interaction.user;
@@ -167,7 +167,7 @@ module.exports = {
 			return await interaction.reply({
 				embeds: [Embed],
 				components: [ROW],
-				ephemeral: interaction.user == user || user.bot,
+				ephemeral: guildSettings.ephemeral,
 			});
 		} else if (sub == "bot") {
 			const cpu = await os.cpus();
@@ -181,7 +181,9 @@ module.exports = {
 			const processHeapTotal = Math.round(
 				process.memoryUsage().heapTotal / 1024 / 1024
 			);
-			const processHeapUsedInPercentage = Math.round((processHeapUsed / processHeapTotal) * 100);
+			const processHeapUsedInPercentage = Math.round(
+				(processHeapUsed / processHeapTotal) * 100
+			);
 
 			const operatingSystemPlatform = `${os.platform()}`;
 			const cpuModel = `${cpu[0].model}`;
@@ -217,7 +219,7 @@ module.exports = {
 
 			return await interaction.reply({
 				embeds: [Embed],
-				ephemeral: true,
+				ephemeral: guildSettings.ephemeral,
 			});
 		}
 	},
