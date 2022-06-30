@@ -31,6 +31,8 @@ module.exports = {
 				],
 			});
 
+			console.log("Registering guildSettings...");
+
 			client.guilds.cache.forEach(async (guild) => {
 				const guildDB = await gDB.findOne(
 					{
