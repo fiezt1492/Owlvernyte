@@ -1,6 +1,6 @@
 // const Discord = require("discord.js");
 const config = require("../../config");
-const guildPrefix = require("../../modules/configuration/guildPrefix")
+const guildPrefix = require("../modules/configuration/guildPrefix")
 
 module.exports = {
 	name: "prefix",

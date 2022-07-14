@@ -1,12 +1,10 @@
-module.exports = {
-  [
-    id: 0,
-    name: 'Fire ball',
-    execute: () => {
-
-    }
-  ] 
-}
+module.exports = [
+	{
+		id: 0,
+		name: "Fire ball",
+		execute: () => {},
+	},
+];
 
 /*
 

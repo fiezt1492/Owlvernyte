@@ -1,4 +1,4 @@
-const { token, client_id, test_guild_id } = require("../config");
+const { token, client_id, test_guild_id } = require("../../config");
 
 module.exports = {
 	name: "userUpdate",
