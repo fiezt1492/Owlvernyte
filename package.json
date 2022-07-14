@@ -9,7 +9,7 @@
 	},
 	"scripts": {
 		"start": "node index.js",
-		"dev": "nodemon bot.js"
+		"dev": "nodemon bot/bot.js"
 	},
 	"author": "Owlvernyte",
 	"license": "ISC",

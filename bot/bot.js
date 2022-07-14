@@ -9,7 +9,7 @@ const {
 	test_guild_id,
 	dev,
 	web,
-} = require("./config.js");
+} = require("../config.js");
 
 const intents = [
 	"GUILDS",
@@ -59,7 +59,7 @@ for (const file of eventFiles) {
 /**********************************************************************/
 // Define Collection of Commands, Slash Commands and cooldowns
 
-const keepAlive = require("./server");
+const keepAlive = require("../server");
 require("./modules/util/client")(client);
 
 client.i18n = require("./modules/util/i18n");
